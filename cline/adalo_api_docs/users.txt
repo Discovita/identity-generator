@@ -1,0 +1,48 @@
+# Users Collection API
+
+Collection ID: t_8200ffc0140b491aaac8db5b6d8d5ded
+
+# Endpoints
+
+GET -> https://api.adalo.com/v0/apps/e16b822a-3562-4df3-b1d0-fa5d749a75c8/collections/t_8200ffc0140b491aaac8db5b6d8d5ded
+```json
+{
+  "records": [
+    {
+      "Email": "user@example.com",
+      "Username": "testuser",
+      "Full Name": "Test User",
+      "Admin": true,
+      "Daily Reminder, true": true,
+      "show identity, true?": true,
+      "Download identity count.": 0,
+      "Turn On": "2019-08-24T14:15:22Z",
+      "AI Image Copy": "string"
+    }
+  ],
+  "offset": 100
+}
+```
+
+POST -> https://api.adalo.com/v0/apps/e16b822a-3562-4df3-b1d0-fa5d749a75c8/collections/t_8200ffc0140b491aaac8db5b6d8d5ded
+```json
+{
+  "Email": "user@example.com",
+  "Username": "testuser",
+  "Full Name": "Test User"
+}
+```
+
+GET -> https://api.adalo.com/v0/apps/e16b822a-3562-4df3-b1d0-fa5d749a75c8/collections/t_8200ffc0140b491aaac8db5b6d8d5ded/{ElementId}
+```json
+{
+  "Email": "user@example.com",
+  "Username": "testuser",
+  "Full Name": "Test User",
+  "Admin": true,
+  "Daily Reminder, true": true,
+  "show identity, true?": true,
+  "Download identity count.": 0,
+  "Turn On": "2019-08-24T14:15:22Z",
+  "AI Image Copy": "string"
+}

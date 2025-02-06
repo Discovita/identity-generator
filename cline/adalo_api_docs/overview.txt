@@ -1,0 +1,38 @@
+# Adalo API Overview
+
+All requests require these headers:
+- Authorization: Bearer [Your App's API Key]
+- Content-Type: application/json
+
+Get your API Key from Settings / App Access menu.
+
+Example request:
+```
+curl -X GET "https://api.adalo.com/v0/apps/{appId}/collections/{collectionId}" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer {API Key}"
+```
+
+Note: Adalo App ID and API key will be in .env file.
+
+# Pagination
+
+The API returns 1000 records per page by default. Use these query params to control pagination:
+
+- offset: Skip N records (default: 0)
+- limit: Return max N records (default: 1000)
+
+Example with pagination:
+```
+curl "https://api.adalo.com/v0/apps/{appId}/collections/{collectionId}?offset=200&limit=100"
+```
+
+# Filtering
+
+Filter results using query parameters:
+- filterKey: Column name to filter by (works with: Text, Number, Boolean, Date & Time, Date)
+- filterValue: Exact value to match
+
+Example with filter:
+```
+curl "https://api.adalo.com/v0/apps/{appId}/collections/{collectionId}?filterKey=Email&filterValue=user@example.com"
