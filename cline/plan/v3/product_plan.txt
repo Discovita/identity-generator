@@ -50,17 +50,21 @@ Key terms:
 - Current Target Image
 
 Step 4: The user is asked to comment on the Current Target Image.
-They can type in any feedback they have.  This is appended
-to the augmented prompt as '\n\nUser Feedback: ...' and sent
-back to the image generation API to generate the new image. 
-Thus the things we're sending to the Image Generation API are:
-1. The Augmented Prompt associated with the Current Target Image.
+They can type in any feedback they have. Previously generated target
+images remain visible, with a selection box highlighting the Current
+Target Image. The user can click on any previous target image to make
+it the Current Target Image. When providing feedback, it is appended
+to the augmented prompt as '\n\nUser Feedback: ...' and sent back to
+the image generation API to generate the new image. Thus the things
+we're sending to the Image Generation API are:
+1. The Augmented Prompt associated with the Current Target Image
+   (which may be a previously generated image if the user selected one)
 2. The Base User Description
 3. The User Questionnaire
-4. The user's feedback on the Current Target Image.
+4. The user's feedback on the Current Target Image
 The API returns a new image which becomes the Current Target Image
-and a new Augmented Prompt associated with it.  This process thus
-repeates until the user indicates their satisfaction to move on.
+and a new Augmented Prompt associated with it. This process thus
+repeats until the user indicates their satisfaction to move on.
 
 Step 5: The Base Image is face-swapped into the Final Target Image
 using my face swap API, also already implemented in the backend.
@@ -74,5 +78,4 @@ capture OpenAI/Dall-E's "augmented prompts" (where they make
 adjustments to our prompt before generating the image) and use 
 (and adjust) that augmented prompt when we want to make edits to
 the image.  Front-end will be responsible for maintaining
-a cache of images and their associated augmented prompts.  
-
+a cache of images and their associated augmented prompts.
