@@ -66,28 +66,21 @@
         </note>
     </long-term-memory>
 
-    <previous-task>
-      Review all docs in cline/plan/v3 for context.  Actually
-      read and understand them.
-
-      The app is implemented.  We're making some minor improvements.
-      
-      1. We need loading spinners for initial headshot image 
-      upload, each target image generation cycle, and the final
-      face-swap API call. 
-
-      2. If there is an error - since we're in the prototype phase -
-      I'd prefer that the app indicate that something went wrong. 
-      Right now, there is no indication to the user that something
-      went wrong, so they just sit there.  If there is a server
-      error message, it can be displayed. 
-    </previous-task>
     <current-task>
       Review all docs in cline/plan/v3 for context.  Actually
       read and understand them.
       
-      Last task was successful, except one loading spinner was 
-      missed on the page where the user submits their feedback
-      and requests a regeneration of the target image.
+      I want to make a small change to the product plan: 
+
+      During "Step 4", when the user is able to comment on the Current Target Image,
+      I want them to also be able to click on one of the previous target images
+      to "revert back to it".  The list of previously-generated target images is 
+      still shown as is currently the case, but we now add a "selection box" around
+      the currently-selected Current Target Image.   If the user gives feedback,
+      that feedback is sent along with the augmented prompt of the *currently-selected*
+      target image.
+
+      Update the .../v3/product_plan.txt with this extra detail so I know you understand.
+      Then implement it.
     </current-task>
 </cline-context>
