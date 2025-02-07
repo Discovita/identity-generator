@@ -1,9 +1,7 @@
 from datetime import datetime
 import logging
-import os
 
-from client import AdaloClient
-from models import AdaloUser
+from discovita.service.adalo import AdaloClient, AdaloUser
 
 logging.basicConfig(
     level=logging.INFO,
@@ -12,37 +10,40 @@ logging.basicConfig(
 )
 
 def main():
-    app_id = os.environ.get("ADALO_APP_ID")
-    api_key = os.environ.get("ADALO_API_KEY")
-    
-    assert app_id, "ADALO_APP_ID environment variable is required"
-    assert api_key, "ADALO_API_KEY environment variable is required"
-    
-    client = AdaloClient(app_id, api_key)
-    
-    logging.info("Fetching users...")
-    users_response = client.get_users(limit=2)
-    logging.info(f"Found {len(users_response.records)} users")
-    
-    new_user = AdaloUser(
-        Email="test@example.com",
-        Username="testuser",
-        Full_Name="Test User",
-        Admin=False,
-        Daily_Reminder=True,
-        show_identity=True,
-        Download_identity_count=0,
-        Turn_On=datetime.now(),
-        AI_Image_Copy=""
-    )
-    
-    logging.info("Creating new user...")
-    created_user = client.create_user(new_user)
-    logging.info(f"Created user with email: {created_user.Email}")
-    
-    logging.info("Fetching single user...")
-    user = client.get_user(1)
-    logging.info(f"Retrieved user: {user.Full_Name}")
+    with AdaloClient() as client:
+        logging.info("Fetching users...")
+        users_response = client.get_users(limit=2)
+        logging.info(f"Found {len(users_response.records)} users")
+
+        test_email = "test3@example.com"
+        new_user = AdaloUser(**{
+            "Email": test_email,
+            "Username": "testuser",
+            "Full Name": "Test User",
+            "Admin": True,
+            "Daily Reminder, true": True,
+            "show identity, true?": True,
+            "Download identity count.": 0,
+            "Turn On": "2025-02-07T14:15:22Z",
+            "AI Image Copy": "string"
+        })
+        
+        # Check if user already exists
+        existing_users = client.get_users(limit=1, email=test_email)
+        
+        if existing_users.records:
+            user = existing_users.records[0]
+            logging.info(f"Found existing user: {user.dict()}")
+        else:
+            logging.info("Creating new user...")
+            user = client.create_user(new_user)
+            logging.info(f"Created user with email: {user.Email}")
+        
+        logging.info("Fetching single user...")
+        # Get the first user from our list
+        first_user_id = users_response.records[0].id
+        user = client.get_user(first_user_id)
+        logging.info(f"Retrieved user: {user.Full_Name}")
 
 if __name__ == "__main__":
     main()
