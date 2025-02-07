@@ -23,6 +23,23 @@ GET -> https://api.adalo.com/v0/apps/e16b822a-3562-4df3-b1d0-fa5d749a75c8/collec
   "offset": 100
 }
 ```
+Query params:
+offset number
+Example: offset=200
+How many records to skip (default: 0)
+
+limit	number
+Example: limit=100
+How many records to return at most (default: 1000)
+
+filterKey	string
+Example: filterKey=Email
+The key (i.e. property or column) name to filter by (only for properties of type: Text, Number, True/False [boolean], Date & Time, Date)
+
+filterValue	string
+Example: filterValue=jane.doe%40example.com
+The value to filter by (exact match)
+
 
 POST -> https://api.adalo.com/v0/apps/e16b822a-3562-4df3-b1d0-fa5d749a75c8/collections/t_8200ffc0140b491aaac8db5b6d8d5ded
 ```json
@@ -46,3 +63,5 @@ GET -> https://api.adalo.com/v0/apps/e16b822a-3562-4df3-b1d0-fa5d749a75c8/collec
   "Turn On": "2019-08-24T14:15:22Z",
   "AI Image Copy": "string"
 }
+
+
