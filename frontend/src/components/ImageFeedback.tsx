@@ -7,7 +7,7 @@ const ImageFeedback: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSwapping, setIsSwapping] = useState(false)
   const state = workflowService.getState()
-  const imageHistory = workflowService.getImageHistory()
+  const { images: imageHistory, selectedIndex } = workflowService.getImageHistory()
 
   const handleSubmitFeedback = async () => {
     if (feedback.trim()) {
@@ -28,11 +28,15 @@ const ImageFeedback: React.FC = () => {
     <div>
       <h2>Your Vision</h2>
       
-      <div>
+      <div style={{
+        border: '3px solid #007bff',
+        padding: '2px',
+        display: 'inline-block'
+      }}>
         <img 
           src={state.generatedImageUrl} 
           alt="Generated vision" 
-          style={{ maxWidth: '100%', height: 'auto' }}
+          style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
         />
       </div>
 
@@ -40,12 +44,22 @@ const ImageFeedback: React.FC = () => {
         <h3>Previous Versions</h3>
         <div style={{ display: 'flex', gap: '10px', overflowX: 'auto' }}>
           {imageHistory.map((image, index) => (
-            <img
+            <div
               key={index}
-              src={image.imageUrl}
-              alt={`Version ${index + 1}`}
-              style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-            />
+              onClick={() => workflowService.selectImage(index)}
+              style={{
+                position: 'relative',
+                cursor: 'pointer',
+                border: selectedIndex === index ? '3px solid #007bff' : 'none',
+                padding: '2px'
+              }}
+            >
+              <img
+                src={image.imageUrl}
+                alt={`Version ${index + 1}`}
+                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+              />
+            </div>
           ))}
         </div>
       </div>

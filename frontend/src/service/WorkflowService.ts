@@ -36,6 +36,7 @@ export class WorkflowService {
   }
 
   private imageHistory: ImageCache[] = []
+  private selectedImageIndex: number = -1  // -1 means latest image is selected
   private subscribers: Array<() => void> = []
 
   subscribe(callback: () => void): void {
@@ -107,6 +108,7 @@ export class WorkflowService {
         augmentedPrompt: response.augmentedPrompt,
       })
 
+      this.selectedImageIndex = -1
       this.setState({
         generatedImageUrl: response.imageUrl,
         augmentedPrompt: response.augmentedPrompt,
@@ -142,8 +144,25 @@ export class WorkflowService {
     }
   }
 
-  getImageHistory(): ImageCache[] {
-    return [...this.imageHistory]
+  getImageHistory(): { images: ImageCache[], selectedIndex: number } {
+    return {
+      images: [...this.imageHistory],
+      selectedIndex: this.selectedImageIndex
+    }
+  }
+
+  selectImage(index: number): void {
+    if (index >= -1 && index < this.imageHistory.length) {
+      this.selectedImageIndex = index
+      const imageToUse = index === -1 
+        ? this.imageHistory[this.imageHistory.length - 1]
+        : this.imageHistory[index]
+      
+      this.setState({
+        generatedImageUrl: imageToUse.imageUrl,
+        augmentedPrompt: imageToUse.augmentedPrompt
+      })
+    }
   }
 }
 
