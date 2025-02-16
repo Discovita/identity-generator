@@ -1,0 +1,56 @@
+# Adalo API Overview
+
+## Authentication & Headers
+
+All requests require these headers:
+- Authorization: Bearer [Your App's API Key]
+- Content-Type: application/json
+- Accept: application/json
+
+Get your API Key from Settings / App Access menu.
+Note: Adalo App ID and API key should be stored in .env file.
+
+## Connection Settings
+
+Example client initialization:
+```python
+client = httpx.Client(
+    timeout=30.0,    # 30 second timeout
+    verify=True,     # Verify SSL certificates
+    http2=True       # Enable HTTP/2
+)
+```
+
+## Pagination
+
+The API returns 1000 records per page by default. Use these query params to control pagination:
+
+- offset: Skip N records (default: 0)
+- limit: Return max N records (default: 1000)
+
+Example with pagination:
+```bash
+curl "https://api.adalo.com/v0/apps/{appId}/collections/{collectionId}?offset=200&limit=100"
+```
+
+## Filtering
+
+Filter results using query parameters:
+- filterKey: Column name to filter by (works with: Text, Number, Boolean, Date & Time, Date)
+- filterValue: Exact value to match (must be URL encoded)
+
+Example filtering by email:
+```bash
+# Note the URL encoded @ symbol (%40)
+curl "https://api.adalo.com/v0/apps/{appId}/collections/{collectionId}?filterKey=Email&filterValue=user%40example.com"
+```
+
+Python example using httpx:
+```python
+params = {
+    "filterKey": "Email",
+    "filterValue": "user@example.com"  # httpx handles URL encoding
+}
+response = client.get(url, params=params)
+```
+

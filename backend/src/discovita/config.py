@@ -2,6 +2,12 @@
 
 import os
 from dataclasses import dataclass
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+# Load environment variables from .env in project root
+load_dotenv(Path(__file__).parents[3] / ".env")
 
 @dataclass
 class Settings:
@@ -13,6 +19,8 @@ class Settings:
     aws_region: str
     s3_bucket: str
     openai_api_key: str
+    adalo_app_id: str
+    adalo_api_key: str
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -37,6 +45,14 @@ class Settings:
         if not openai_api_key:
             raise ValueError("OPENAI_API_KEY is required")
 
+        adalo_app_id = os.getenv("ADALO_APP_ID")
+        if not adalo_app_id:
+            raise ValueError("ADALO_APP_ID is required")
+
+        adalo_api_key = os.getenv("ADALO_API_KEY")
+        if not adalo_api_key:
+            raise ValueError("ADALO_API_KEY is required")
+
         return cls(
             icons8_api_key=icons8_api_key,
             icons8_base_url="https://api-faceswapper.icons8.com/api/v1",
@@ -44,5 +60,7 @@ class Settings:
             aws_secret_access_key=aws_secret_access_key,
             aws_region="us-east-1",
             s3_bucket=s3_bucket,
-            openai_api_key=openai_api_key
+            openai_api_key=openai_api_key,
+            adalo_app_id=adalo_app_id,
+            adalo_api_key=adalo_api_key
         )
