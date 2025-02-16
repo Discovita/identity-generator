@@ -1,0 +1,27 @@
+Step 1 of this project will be to build a front-end application
+that is simply a wrapper around ChatGPT's 4o model.
+
+1.  Front-end will retain context of the chat conversation.
+
+2.  Whenever user enters input, it is sent to a backend 'coach'
+API.  Let's just call it POST -> .../coach/user_input
+The API request includes a User ID, context, and the user's 
+message.
+
+Note that we already have APIs implemented for other things
+in ./backend.  Follow my patterns.
+
+3.  For now, in the first implementation, that 'coach' API will
+simply return a response by making a simple API request to OpenAI
+(client is already implemented) with a system instruction that
+"You are a life coach, etc."
+
+In follow-up steps we will move on to specialize this 'coach' API.
+
+For now build this simple GPT-wrapper-coach and the front-end.
+
+Note, we now have multiple front-end apps we can run, 
+make sure the frontend directory stays organized.  Do not remove
+the existing face swapper app, just make a separate React app
+for this under frontend.  Make a separate package.json run
+script for this 'coach' application.  

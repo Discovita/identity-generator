@@ -1,0 +1,18 @@
+This is kind of the "meta-plan".   
+I'm actually still writing the plan.  Here's what I know so far:
+
+I am a software engineer and architect working on a major contracting 
+project to build a chatbot for a life coach who wants me to put 
+her proprietary coaching methodology into the chatbot.  
+I have some example dialogues between the coach and her clients.  
+
+The coach will not only provide free-form chat with the user, 
+but will also occasionally be able to make API calls to my 
+backend to update certain information about the user based 
+on what it learns. 
+
+In Step 1, we will implement a basic chatbot which is just
+a thin wrapper around ChatGPT.
+
+In following steps, we will specialize it and add AIPI calls 
+for managing user state and creating identities.

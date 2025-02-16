@@ -8,6 +8,7 @@ from ..dependencies import get_settings
 from ..service.openai.client.client import OpenAIClient
 from ..service.openai.image_description import ImageDescriptionService
 from ..service.openai.image_generation import ImageGenerationService
+from ..service.coach.service import CoachService
 
 async def get_openai_client(
     settings: Settings = Depends(get_settings)
@@ -30,3 +31,9 @@ async def get_image_generation_service(
 ) -> ImageGenerationService:
     """Get image generation service."""
     return ImageGenerationService(client)
+
+async def get_coach_service(
+    client: OpenAIClient = Depends(get_openai_client)
+) -> CoachService:
+    """Get coach service."""
+    return CoachService(client)

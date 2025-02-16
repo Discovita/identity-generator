@@ -1,18 +1,39 @@
 #!/bin/bash
+set -e
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <app-name>"
+    echo "Available apps: face-swapper, coach"
+    exit 1
+fi
+
+APP_NAME=$1
+
+if [ "$APP_NAME" != "face-swapper" ] && [ "$APP_NAME" != "coach" ]; then
+    echo "Error: Invalid app name. Must be either 'face-swapper' or 'coach'"
+    exit 1
+fi
 
 # Get the project root directory
 PROJECT_ROOT="$(dirname "$0")/.."
 cd "$PROJECT_ROOT"
 
+echo "Building $APP_NAME app..."
+
 echo "Installing Python dependencies..."
 cd backend
 python -m pip install -e .
+cd ..
 
 echo "Building frontend..."
-cd ../frontend && npm install && npm run build
+cd frontend
+npm install
+npm run install:$APP_NAME
+npm run build:$APP_NAME
+cd ..
 
-echo "Copying frontend build to backend/public..."
-rm -rf ../backend/public/*
-cp -r build/* ../backend/public/
+echo "Setting up backend public directory..."
+rm -rf backend/public/*
+cp -r frontend/apps/$APP_NAME/build/* backend/public/
 
 echo "Build complete!"
