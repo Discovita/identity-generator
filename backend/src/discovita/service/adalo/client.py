@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 import json
 from contextlib import contextmanager
 
@@ -40,13 +40,13 @@ class AdaloClient:
 
     def get_users(self, offset: int = 0, limit: int = 100, email: Optional[str] = None) -> GetUsersResponse:
         url = self._build_collection_url(USERS_COLLECTION_ID)
-        params = {
+        params: Dict[str, Any] = {
             "offset": offset,
             "limit": limit
         }
         if email:
-            params["filterKey"] = "Email"
-            params["filterValue"] = email
+            params["filterKey"] = str("Email")
+            params["filterValue"] = str(email)
         
         logger.info(f"Making GET request to {url} with params: {params}")
         response = self.client.get(
