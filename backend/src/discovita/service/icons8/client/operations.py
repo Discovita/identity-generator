@@ -3,7 +3,7 @@
 from typing import List
 from urllib.parse import quote
 from httpx import AsyncClient
-from pydantic import AnyHttpUrl, HttpUrl, parse_obj_as
+from pydantic import AnyHttpUrl, TypeAdapter
 from ..models import (
     FaceSwapRequest,
     FaceSwapResponse,
@@ -17,10 +17,15 @@ from ..models import (
 from ..face_selection import select_primary_face
 from .logging import log_response
 
+def validate_url(url: str) -> AnyHttpUrl:
+    """Validate URL string and return AnyHttpUrl object."""
+    url_adapter = TypeAdapter(AnyHttpUrl)
+    return url_adapter.validate_python(url)
+
 async def get_landmarks(client: AsyncClient, api_key: str, urls: List[str]) -> GetBboxResponse:
     """Get face landmarks for the given image URLs."""
-    # Let pydantic handle URL parsing and encoding
-    request = GetBboxRequest(urls=parse_obj_as(List[AnyHttpUrl], urls))
+    parsed_urls = [validate_url(url) for url in urls]
+    request = GetBboxRequest(urls=parsed_urls)
     
     response = await client.post(
         "/get_bbox",
@@ -41,9 +46,8 @@ async def get_landmarks(client: AsyncClient, api_key: str, urls: List[str]) -> G
 
 async def swap_faces(client: AsyncClient, api_key: str, source_url: str, target_url: str) -> FaceSwapResponse:
     """Submit a face swap job to Icons8."""
-    # Let pydantic handle URL parsing and encoding
-    target_http_url = parse_obj_as(AnyHttpUrl, target_url)
-    source_http_url = parse_obj_as(AnyHttpUrl, source_url)
+    target_http_url = validate_url(target_url)
+    source_http_url = validate_url(source_url)
     
     landmarks_response = await get_landmarks(client, api_key, [source_url, target_url])
     source_faces = next(img for img in landmarks_response.__root__ if img.img_url == source_http_url)
