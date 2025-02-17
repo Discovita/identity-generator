@@ -1,0 +1,127 @@
+Sure! Here's a friendly article with steps to add Elastic Cloud logs search to your FastAPI Python server:
+
+## Adding Elastic Cloud Logs Search to Your FastAPI Python Server
+
+Hey there, fellow developer! Ready to supercharge your FastAPI server with powerful logging capabilities? Let's walk through the process of integrating Elastic Cloud logs search into your project. This guide assumes you have a FastAPI server up and running, and you're ready to take your logging game to the next level.
+
+### Step 1: Set Up Elastic Cloud
+
+First things first, let's get you set up with Elastic Cloud:
+
+1. Sign up for an Elastic Cloud account if you haven't already.
+2. Create a new deployment and note down your Cloud ID and credentials.
+
+### Step 2: Install Required Packages
+
+Open your terminal and install the necessary Python packages:
+
+```bash
+pip install elasticsearch python-dotenv fastapi[all] uvicorn
+```
+
+### Step 3: Configure Environment Variables
+
+Create a `.env` file in your project root to store your Elastic Cloud credentials:
+
+```bash
+touch .env
+```
+
+Add the following to your `.env` file:
+
+```
+ELASTIC_CLOUD_ID=your_cloud_id
+ELASTIC_USER=elastic
+ELASTIC_PASSWORD=your_password
+```
+
+### Step 4: Set Up Logging in Your FastAPI App
+
+Now, let's modify your FastAPI app to use Elastic Cloud for logging. Create a new file called `elastic_logger.py`:
+
+```python
+import logging
+from elasticsearch import Elasticsearch
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+class ElasticHandler(logging.Handler):
+    def __init__(self):
+        super().__init__()
+        self.es = Elasticsearch(
+            cloud_id=os.getenv('ELASTIC_CLOUD_ID'),
+            basic_auth=(os.getenv('ELASTIC_USER'), os.getenv('ELASTIC_PASSWORD'))
+        )
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.es.index(index="fastapi-logs", document=log_entry)
+
+def setup_elastic_logging():
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    
+    elastic_handler = ElasticHandler()
+    elastic_handler.setFormatter(formatter)
+    
+    logger.addHandler(elastic_handler)
+
+    return logger
+```
+
+### Step 5: Integrate Logging into Your FastAPI App
+
+Modify your main FastAPI app file (e.g., `main.py`) to use the new logging setup:
+
+```python
+from fastapi import FastAPI
+from elastic_logger import setup_elastic_logging
+
+app = FastAPI()
+logger = setup_elastic_logging()
+
+@app.get("/")
+async def root():
+    logger.info("Root endpoint accessed")
+    return {"message": "Hello World"}
+
+@app.get("/items/{item_id}")
+async def read_item(item_id: int):
+    logger.info(f"Item details requested for item_id: {item_id}")
+    return {"item_id": item_id}
+```
+
+### Step 6: Run Your FastAPI App
+
+Start your FastAPI app with Uvicorn:
+
+```bash
+uvicorn main:app --reload
+```
+
+### Step 7: View Logs in Kibana
+
+1. Log into your Elastic Cloud account.
+2. Navigate to Kibana.
+3. Go to "Discover" in the main menu.
+4. Create a new index pattern for "fastapi-logs*".
+5. Start exploring your logs!
+
+And there you have it! Your FastAPI server is now sending logs to Elastic Cloud. You can create custom dashboards, set up alerts, and leverage the full power of the Elastic Stack to gain insights into your application's behavior.
+
+Happy logging, and may your server always be observable! 🚀📊
+
+Citations:
+[1] https://www.youtube.com/watch?v=bKc3aAttmKM
+[2] https://www.elastic.co/guide/en/cloud-enterprise/3.6/ece-getting-started-python.html
+[3] https://signoz.io/blog/python-elasticsearch-tutorial/
+[4] https://stackoverflow.com/questions/41748464/pytest-cannot-import-module-while-python-can
+[5] https://openobserve.ai/blog/monitoring-fastapi-application-using-opentelemetry-and-openobserve
+[6] https://github.com/trolologuy/useful-tools/blob/main/docs/readme.md
+[7] https://stackoverflow.com/questions/77001129/how-to-configure-fastapi-logging-so-that-it-works-both-with-uvicorn-locally-and
+[8] https://www.youtube.com/watch?v=NyDT3KkscSk
+[9] https://www.elastic.co/guide/en/cloud/current/ec-getting-started-search-use-cases-python-logs.html

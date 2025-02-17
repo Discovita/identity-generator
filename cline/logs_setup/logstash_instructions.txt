@@ -1,3 +1,6 @@
+DEPRECATED: we're going to use elastic cloud directly instead.
+See elastic_cloud_instructions.txt.
+
 To add Logstash logging to your FastAPI Python server, follow these steps:
 
 1. Add python-logstash-async to requirements and install.
