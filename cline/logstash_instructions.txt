@@ -1,0 +1,89 @@
+To add Logstash logging to your FastAPI Python server, follow these steps:
+
+1. Add python-logstash-async to requirements and install.
+
+2. In your FastAPI application file, import the necessary modules:
+
+```python
+import logging
+from logstash_async.handler import AsynchronousLogstashHandler
+from logstash_async.formatter import LogstashFormatter
+```
+
+3. Set up the logger and configure it to use Logstash:
+
+```python
+# Create a logger
+logger = logging.getLogger("fastapi_logger")
+logger.setLevel(logging.INFO)
+
+# Configure Logstash handler
+logstash_handler = AsynchronousLogstashHandler(
+    host='your_logstash_host',
+    port=5000,  # Adjust port as needed
+    database_path='logstash_async_db.sqlite'
+)
+
+# Set formatter
+formatter = LogstashFormatter()
+logstash_handler.setFormatter(formatter)
+
+# Add the handler to the logger
+logger.addHandler(logstash_handler)
+```
+
+4. Use the logger in your FastAPI routes:
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    logger.info("Root endpoint accessed")
+    return {"message": "Hello World"}
+```
+
+5. Configure Logstash to receive logs. Create a Logstash configuration file (e.g., `logstash.conf`):
+
+```
+input {
+  udp {
+    port => 5000
+    codec => json
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "fastapi-logs-%{+YYYY.MM.dd}"
+  }
+}
+```
+
+6. Start Logstash with the configuration file:
+
+```bash
+logstash -f logstash.conf
+```
+
+7. Run your FastAPI application:
+
+```bash
+uvicorn main:app --reload
+```
+
+Now, your FastAPI application will send logs to Logstash, which can then forward them to Elasticsearch for storage and analysis[1][8].
+
+Citations:
+[1] https://pypi.org/project/python-logstash-async/
+[2] https://www.youtube.com/watch?v=1RLFSOwpf88
+[3] https://www.restack.io/p/fastapi-answer-logging-example
+[4] https://www.youtube.com/watch?v=bKc3aAttmKM
+[5] https://stackoverflow.com/questions/77001129/how-to-configure-fastapi-logging-so-that-it-works-both-with-uvicorn-locally-and
+[6] https://stackoverflow.com/questions/63510041/adding-python-logging-to-fastapi-endpoints-hosted-on-docker-doesnt-display-api
+[7] https://github.com/lemoncode21/fastapi-logs-elk
+[8] https://github.com/eht16/python-logstash-async/blob/master/example1.py
+[9] https://www.youtube.com/watch?v=wisXOgaTEU8
