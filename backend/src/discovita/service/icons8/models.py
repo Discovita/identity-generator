@@ -2,7 +2,7 @@
 
 from enum import IntEnum
 from typing import NewType, Optional, List
-from pydantic import BaseModel, AnyHttpUrl, Field
+from pydantic import BaseModel, AnyHttpUrl, Field, RootModel
 
 from .face_selection import BoundingBox
 
@@ -91,6 +91,6 @@ class GetBboxRequest(BaseModel):
     """Request model for get_bbox endpoint."""
     urls: List[AnyHttpUrl]
 
-class GetBboxResponse(BaseModel):
+class GetBboxResponse(RootModel):
     """Response model for get_bbox endpoint."""
-    __root__: List[ImageFaces]
+    root: List[ImageFaces]
