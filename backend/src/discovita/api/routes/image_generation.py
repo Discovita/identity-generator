@@ -1,6 +1,6 @@
 """Image generation route handlers."""
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from ...models import GenerateImageRequest, GenerateImageResponse
 from ...service.openai.image_generation import ImageGenerationService
 from ..dependencies import get_image_generation_service
@@ -23,8 +23,8 @@ async def generate_scene(
     )
     if not response.success:
         raise HTTPException(status_code=500, detail=response.error)
-        
-    # Get the first generated image
+    
+    assert response.data is not None
     image = response.data.data[0]
     return GenerateImageResponse(
         imageUrl=image.url,

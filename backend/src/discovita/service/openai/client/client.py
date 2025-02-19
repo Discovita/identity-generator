@@ -4,9 +4,9 @@ import os
 from typing import Optional
 from openai import AsyncOpenAI
 from pydantic import AnyHttpUrl
-from ..models import ImageResponse, OpenAIMode, SafeImageResponse
-from . import operations
-from .test import operations as test_operations
+from discovita.service.openai.models import ImageResponse, OpenAIMode, SafeImageResponse
+from discovita.service.openai.client import operations
+from discovita.service.openai.client.test import operations as test_operations
 
 class OpenAIClient:
     """Client for interacting with OpenAI's APIs (DALL-E, Vision, Chat)."""

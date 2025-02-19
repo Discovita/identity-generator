@@ -3,9 +3,37 @@
 from pathlib import Path
 from openai import AsyncOpenAI
 from pydantic import AnyHttpUrl
-from ...models import ImageResponse, GeneratedImage
+from discovita.service.openai.models import (
+    ImageResponse,
+    GeneratedImage,
+    SafeImageResponse
+)
 
-DUMMY_IMAGE_PATH = Path("src/face_swap/icons8/client/example_images/base_face_darth.png")
+DUMMY_IMAGE_PATH = Path("backend/src/discovita/service/icons8/client/example_images/base_face_darth.png")
+
+async def safe_generate_image(
+    client: AsyncOpenAI,
+    api_key: str,
+    prompt: str,
+) -> SafeImageResponse:
+    """Return dummy safe image generation response."""
+    response = ImageResponse(
+        created=1234567890,
+        data=[
+            GeneratedImage(
+                url="https://api.openai.com/test/safe-image.png",
+                revised_prompt=f"A highly detailed digital art {prompt}, 8k resolution, cinematic lighting"
+            )
+        ]
+    )
+    return SafeImageResponse(
+        success=True,
+        original_prompt=prompt,
+        error=None,
+        safety_violation=False,
+        cleaned_prompt=None,
+        data=response
+    )
 
 async def describe_image_with_vision(
     client: AsyncOpenAI,
