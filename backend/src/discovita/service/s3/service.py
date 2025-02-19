@@ -1,5 +1,7 @@
 """S3 service implementation."""
 
+import uuid
+from pathlib import Path
 import boto3
 from botocore.config import Config
 from .models import FileUploadRequest
@@ -18,9 +20,16 @@ class S3Service:
         self.bucket = settings.s3_bucket
         self.region = settings.aws_region
 
+    def _generate_unique_filename(self, original_filename: str) -> str:
+        """Generate a unique filename while preserving the original extension."""
+        extension = Path(original_filename).suffix
+        random_name = str(uuid.uuid4())
+        return f"{random_name}{extension}"
+
     def upload(self, request: FileUploadRequest) -> str:
         """Upload a file to S3 and return its public URL."""
-        key = f"uploads/{request.filename}"
+        unique_filename = self._generate_unique_filename(request.filename)
+        key = f"uploads/{unique_filename}"
         
         self.client.put_object(
             Bucket=self.bucket,
