@@ -66,53 +66,18 @@
         </note>
     </long-term-memory>
     <current-task>
-      We have written an Adalo client that works, see backend/scripts/adalo/main.py
+      The project deploy infrastructure is a mess.
 
-      Observe that script and the read the Adalo client implementation.  
+There's a run_services script which references a ./scripts/build.sh script which is distinct from the render_deploy/build.sh script. The ./sripts/build.sh script ... I'm not even sure which app it deploys, it's not clear.
 
-      Make a similar set of functions for doing CRUD operations against the `Identities`
-      table, analogous to the `Users` table.  
+How can we make this clear?
 
-      Collection ID is t_0lnnuplpppxwik9nor4e5n5w7
+My goal is simple, I think: it should be possible to run the entire project with one shell script.
 
-      A typical Identities object is:
+The shell script should allow you to specify which app you're running. If you forget to or don't know to do it, it prompts you (face-swapper or coach are the choices). It checks dependencies, reinstalling as needed; it builds the frontend and puts it in the directory to be served by the server; it runs the uvicorn server.
 
-      Notice that there are indeed punctuation marks in some of the keys, such as 
-      "Show I AM, true?" (note the comma after AM and the question mark after "true")
+Call this ./scripts/run_project.sh
 
-      `{
-"id": 0,
-"Movie Poster Moments": [1,2,3],
-"User identity": [1,2,3],
-"Shadow Keepers": [1,2,3],
-"Actions incompleted count": 0,
-"Name": "string",
-"show shadows, true?": true,
-"Today's Healthscore": 0,
-"Show I AM, true?": true,
-"Order #": 0,
-"Safety phrase": "string",
-"Actions": [1,2,3],
-"AI Identity Images": [1,2,3],
-"Actions completed count": 0,
-"Show, safety phrase, true": true,
-"Health Score": 0,
-"I am statement": "string",
-"created_at": "2019-08-24T14:15:22Z",
-"updated_at": "2019-08-24T14:15:22Z"
-}
-`
-
-    Implement the client and make a proof-of-concept script that can CRUD these Identities. 
-
-    Be sure to create first, and then update/delete on the created identity.
-
-    You've actually already started on it, you've made changes to 
-    .../adalo/client.py which I think wrap up most of the project.  
-    Check on the work, and finish it up; when it looks good, 
-    write a backend/scripts/... proof-of-concept script to make 
-    sure it is working for users and identities.
-
-    
+All other bash scripts should be in a subdirectory called ./scripts/utils. Thus run_project.sh is the only script in the top-level directory. The README simply tells the user to run ./scripts/run_project.sh
     </current-task>
 </cline-context>

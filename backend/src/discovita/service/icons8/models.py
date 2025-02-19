@@ -41,11 +41,6 @@ class FaceTask(BaseModel):
     target_landmarks: List[float]
     boundary_adjustments: BoundaryAdjustments = BoundaryAdjustments()
 
-class FaceSwapRequest(BaseModel):
-    """Request model for face swap operation."""
-    target_url: AnyHttpUrl = Field(..., description="URL of the target image")
-    face_tasks: List[FaceTask]
-
 class ProcessedImage(BaseModel):
     """Details of a processed image."""
     width: int
@@ -90,6 +85,30 @@ class ImageFaces(BaseModel):
 class GetBboxRequest(BaseModel):
     """Request model for get_bbox endpoint."""
     urls: List[AnyHttpUrl]
+
+    def to_json(self) -> dict:
+        """Convert model to JSON-serializable dict."""
+        return {"urls": [str(url) for url in self.urls]}
+
+class FaceSwapRequest(BaseModel):
+    """Request model for face swap operation."""
+    target_url: AnyHttpUrl = Field(..., description="URL of the target image")
+    face_tasks: List[FaceTask]
+
+    def to_json(self) -> dict:
+        """Convert model to JSON-serializable dict."""
+        return {
+            "target_url": str(self.target_url),
+            "face_tasks": [
+                {
+                    "source_url": str(task.source_url),
+                    "source_landmarks": task.source_landmarks,
+                    "target_landmarks": task.target_landmarks,
+                    "boundary_adjustments": task.boundary_adjustments.model_dump()
+                }
+                for task in self.face_tasks
+            ]
+        }
 
 class GetBboxResponse(RootModel):
     """Response model for get_bbox endpoint."""

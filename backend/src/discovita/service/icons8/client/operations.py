@@ -30,7 +30,7 @@ async def get_landmarks(client: AsyncClient, api_key: str, urls: List[str]) -> G
     response = await client.post(
         "/get_bbox",
         params={"token": api_key},
-        json=request.dict()
+        json=request.to_json()
     )
     
     response_data = response.json()
@@ -50,8 +50,8 @@ async def swap_faces(client: AsyncClient, api_key: str, source_url: str, target_
     source_http_url = validate_url(source_url)
     
     landmarks_response = await get_landmarks(client, api_key, [source_url, target_url])
-    source_faces = next(img for img in landmarks_response.__root__ if img.img_url == source_http_url)
-    target_faces = next(img for img in landmarks_response.__root__ if img.img_url == target_http_url)
+    source_faces = next(img for img in landmarks_response.root if img.img_url == source_http_url)
+    target_faces = next(img for img in landmarks_response.root if img.img_url == target_http_url)
     
     assert source_faces.faces, "No faces detected in source image"
     assert target_faces.faces, "No faces detected in target image"
@@ -80,7 +80,7 @@ async def swap_faces(client: AsyncClient, api_key: str, source_url: str, target_
     response = await client.post(
         "/process_image",
         params={"token": api_key},
-        json=request.dict()
+        json=request.to_json()
     )
     
     response_data = response.json()

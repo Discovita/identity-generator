@@ -30,7 +30,11 @@ class OpenAIClient:
             max_retries=3
         )
         self.ops = test_operations if self.mode == OpenAIMode.TEST else operations
-    
+
+    async def get_completion(self, prompt: str) -> str:
+        """Get a completion from GPT-4o."""
+        return await self.ops.get_completion(self.client, prompt)
+
     async def generate_image(self, prompt: str) -> ImageResponse:
         """Generate an image from a text prompt using DALL-E."""
         return await self.ops.generate_image(self.client, self.api_key, prompt)
@@ -39,6 +43,3 @@ class OpenAIClient:
         """Get a description of an image using GPT-4 Vision."""
         return await self.ops.describe_image_with_vision(self.client, image_url, prompt)
     
-    async def get_completion(self, prompt: str) -> str:
-        """Get a completion from GPT-4o."""
-        return await self.ops.get_completion(self.client, prompt)

@@ -1,10 +1,9 @@
-fastapi<0.100.0
+fastapi
 uvicorn
 python-multipart
 boto3
 httpx[http2]
 python-dotenv
-pydantic>=1.10.0,<2.0.0
-python-dotenv
+pydantic
 openai
 pytest
