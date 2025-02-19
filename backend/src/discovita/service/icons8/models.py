@@ -91,6 +91,9 @@ class GetBboxRequest(BaseModel):
     """Request model for get_bbox endpoint."""
     urls: List[AnyHttpUrl]
 
-class GetBboxResponse(RootModel):
+class GetBboxResponse(BaseModel):
     """Response model for get_bbox endpoint."""
-    root: List[ImageFaces]
+    faces: List[ImageFaces] = Field(default_factory=list)
+
+    def __iter__(self):
+        return iter(self.faces)
