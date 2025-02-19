@@ -66,18 +66,104 @@
         </note>
     </long-term-memory>
     <current-task>
-      The project deploy infrastructure is a mess.
+    Help me troubleshoot my deploy.  First make sure it works locally.
 
-There's a run_services script which references a ./scripts/build.sh script which is distinct from the render_deploy/build.sh script. The ./sripts/build.sh script ... I'm not even sure which app it deploys, it's not clear.
-
-How can we make this clear?
-
-My goal is simple, I think: it should be possible to run the entire project with one shell script.
-
-The shell script should allow you to specify which app you're running. If you forget to or don't know to do it, it prompts you (face-swapper or coach are the choices). It checks dependencies, reinstalling as needed; it builds the frontend and puts it in the directory to be served by the server; it runs the uvicorn server.
-
-Call this ./scripts/run_project.sh
-
-All other bash scripts should be in a subdirectory called ./scripts/utils. Thus run_project.sh is the only script in the top-level directory. The README simply tells the user to run ./scripts/run_project.sh
+    <server-deploy-logs>
+      ==> Running './scripts/render_deploy/start.sh'
+Traceback (most recent call last):
+  File "/opt/render/project/src/backend/.venv/bin/uvicorn", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/click/core.py", line 1161, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/click/core.py", line 1082, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/click/core.py", line 1443, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/click/core.py", line 788, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/uvicorn/main.py", line 412, in main
+    run(
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/uvicorn/main.py", line 579, in run
+    server.run()
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/opt/render/project/src/backend/src/discovita/app.py", line 9, in <module>
+    from .api.router import router
+  File "/opt/render/project/src/backend/src/discovita/api/router.py", line 4, in <module>
+    from .routes import image_generation, face_swap, upload, image_description
+  File "/opt/render/project/src/backend/src/discovita/api/routes/__init__.py", line 4, in <module>
+    from . import face_swap
+  File "/opt/render/project/src/backend/src/discovita/api/routes/face_swap.py", line 8, in <module>
+    from ...service.icons8.icons8_service import Icons8Service
+  File "/opt/render/project/src/backend/src/discovita/service/icons8/icons8_service.py", line 6, in <module>
+    from .client import Icons8Client
+  File "/opt/render/project/src/backend/src/discovita/service/icons8/client/__init__.py", line 3, in <module>
+    from .client import Icons8Client
+  File "/opt/render/project/src/backend/src/discovita/service/icons8/client/client.py", line 5, in <module>
+    from ..models import FaceSwapResponse, ImageId, GetBboxResponse
+  File "/opt/render/project/src/backend/src/discovita/service/icons8/models.py", line 5, in <module>
+    from pydantic import BaseModel, AnyHttpUrl, Field, RootModel
+ImportError: cannot import name 'RootModel' from 'pydantic' (/opt/render/project/src/backend/.venv/lib/python3.11/site-packages/pydantic/__init__.cpython-311-x86_64-linux-gnu.so)
+==> Deploying...
+==> Running './scripts/start.sh'
+INFO:     Will watch for changes in these directories: ['/opt/render/project/src/backend']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [96] using StatReload
+2025-02-19 16:22:42,350 - discovita.app - INFO - Environment variables loaded
+INFO:     Started server process [98]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:43460 - "HEAD / HTTP/1.1" 200 OK
+==> No open ports detected on 0.0.0.0, continuing to scan...
+==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+==> No open ports detected on 0.0.0.0, continuing to scan...
+==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+==> No open ports detected on 0.0.0.0, continuing to scan...
+==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+==> No open ports detected on 0.0.0.0, continuing to scan...
+==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+==> No open ports detected on 0.0.0.0, continuing to scan...
+==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+==> Port scan timeout reached, no open ports detected on 0.0.0.0. Detected open ports on localhost -- did you mean to bind one of these to 0.0.0.0?
+==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+==> Deploying...
+==> Exited with status 2
+==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
+==> Deploying...
+</server-deploy-logs>
     </current-task>
 </cline-context>
