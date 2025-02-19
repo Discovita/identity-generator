@@ -1,23 +1,29 @@
-# face-swap
+# Discovita Apps
 
-A face swapping application with a FastAPI backend and React frontend.
+This repository contains two applications:
+- Face Swapper: A face swapping application
+- Coach: An AI coaching application
 
-## Running the Backend Server
+## Running the Project
 
-To run the backend server in development mode with auto-reload:
-
-```bash
-uvicorn face_swap.app:app --reload
-```
-
-The server will start and listen for incoming requests. Any changes to the code will automatically reload the server.
-
-## Running the Full Stack
-
-To run both the backend and frontend together, use:
+To run either application, simply use:
 
 ```bash
-./scripts/run_services.sh
+./scripts/run_project.sh
 ```
 
-This will start both the FastAPI backend server and the React frontend development server.
+If no app is specified, you will be prompted to choose which app to run. Alternatively, you can specify the app directly:
+
+```bash
+./scripts/run_project.sh face-swapper
+# or
+./scripts/run_project.sh coach
+```
+
+The script will:
+1. Check for required dependencies (Python, pip, Node.js, npm)
+2. Install Python and npm dependencies
+3. Build the frontend
+4. Start the server
+
+The application will be available at http://localhost:8000
