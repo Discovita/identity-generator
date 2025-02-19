@@ -66,11 +66,13 @@ cd "$PROJECT_ROOT"
 echo "Installing Python dependencies..."
 cd backend
 . .venv/bin/activate
+python -m pip install -r requirements.txt
 python -m pip install -e .
 cd ..
 
 echo "Building frontend..."
 cd frontend
+mkdir -p apps/$APP_NAME/build
 npm install
 npm run install:$APP_NAME
 npm run build:$APP_NAME

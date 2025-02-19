@@ -25,9 +25,9 @@ Directory Structure
 │           └── src/
 │
 └── scripts/               # Build and deployment scripts
-    ├── build.sh          # Local build script
-    ├── run_services.sh   # Local development script
-    └── render_deploy/    # Production deployment scripts
+    ├── build.sh          # Build script
+    ├── run_project.sh    # Project runner
+    └── start.sh          # Start script
 ```
 
 Application Architecture
@@ -68,10 +68,10 @@ Local Development
 2. Run a frontend app:
    ```bash
    # For face-swapper
-   ./scripts/run_services.sh face-swapper
+   ./scripts/run_project.sh face-swapper
 
    # For coach app
-   ./scripts/run_services.sh coach
+   ./scripts/run_project.sh coach
    ```
 
 This will:
@@ -84,13 +84,13 @@ Production Deployment
 -------------------
 1. Build the application:
    ```bash
-   ./scripts/render_deploy/build.sh <app-name>
+   ./scripts/build.sh <app-name>
    ```
    Where <app-name> is either 'face-swapper' or 'coach'
 
 2. Start the production server:
    ```bash
-   ./scripts/render_deploy/start.sh
+   ./scripts/start.sh
    ```
 
 The build process:
