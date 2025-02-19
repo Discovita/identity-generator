@@ -64,11 +64,12 @@
             using the OpenAI client.  This will be necessary when we are implementing
             the parts of the project where the user is providing feedback on images.
         </note>
+        <note>
+            Project uses Pydantic v2. V1 functions like dict() are not allowed.
+            Use model_dump() instead of dict() for serialization.
+        </note>
     </long-term-memory>
     <current-task>
-        The photo upload API currently puts user photos on AWS with 
-        the original filename from the user's machine. We'd prefer
-        that the files stored on AWS have random unguessable strings. 
-        Make it so.
+        Fix all compiler errors and ensure tests pass.
     </current-task>
 </cline-context>

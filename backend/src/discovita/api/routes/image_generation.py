@@ -1,6 +1,6 @@
 """Image generation route handlers."""
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from ...models import GenerateImageRequest, GenerateImageResponse
 from ...service.openai.image_generation import ImageGenerationService
 from ..dependencies import get_image_generation_service
@@ -13,7 +13,7 @@ async def generate_scene(
     service: ImageGenerationService = Depends(get_image_generation_service)
 ) -> GenerateImageResponse:
     """Generate an image based on the user's vision."""
-    response = await service.generate_scene(
+    response = await service.safe_generate_scene(
         setting=request.setting,
         outfit=request.outfit,
         emotion=request.emotion,
@@ -21,8 +21,11 @@ async def generate_scene(
         user_feedback=request.userFeedback,
         previous_augmented_prompt=request.previousAugmentedPrompt
     )
-    # Get the first generated image
-    image = response.data[0]
+    if not response.success:
+        raise HTTPException(status_code=500, detail=response.error)
+    
+    assert response.data is not None
+    image = response.data.data[0]
     return GenerateImageResponse(
         imageUrl=image.url,
         augmentedPrompt=image.revised_prompt

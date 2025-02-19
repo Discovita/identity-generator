@@ -12,23 +12,21 @@ async def test_no_faces_error() -> None:
     
     # Create mock post function with proper typing
     async def mock_post(url: str, **kwargs) -> MockResponse:
-        return MockResponse({
-            "__root__": [
-                {
-                    "img_url": "https://example.com/source.jpg",
-                    "faces": []
-                },
-                {
-                    "img_url": "https://example.com/target.jpg",
-                    "faces": [
-                        {
-                            "bbox": [0, 0, 100, 100],
-                            "landmarks": [0.0] * 68  # Icons8 uses 68 facial landmarks
-                        }
-                    ]
-                }
-            ]
-        }, url="https://api.icons8.com/get_bbox")
+        return MockResponse([
+            {
+                "img_url": "https://example.com/source.jpg",
+                "faces": []
+            },
+            {
+                "img_url": "https://example.com/target.jpg",
+                "faces": [
+                    {
+                        "bbox": [0, 0, 100, 100],
+                        "landmarks": [0.0] * 68  # Icons8 uses 68 facial landmarks
+                    }
+                ]
+            }
+        ], url="https://api.icons8.com/get_bbox")
     
     # Monkey patch the client's post method
     setattr(client.client, "post", mock_post)

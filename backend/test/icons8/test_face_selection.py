@@ -8,7 +8,7 @@ from discovita.service.icons8.models import (
     ProcessStatus,
 )
 from .mock_response import MockResponse
-from .fixtures import mock_landmarks_response, mock_swap_response
+from fixtures.icons8 import mock_landmarks_response, mock_swap_response
 
 pytestmark = pytest.mark.asyncio
 

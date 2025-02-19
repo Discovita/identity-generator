@@ -23,6 +23,15 @@ class GenerateImageRequest(BaseModel):
 class GenerateImageResponse(BaseModel):
     imageUrl: str
     augmentedPrompt: str
+
+class SafeGenerateImageResponse(BaseModel):
+    """Response for safe image generation with safety handling."""
+    imageUrl: str | None = None
+    augmentedPrompt: str | None = None
+    success: bool
+    error: str | None = None
+    safety_violation: bool = False
+    cleaned_prompt: str | None = None
     
 class SwapFaceRequest(BaseModel):
     """Request model for face swap operation."""
