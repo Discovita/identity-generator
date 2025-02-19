@@ -2,7 +2,7 @@
 
 from enum import IntEnum
 from typing import NewType, Optional, List
-from pydantic import BaseModel, AnyHttpUrl, Field, RootModel
+from pydantic import BaseModel, AnyHttpUrl, Field, ConfigDict
 
 from .face_selection import BoundingBox
 
@@ -50,6 +50,8 @@ class ProcessedImage(BaseModel):
 
 class FaceSwapResponse(BaseModel):
     """Response model for face swap operation."""
+    model_config = ConfigDict(populate_by_name=True)
+    
     id: ImageId
     processed: Optional[ProcessedImage] = None
     status: ProcessStatus
@@ -80,7 +82,7 @@ class ImageFaces(BaseModel):
 
     def get_face_objects(self) -> List[Face]:
         """Convert raw faces to Face objects."""
-        return [Face.from_icons8_response(face.dict()) for face in self.faces]
+        return [Face.from_icons8_response(face.model_dump()) for face in self.faces]
 
 class GetBboxRequest(BaseModel):
     """Request model for get_bbox endpoint."""
@@ -110,6 +112,18 @@ class FaceSwapRequest(BaseModel):
             ]
         }
 
-class GetBboxResponse(RootModel):
+class GetBboxResponse(BaseModel):
     """Response model for get_bbox endpoint."""
-    root: List[ImageFaces]
+    images: List[ImageFaces] = Field(default_factory=list)
+
+    @classmethod
+    def model_validate(
+        cls,
+        obj: List[dict],
+        *,
+        strict: bool | None = False,
+        from_attributes: bool | None = False,
+        context: dict | None = None,
+    ) -> "GetBboxResponse":
+        """Create response from API's array response."""
+        return cls(images=[ImageFaces.model_validate(item) for item in obj])

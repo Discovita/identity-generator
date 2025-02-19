@@ -42,7 +42,7 @@ async def get_landmarks(client: AsyncClient, api_key: str, urls: List[str]) -> G
             detail=response_data.get('error', 'Unknown error')
         )
         
-    return GetBboxResponse.parse_obj(response_data)
+    return GetBboxResponse.model_validate(response_data)
 
 async def swap_faces(client: AsyncClient, api_key: str, source_url: str, target_url: str) -> FaceSwapResponse:
     """Submit a face swap job to Icons8."""
@@ -50,8 +50,8 @@ async def swap_faces(client: AsyncClient, api_key: str, source_url: str, target_
     source_http_url = validate_url(source_url)
     
     landmarks_response = await get_landmarks(client, api_key, [source_url, target_url])
-    source_faces = next(img for img in landmarks_response.root if img.img_url == source_http_url)
-    target_faces = next(img for img in landmarks_response.root if img.img_url == target_http_url)
+    source_faces = next(img for img in landmarks_response.images if img.img_url == source_http_url)
+    target_faces = next(img for img in landmarks_response.images if img.img_url == target_http_url)
     
     assert source_faces.faces, "No faces detected in source image"
     assert target_faces.faces, "No faces detected in target image"
@@ -92,7 +92,7 @@ async def swap_faces(client: AsyncClient, api_key: str, source_url: str, target_
             detail=response_data.get('error', 'Unknown error')
         )
         
-    return FaceSwapResponse.parse_obj(response_data)
+    return FaceSwapResponse.model_validate(response_data)
 
 async def get_job_status(client: AsyncClient, api_key: str, job_id: ImageId) -> FaceSwapResponse:
     """Get the status of a face swap job."""
@@ -110,7 +110,7 @@ async def get_job_status(client: AsyncClient, api_key: str, job_id: ImageId) -> 
             detail=response_data.get('error', 'Unknown error')
         )
         
-    return FaceSwapResponse.parse_obj(response_data)
+    return FaceSwapResponse.model_validate(response_data)
 
 async def list_jobs(client: AsyncClient, api_key: str) -> List[FaceSwapResponse]:
     """Get list of face swap jobs."""
@@ -121,4 +121,4 @@ async def list_jobs(client: AsyncClient, api_key: str) -> List[FaceSwapResponse]
     
     log_response(response, "List jobs")
     data = response.json()
-    return [FaceSwapResponse.parse_obj(img) for img in data["images"]]
+    return [FaceSwapResponse.model_validate(img) for img in data["images"]]

@@ -10,7 +10,7 @@ class AdaloRecord(BaseModel):
 
     class Config:
         extra = "allow"
-        allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class GetRecordsResponse(BaseModel):
