@@ -54,9 +54,11 @@
         <note>
             Start app:
             ```
-            cd backend && uvicorn discovita.app:app --reload  # Terminal 1
-            cd frontend && npm start                          # Terminal 2
+            ./scripts/run_project.sh [app-name]  # Where app-name is either 'coach' or 'face-swapper'
             ```
+            
+            The script handles all setup, building, and deployment. If no app-name is provided,
+            it will prompt for selection. All utility scripts are in scripts/utils/.
         </note>
         <note>
           src/scripts/dalle/darth_vader_example.py demonstrates how to generate

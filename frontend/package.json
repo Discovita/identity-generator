@@ -15,6 +15,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:coach": "PUBLIC_URL=/coach REACT_APP_APP_TYPE=coach react-scripts build",
+    "build:face-swapper": "PUBLIC_URL=/face-swapper REACT_APP_APP_TYPE=face-swapper react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
