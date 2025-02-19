@@ -1,0 +1,23 @@
+# Common Bugs and Issues
+
+## Dependency Version Mismatches
+
+### Pydantic v1 vs v2 Syntax
+ISSUE: Code using pydantic v1 syntax (like `__root__` attribute) fails when running with pydantic v2.
+
+ROOT CAUSE: Not having exact versions pinned in requirements.txt allowed pydantic to upgrade from v1 to v2, but code wasn't updated to use v2 syntax.
+
+PREVENTION:
+1. Always pin exact versions in requirements.txt (e.g., pydantic==2.10.6)
+2. Use `pip freeze > requirements.txt` to capture known-working versions
+3. When upgrading dependencies:
+   - Review breaking changes in new versions
+   - Update all related code to use new syntax
+   - Test thoroughly before committing
+
+EXAMPLES:
+- Pydantic v1: Uses `__root__` attribute
+- Pydantic v2: Uses `RootModel` with `root` attribute
+- FastAPI requires specific pydantic versions, so upgrading one may require upgrading both
+
+LESSON: Dependency versioning is critical for stable deployments. Always use exact versions and test thoroughly when upgrading.
