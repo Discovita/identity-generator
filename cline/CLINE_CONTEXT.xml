@@ -64,11 +64,50 @@
             using the OpenAI client.  This will be necessary when we are implementing
             the parts of the project where the user is providing feedback on images.
         </note>
+        <note>
+            Project uses Pydantic v2. V1 functions like dict() are not allowed.
+            Use model_dump() instead of dict() for serialization.
+        </note>
     </long-term-memory>
     <current-task>
-        The photo upload API currently puts user photos on AWS with 
-        the original filename from the user's machine. We'd prefer
-        that the files stored on AWS have random unguessable strings. 
-        Make it so.
+        Troubleshoot
+
+        <outout>
+        (venv) ➜  identity-generator git:(mazerakham/openai-client-impr) ✗ ./scripts/run_project.sh 
+Checking dependencies...
+Activating virtual environment...
+Requirement already satisfied: pip in ./venv/lib/python3.11/site-packages (25.0.1)
+Which app would you like to run?
+1) face-swapper
+2) coach
+Enter 1 or 2: 1
+Starting face-swapper app...
+Installing Python dependencies...
+Obtaining file:///Users/jakemirra/workspace/discovita/identity-generator/backend
+  Installing build dependencies ... done
+  Checking if build backend supports build_editable ... done
+  Getting requirements to build editable ... error
+  error: subprocess-exited-with-error
+  
+  × Getting requirements to build editable did not run successfully.
+  │ exit code: 1
+  ╰─> [6 lines of output]
+      running egg_info
+      writing src/discovita.egg-info/PKG-INFO
+      writing dependency_links to src/discovita.egg-info/dependency_links.txt
+      writing requirements to src/discovita.egg-info/requires.txt
+      writing top-level names to src/discovita.egg-info/top_level.txt
+      error: package directory 'src/service_openai' does not exist
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: subprocess-exited-with-error
+
+× Getting requirements to build editable did not run successfully.
+│ exit code: 1
+╰─> See above for output.
+
+note: This error originates from a subprocess, and is likely not a problem with pip.
+        </outout>
     </current-task>
 </cline-context>

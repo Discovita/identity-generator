@@ -1,7 +1,7 @@
 """Data models for OpenAI API interactions."""
 
 from enum import Enum
-from typing import List, Union, Dict, Any
+from typing import List, Union, Dict, Any, Optional
 from pydantic import BaseModel, Field
 
 class OpenAIMode(str, Enum):
@@ -26,6 +26,15 @@ class ImageResponse(BaseModel):
     """Response model for image operations."""
     created: int = Field(..., description="Unix timestamp of when the request was created")
     data: List[GeneratedImage]
+
+class SafeImageResponse(BaseModel):
+    """Response model for safe image generation with safety handling."""
+    success: bool = Field(..., description="Whether the operation was successful")
+    data: Optional[ImageResponse] = Field(None, description="Generated image data if successful")
+    error: Optional[str] = Field(None, description="Error message if unsuccessful")
+    safety_violation: bool = Field(False, description="Whether a safety violation occurred")
+    original_prompt: str = Field(..., description="Original prompt that was submitted")
+    cleaned_prompt: Optional[str] = Field(None, description="Cleaned prompt if safety violation occurred")
 
 class OpenAIError(Exception):
     """OpenAI API error."""

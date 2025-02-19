@@ -1,7 +1,7 @@
 """OpenAI API operations."""
 
 from typing import List, Dict, Any
-from openai import AsyncOpenAI
+from openai import AsyncOpenAI, APIError
 from pydantic import AnyHttpUrl
 from . import logging
 from ..models import (
@@ -12,7 +12,8 @@ from ..models import (
     VisionRequest,
     CompletionRequest,
     ChatMessage,
-    ChatResponse
+    ChatResponse,
+    SafeImageResponse
 )
 
 async def describe_image_with_vision(
@@ -93,3 +94,58 @@ async def generate_image(
             for img in response.data
         ]
     )
+
+async def safe_generate_image(
+    client: AsyncOpenAI,
+    api_key: str,
+    prompt: str,
+) -> SafeImageResponse:
+    """Generate an image with safety handling."""
+    try:
+        response = await generate_image(client, api_key, prompt)
+        return SafeImageResponse(
+            success=True,
+            data=response,
+            original_prompt=prompt
+        )
+    except APIError as e:
+        error_str = str(e)
+        if "safety system" in error_str:
+            # Clean the prompt using GPT-4
+            system_prompt = """You are an AI that helps make image generation prompts safe and appropriate. 
+            Rewrite the following prompt to remove any content that might violate content policies 
+            while preserving the core intent. Focus on making the prompt family-friendly and non-violent.
+            
+            Original prompt: """
+            
+            try:
+                cleaned_prompt = await get_completion(client, system_prompt + prompt)
+                # Try again with cleaned prompt
+                try:
+                    response = await generate_image(client, api_key, cleaned_prompt)
+                    return SafeImageResponse(
+                        success=True,
+                        data=response,
+                        original_prompt=prompt,
+                        cleaned_prompt=cleaned_prompt
+                    )
+                except APIError as retry_error:
+                    return SafeImageResponse(
+                        success=False,
+                        error=str(retry_error),
+                        safety_violation=True,
+                        original_prompt=prompt,
+                        cleaned_prompt=cleaned_prompt
+                    )
+            except APIError as clean_error:
+                return SafeImageResponse(
+                    success=False,
+                    error=str(clean_error),
+                    safety_violation=True,
+                    original_prompt=prompt
+                )
+        return SafeImageResponse(
+            success=False,
+            error=error_str,
+            original_prompt=prompt
+        )

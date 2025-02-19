@@ -1,0 +1,74 @@
+Here's a Python code snippet that creates a wrapper function for OpenAI's chat completion, incorporating the requested functionality:
+
+```python
+import openai
+from openai import OpenAI
+
+def safe_chat_completion(prompt, max_tokens=100, temperature=0.7):
+    client = OpenAI()
+    
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=max_tokens,
+            temperature=temperature
+        )
+        return response.choices[0].message.content
+    except openai.BadRequestError as e:
+        if e.code == "content_policy_violation":
+            try:
+                clean_prompt_response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "Please rewrite the following prompt to make it appropriate and safe, removing any content that might violate content policies:"},
+                        {"role": "user", "content": prompt}
+                    ],
+                    max_tokens=max_tokens,
+                    temperature=temperature
+                )
+                clean_prompt = clean_prompt_response.choices[0].message.content
+                
+                final_response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[{"role": "user", "content": clean_prompt}],
+                    max_tokens=max_tokens,
+                    temperature=temperature
+                )
+                return final_response.choices[0].message.content
+            except Exception as inner_e:
+                return f"Error cleaning prompt: {str(inner_e)}"
+        else:
+            return f"Error: {str(e)}"
+    except Exception as e:
+        return f"Unexpected error: {str(e)}"
+```
+
+This function, `safe_chat_completion`, does the following:
+
+1. It attempts to create a chat completion using the provided prompt.
+
+2. If the request fails due to a content policy violation (indicated by the error code "content_policy_violation"), it:
+   a. Sends a new request to clean the prompt.
+   b. Uses the cleaned prompt to make another chat completion request.
+
+3. If any other error occurs, it returns an error message.
+
+To use this function:
+
+```python
+result = safe_chat_completion("Your prompt here")
+print(result)
+```
+
+Note that this function specifically checks for the "content_policy_violation" error code, which indicates a trust and safety issue. Other types of errors will be caught by the general exception handler[1][2][4].
+
+Citations:
+[1] https://platform.openai.com/docs/api-reference/chat
+[2] https://help.openai.com/en/articles/6897213-openai-library-error-types-guidance
+[3] https://gist.github.com/pszemraj/c643cfe422d3769fd13b97729cf517c5
+[4] https://github.com/heyfoz/python-openai-chatcompletion
+[5] https://stackoverflow.com/questions/76363168/openai-api-how-do-i-handle-errors-in-python
+[6] https://stackoverflow.com/questions/75838175/create-function-for-openai-and-chatcompletion-in-python
+[7] https://community.openai.com/t/issue-with-openai-chatcompletion-create-in-latest-openai-python-library/926301
+[8] https://learn.microsoft.com/en-us/answers/questions/1329414/how-can-i-handle-openai-api-errors-when-im-using-t
