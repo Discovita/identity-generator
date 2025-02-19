@@ -10,5 +10,9 @@ setup(
         for line in open("requirements.txt").readlines()
         if line.strip() and not line.startswith("#")
     ],
-    python_requires=">=3.11",
+    # Ensure pydantic v2 is installed
+    dependency_links=[
+        "https://pypi.org/simple/pydantic/"
+    ],
+    python_requires=">=3.11,<4.0",
 )
