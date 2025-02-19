@@ -1,0 +1,106 @@
+# Build Setup Instructions
+
+Create a unified build and deployment script that handles both the coach and face-swapper apps. The goal is to have a single command that sets up dependencies, builds the selected app, and runs the server.
+
+## 1. Create Project Structure
+
+1. Move all existing utility scripts to scripts/utils/
+2. Create a new scripts/run_project.sh as the main entry point
+
+## 2. Implement run_project.sh
+
+Create a bash script with the following components:
+
+1. App Selection:
+   - Accept app name as command line argument
+   - If no argument, prompt user to select between "face-swapper" and "coach"
+   - Validate selection is one of these two options
+
+2. Python Environment Setup:
+   - Create fresh venv in backend/venv
+   - Install exact versions from requirements.txt
+   - Install local package in editable mode
+
+3. Node.js Setup:
+   - Clean install using package-lock.json (npm ci)
+   - Handle npm deprecation warnings but don't try to fix them yet
+
+4. Frontend Build:
+   - Build the selected app with proper public URL
+   - For face-swapper: PUBLIC_URL="/face-swapper" REACT_APP_APP_TYPE=face-swapper
+   - For coach: PUBLIC_URL="/coach" REACT_APP_APP_TYPE=coach
+
+5. Backend Setup:
+   - Create backend/public directory structure
+   - Copy built frontend files to app-specific subdirectory
+   - Copy index.html to root for direct access
+
+6. Server Start:
+   - Run uvicorn with the correct Python path
+   - Enable auto-reload for development
+
+## 3. Error Handling
+
+1. Add set -e to fail on any error
+2. Add cleanup function to deactivate venv on exit
+3. Validate all user inputs
+4. Check return status of critical operations
+
+## 4. File Structure
+
+The final structure should be:
+```
+scripts/
+  run_project.sh     # Main entry point
+  utils/             # All other scripts
+    build.sh
+    run_services.sh
+    render_deploy/
+```
+
+## 5. Usage
+
+Update README.md to show simple usage:
+```bash
+./scripts/run_project.sh [app-name]  # where app-name is either 'coach' or 'face-swapper'
+```
+
+## 6. Key Implementation Details
+
+1. Python venv handling:
+```bash
+rm -rf backend/venv
+python3 -m venv backend/venv
+source backend/venv/bin/activate
+```
+
+2. Frontend build:
+```bash
+if [ "$app" = "face-swapper" ]; then
+    PUBLIC_URL="/face-swapper" REACT_APP_APP_TYPE=face-swapper npm run build
+elif [ "$app" = "coach" ]; then
+    PUBLIC_URL="/coach" REACT_APP_APP_TYPE=coach npm run build
+fi
+```
+
+3. Backend public directory:
+```bash
+rm -rf backend/public
+mkdir -p "backend/public/$app"
+cp -r frontend/build/* "backend/public/$app/"
+cp "backend/public/$app/index.html" backend/public/
+```
+
+4. Server start:
+```bash
+cd backend
+python -m uvicorn src.discovita.app:app --reload
+```
+
+## Notes
+
+- Keep all dependencies pinned to exact versions
+- Use npm ci instead of npm install for reproducible builds
+- Maintain proper directory structure for static file serving
+- Clean up old builds before creating new ones
+- Handle environment cleanup properly
