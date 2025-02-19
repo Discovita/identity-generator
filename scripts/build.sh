@@ -77,6 +77,7 @@ npm run build:$APP_NAME
 cd ..
 
 echo "Setting up backend public directory..."
+mkdir -p backend/public
 rm -rf backend/public/*
 cp -r frontend/apps/$APP_NAME/build/* backend/public/
 
