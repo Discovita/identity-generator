@@ -12,4 +12,10 @@ if [ ! -d ".venv" ]; then
 fi
 
 . .venv/bin/activate
-uvicorn discovita.app:app --reload
+
+# If PORT is set, bind to 0.0.0.0 for production
+if [ -n "${PORT}" ]; then
+    uvicorn discovita.app:app --host 0.0.0.0 --port "${PORT}"
+else
+    uvicorn discovita.app:app --reload --port 8000
+fi
