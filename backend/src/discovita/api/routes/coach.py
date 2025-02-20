@@ -13,7 +13,4 @@ async def handle_user_input(
     service: CoachService = Depends(get_coach_service)
 ) -> CoachResponse:
     """Handle user input and get coach response."""
-    return await service.get_response(
-        message=request.message,
-        context=request.context
-    )
+    return await service.get_response(request)
