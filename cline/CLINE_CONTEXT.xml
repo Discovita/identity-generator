@@ -37,6 +37,11 @@
         <rule>Keep source code files under 100 lines so they are AI assistant-friendly.  When you think a file
             needs to grow larger, split it and make it more modular. 
         </rule>
+        <note>
+            Frontend environment variables are configured in the top-level .env file and accessed
+            in React components using process.env.REACT_APP_* (e.g. process.env.REACT_APP_API_BASE_URL).
+            Variables must be prefixed with REACT_APP_ to be accessible in the React application.
+        </note>
         <rule>Inline comments are almost always bad and a code smell.  Good code should
             explain itself.
         </rule>
@@ -106,11 +111,13 @@
           <step>Added coach_chat_logic_trace.md documenting the request lifecycle</step>
         </steps-already-done>
         <current-step-within-task>
-            Add loading bubbles in chat, akin to a "user is typing" graphic
-            in a text message thread, for when the user is waiting
-            for the coach.  
+            We need to pause feature development to build some tools 
+            we'll find useful for it.  I want to build the ability
+            to test the coach chat component in various states. 
 
-            If server error, display red text to try again. 
+            I spoke to an expert and provided you with some pointers
+            from that conversation in ./cline/chat_testingg_ideas.md. 
+            Let that guide you.
         </current-step-within-task>
     </current-task>
 </cline-context>
