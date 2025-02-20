@@ -54,8 +54,10 @@
         <note>
             Start app:
             ```
+            <![CDATA[
             cd backend && uvicorn discovita.app:app --reload  # Terminal 1
             cd frontend && npm start                          # Terminal 2
+            ]]>
             ```
         </note>
         <note>
@@ -67,6 +69,13 @@
         <note>
             Project uses Pydantic v2. V1 functions like dict() are not allowed.
             Use model_dump() instead of dict() for serialization.
+        </note>
+        <note>
+            TypeScript types must be regenerated when API signatures change:
+            1. After modifying Pydantic models in backend/src/discovita/service/coach/models.py
+            2. Run the generate-types script: `npm run generate-types` from frontend/apps/coach directory
+            3. Include the updated apiTypes.ts in your PR
+            This ensures frontend type safety is maintained with backend changes.
         </note>
     </long-term-memory>
     <current-task>
