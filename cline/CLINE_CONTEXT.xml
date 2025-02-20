@@ -106,10 +106,11 @@
           <step>Added coach_chat_logic_trace.md documenting the request lifecycle</step>
         </steps-already-done>
         <current-step-within-task>
-            Next steps:
-            1. Generate TypeScript types for frontend to maintain type safety
-            2. Test frontend integration with new API response format
-            3. Add error handling for edge cases in identity extraction
+            Add loading bubbles in chat, akin to a "user is typing" graphic
+            in a text message thread, for when the user is waiting
+            for the coach.  
+
+            If server error, display red text to try again. 
         </current-step-within-task>
     </current-task>
 </cline-context>

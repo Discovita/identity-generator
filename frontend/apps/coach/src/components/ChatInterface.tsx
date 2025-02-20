@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { ChatMessage } from '../api/types'
 import { apiClient } from '../api/client'
+import { LoadingBubbles } from './LoadingBubbles'
 
 interface Props {
   userId: string
@@ -61,6 +62,7 @@ export const ChatInterface: React.FC<Props> = ({ userId }) => {
             {message.content}
           </div>
         ))}
+        {isLoading && <LoadingBubbles />}
         <div ref={messagesEndRef} />
       </div>
       <form onSubmit={handleSubmit} className="input-form">
