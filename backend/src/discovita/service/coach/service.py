@@ -1,30 +1,42 @@
 """Coaching service implementation."""
 
-from typing import List
-from .models import ChatMessage, CoachResponse
+from .models import CoachRequest, CoachResponse
+from .context_builder import ContextBuilder
+from .identity_processor import IdentityProcessor
 from ..openai.client.client import OpenAIClient
-
-SYSTEM_PROMPT = """You are a professional life coach. Your role is to help users achieve their personal and professional goals through supportive dialogue, insightful questions, and actionable guidance. Focus on being empathetic while maintaining professional boundaries. Guide users to discover their own solutions rather than giving direct advice."""
 
 class CoachService:
     """Service for handling coaching interactions."""
     
     def __init__(self, client: OpenAIClient):
         self.client = client
+        self.context_builder = ContextBuilder()
+        self.identity_processor = IdentityProcessor()
     
     async def get_response(
         self,
-        message: str,
-        context: List[ChatMessage]
+        request: CoachRequest
     ) -> CoachResponse:
         """Get a response from the coach."""
-        messages = [
-            ChatMessage(role="system", content=SYSTEM_PROMPT),
-            *context,
-            ChatMessage(role="user", content=message)
-        ]
+        # Build complete context
+        context = self.context_builder.build_context(
+            request.context,
+            request.profile
+        )
         
-        prompt = "\n".join(f"{msg.role}: {msg.content}" for msg in messages)
-        response = await self.client.get_completion(prompt)
+        # Get completion from OpenAI
+        response = await self.client.get_completion(
+            f"{context}\nuser: {request.message}"
+        )
         
-        return CoachResponse(message=response)
+        # Process identities and visualizations
+        suggested_identities = self.identity_processor.extract_identities(response)
+        visualization_prompt = self.identity_processor.generate_visualization(
+            suggested_identities
+        )
+        
+        return CoachResponse(
+            message=response,
+            suggested_identities=suggested_identities,
+            visualization_prompt=visualization_prompt
+        )
