@@ -1,0 +1,25 @@
+We are taking on a major new task.  
+
+We have a class called CoachService that powers the 
+POST -> /user_input API.  We might want to rename that
+when we come up with a better name, but at any rate:
+
+Right now the coach is a very naive wrapper around
+chatgpt 4o.  
+
+We need the coach to have the "personality" of the 
+company CEO Leigh Ann.  In fact, it should introduce
+itself to users as Leigh Ann.  
+
+Sample dialogue of Leigh Ann providing life coaching
+services is in 
+./cline/coach_planning/sample_dialogue_original.md
+
+We need to take this document and somehow use it 
+- or some refinement of it - to make the coach
+like Leigh Ann.  
+
+For now we're going to build a chat system where the 
+FRONT-END maintains all conversation and user state.
+Eventually we will persist user information in a backend
+database, but that is beyond the scope of the current task.
