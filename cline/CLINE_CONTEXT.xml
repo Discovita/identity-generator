@@ -70,12 +70,16 @@
         </note>
     </long-term-memory>
     <current-task>
+        Re-read:
         cline/coach_planning/coach_plan_start.txt
 
-        describes the project we are now starting.  Read
-        it and make a refined technical plan called
-        coach_plan_technical.md in that same directory.
-        The idea is that we will use that doc to move
-        forward with the project.
+        We wrote a technical plan together.  Read it as well:
+        cline/coach_planning/coach_plan_technical.md
+
+        <steps-already-done>
+          <!-- None.  Use <step> tags to list the -->
+          <!-- things we've already done as we do them. -->
+          <!-- We are just getting started now. -->
+        </steps-already-done>
     </current-task>
 </cline-context>
