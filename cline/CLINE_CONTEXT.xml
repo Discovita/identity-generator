@@ -114,13 +114,12 @@
           easily.</step>
         </steps-already-done>
         <current-step-within-task>
-            Build a conversation export button that exports the conversation
-            to XML and downloads it for the user from the coach app.
-
-            It will be useful for users and for our team to debug coach issues.
-
-            Come up with a reasonable XML format that captures any
-            relevant details about the conversation state.
+            We're in the middle of building identity extraction,
+            but I'm getting lost.  I need you to write out
+            a document, cline/identity_extraction_trace.md that
+            summarizes what code we've written so far for the
+            coach API, how the components interact with each
+            other, and what work remains to do to implement it. 
         </current-step-within-task>
     </current-task>
 </cline-context>
