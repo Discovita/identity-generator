@@ -2,7 +2,8 @@
 
 from enum import Enum
 from typing import Dict, List, Optional
-from pydantic import BaseModel, Field
+from pydantic import Field, BaseModel
+from discovita.service.openai.models.llm_response import LLMResponseModel
 
 class ChatMessage(BaseModel):
     """Single chat message."""
@@ -41,7 +42,7 @@ class CoachRequest(BaseModel):
     context: List[ChatMessage] = Field(default_factory=list, description="Previous chat context")
     profile: Optional[UserProfile] = Field(None, description="User's identity profile")
 
-class CoachResponse(BaseModel):
+class CoachResponse(LLMResponseModel):
     """Response model for coach API."""
     message: str = Field(..., description="Coach's response message")
     suggested_identities: Optional[List[Identity]] = Field(None, description="Suggested new identities")

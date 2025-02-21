@@ -33,10 +33,19 @@ async def get_structured_completion(
     Args:
         client: OpenAI client instance
         messages: List of message dictionaries with role and content
-        response_model: Pydantic model class for response validation
+        response_model: Pydantic model class for response validation that extends LLMResponseModel
     """
+    # Get schema instruction for the response model
+    schema_instruction = response_model.get_prompt_instruction()
+    
+    # Add schema instruction to the last message
+    final_messages = messages[:-1]
+    last_message = messages[-1].copy()
+    last_message["content"] = f"{last_message['content']}\n\n{schema_instruction}"
+    final_messages.append(last_message)
+    
     request = CompletionRequest(
-        messages=[ChatMessage(**msg) for msg in messages],
+        messages=[ChatMessage(**msg) for msg in final_messages],
         response_format={"type": "json_object"}
     )
     
