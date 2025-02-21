@@ -7,6 +7,24 @@ export interface TestState {
 }
 
 export const testStates: Record<string, TestState> = {
+  xmlExportTest: {
+    name: 'XML Export Test',
+    description: 'Test state with malformed HTML and special characters',
+    messages: [
+      {
+        role: 'user',
+        content: 'Here is text with an <div>unclosed tag and & special characters'
+      },
+      {
+        role: 'assistant',
+        content: 'Response with <b>mixed formatting</b> and <i>some unclosed tags <u> and nested <span>elements'
+      },
+      {
+        role: 'user',
+        content: 'Message with <script>alert("xss")</script> attempt & multiple && ampersands'
+      }
+    ]
+  },
   initialGreeting: {
     name: 'Initial Greeting',
     description: 'First interaction with Leigh Ann, no prior context',

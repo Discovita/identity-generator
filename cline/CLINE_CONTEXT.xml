@@ -114,17 +114,13 @@
           easily.</step>
         </steps-already-done>
         <current-step-within-task>
-            The test wrapper is working in the sense that there 
-            is now a state selector.  But:
+            Build a conversation export button that exports the conversation
+            to XML and downloads it for the user from the coach app.
 
-            (1) state selection should be a separate screen, not
-            a widget in the app.  That is worse because it could
-            interfere with the faithfulness of the test. 
+            It will be useful for users and for our team to debug coach issues.
 
-            (2) The test wrapper is not working.  I would expect
-            the chat messages to appear in chat if the context
-            has really been loaded as I'd expect.  The chat
-            remains blank.
+            Come up with a reasonable XML format that captures any
+            relevant details about the conversation state.
         </current-step-within-task>
     </current-task>
 </cline-context>

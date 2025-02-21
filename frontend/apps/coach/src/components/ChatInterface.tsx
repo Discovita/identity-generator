@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { ChatMessage } from '../api/types'
 import { apiClient } from '../api/client'
 import { LoadingBubbles } from './LoadingBubbles'
+import { ConversationExporter } from './ConversationExporter'
 
 interface Props {
   userId: string
@@ -66,18 +67,21 @@ export const ChatInterface: React.FC<Props> = ({ userId, initialMessages = [] })
         {isLoading && <LoadingBubbles />}
         <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={handleSubmit} className="input-form">
-        <input
-          type="text"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Type your message..."
-          disabled={isLoading}
-        />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Sending...' : 'Send'}
-        </button>
-      </form>
+      <div className="chat-controls">
+        <form onSubmit={handleSubmit} className="input-form">
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            placeholder="Type your message..."
+            disabled={isLoading}
+          />
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Sending...' : 'Send'}
+          </button>
+        </form>
+        <ConversationExporter messages={messages} userId={userId} />
+      </div>
     </div>
   )
 }
