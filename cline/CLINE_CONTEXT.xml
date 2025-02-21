@@ -37,6 +37,11 @@
         <rule>Keep source code files under 100 lines so they are AI assistant-friendly.  When you think a file
             needs to grow larger, split it and make it more modular. 
         </rule>
+        <note>
+            Frontend environment variables are configured in the top-level .env file and accessed
+            in React components using process.env.REACT_APP_* (e.g. process.env.REACT_APP_API_BASE_URL).
+            Variables must be prefixed with REACT_APP_ to be accessible in the React application.
+        </note>
         <rule>Inline comments are almost always bad and a code smell.  Good code should
             explain itself.
         </rule>
@@ -104,13 +109,22 @@
             - Added visualization generation
           </step>
           <step>Added coach_chat_logic_trace.md documenting the request lifecycle</step>
+          <step>Built a test wrapper for the coach app so that we can 
+          easily inject state into the app to test certain functionality
+          easily.</step>
         </steps-already-done>
         <current-step-within-task>
-            Add loading bubbles in chat, akin to a "user is typing" graphic
-            in a text message thread, for when the user is waiting
-            for the coach.  
+            The test wrapper is working in the sense that there 
+            is now a state selector.  But:
 
-            If server error, display red text to try again. 
+            (1) state selection should be a separate screen, not
+            a widget in the app.  That is worse because it could
+            interfere with the faithfulness of the test. 
+
+            (2) The test wrapper is not working.  I would expect
+            the chat messages to appear in chat if the context
+            has really been loaded as I'd expect.  The chat
+            remains blank.
         </current-step-within-task>
     </current-task>
 </cline-context>

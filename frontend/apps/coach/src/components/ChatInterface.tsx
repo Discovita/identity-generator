@@ -5,10 +5,11 @@ import { LoadingBubbles } from './LoadingBubbles'
 
 interface Props {
   userId: string
+  initialMessages?: ChatMessage[]
 }
 
-export const ChatInterface: React.FC<Props> = ({ userId }) => {
-  const [messages, setMessages] = useState<ChatMessage[]>([])
+export const ChatInterface: React.FC<Props> = ({ userId, initialMessages = [] }) => {
+  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages)
   const [inputMessage, setInputMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)

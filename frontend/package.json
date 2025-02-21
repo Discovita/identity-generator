@@ -12,5 +12,8 @@
     "build:coach": "cd apps/coach && npm run build",
     "install:face-swapper": "cd apps/face-swapper && npm install",
     "install:coach": "cd apps/coach && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }
