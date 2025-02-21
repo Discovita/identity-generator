@@ -109,15 +109,22 @@
             - Added visualization generation
           </step>
           <step>Added coach_chat_logic_trace.md documenting the request lifecycle</step>
+          <step>Built a test wrapper for the coach app so that we can 
+          easily inject state into the app to test certain functionality
+          easily.</step>
         </steps-already-done>
         <current-step-within-task>
-            We need to pause feature development to build some tools 
-            we'll find useful for it.  I want to build the ability
-            to test the coach chat component in various states. 
+            The test wrapper is working in the sense that there 
+            is now a state selector.  But:
 
-            I spoke to an expert and provided you with some pointers
-            from that conversation in ./cline/chat_testingg_ideas.md. 
-            Let that guide you.
+            (1) state selection should be a separate screen, not
+            a widget in the app.  That is worse because it could
+            interfere with the faithfulness of the test. 
+
+            (2) The test wrapper is not working.  I would expect
+            the chat messages to appear in chat if the context
+            has really been loaded as I'd expect.  The chat
+            remains blank.
         </current-step-within-task>
     </current-task>
 </cline-context>
