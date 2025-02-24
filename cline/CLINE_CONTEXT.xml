@@ -114,13 +114,10 @@
           easily.</step>
         </steps-already-done>
         <current-step-within-task>
-            Build a conversation export button that exports the conversation
-            to XML and downloads it for the user from the coach app.
-
-            It will be useful for users and for our team to debug coach issues.
-
-            Come up with a reasonable XML format that captures any
-            relevant details about the conversation state.
+            Find the main coaching prompts and emphasize that it's 
+            important that the coach focuses on one identity at a time,
+            and should always ask the user to provide feedback on and
+            approve an identity before it is created formally.
         </current-step-within-task>
     </current-task>
 </cline-context>
