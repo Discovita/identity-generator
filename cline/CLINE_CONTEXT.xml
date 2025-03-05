@@ -49,6 +49,9 @@
         <rule>Primary git branch is `master`.</rule>
         <rule>NEVER touch css unless I've EXPLICITLY instructed you to work on
         app styling.</rule>
+        <rule>When working with CSS, use variables for shared values across components, 
+        particularly for colors.  Avoid haphazard use of hard-coded values.
+        </rule>
     </rules>
 
     <long-term-memory>
@@ -82,42 +85,12 @@
             3. Include the updated apiTypes.ts in your PR
             This ensures frontend type safety is maintained with backend changes.
         </note>
-
     </long-term-memory>
     <current-task>
-        Re-read:
-        cline/coach_planning/coach_plan_start.txt
+      Make the chat application pretty by updating the css files for it.
 
-        We wrote a technical plan together.  Read it as well:
-        cline/coach_planning/coach_plan_technical.md
+      We're going to center our theme around this purple color: #d0a959.  
 
-        <steps-already-done>
-          <step>Added pydantic and corresponding typescript models.</step>
-          <step>Split coach service into focused modules.</step>
-          <step>Added sample dialogue and tests.</step>
-          <step>Implemented initial coach service structure with:
-            - Enhanced models for identity tracking
-            - Split service into focused modules (context_builder, identity_processor)
-            - Updated API route
-            - Added sample dialogue
-            - Created test files
-          </step>
-          <step>Implemented identity extraction and visualization in identity_processor.py:
-            - Added category detection from response text
-            - Implemented "I am" statement parsing
-            - Added prefix stripping (a/an)
-            - Added visualization generation
-          </step>
-          <step>Added coach_chat_logic_trace.md documenting the request lifecycle</step>
-          <step>Built a test wrapper for the coach app so that we can 
-          easily inject state into the app to test certain functionality
-          easily.</step>
-        </steps-already-done>
-        <current-step-within-task>
-            Find the main coaching prompts and emphasize that it's 
-            important that the coach focuses on one identity at a time,
-            and should always ask the user to provide feedback on and
-            approve an identity before it is created formally.
-        </current-step-within-task>
+      While you're at it, make index.css more modular - it will need to be split up.
     </current-task>
 </cline-context>

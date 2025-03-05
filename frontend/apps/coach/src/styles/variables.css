@@ -1,0 +1,42 @@
+:root {
+  /* Primary gold theme color */
+  --primary-color: #d0a959;
+  --primary-light: #f5efd7;
+  --primary-dark: #a88743;
+  
+  /* Text colors */
+  --text-color: #333;
+  --text-light: #666;
+  --text-on-primary: #fff;
+  
+  /* Background colors */
+  --background-color: #fff;
+  --background-light: #f9f7f2; /* Slight gold tint */
+  --background-dark: #e5e0d0; /* Light gold tint */
+  
+  /* Accent colors */
+  --accent-color: #d0a959; /* Using gold as accent */
+  --error-color: #c25450;
+  --success-color: #5d9a6f;
+  
+  /* Spacing and sizing */
+  --border-radius: 12px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Typography */
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.15);
+  
+  /* Gold-specific shadows */
+  --gold-shadow-sm: 0 2px 5px rgba(208, 169, 89, 0.2);
+  --gold-shadow-md: 0 4px 10px rgba(208, 169, 89, 0.25);
+  --gold-shadow-lg: 0 8px 20px rgba(208, 169, 89, 0.3);
+}
