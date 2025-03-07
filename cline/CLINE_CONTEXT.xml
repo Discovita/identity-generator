@@ -114,10 +114,11 @@
           easily.</step>
         </steps-already-done>
         <current-step-within-task>
-            Find the main coaching prompts and emphasize that it's 
-            important that the coach focuses on one identity at a time,
-            and should always ask the user to provide feedback on and
-            approve an identity before it is created formally.
+            Coach messages to the user are in markdown format.  Let's make the
+            app render them as markdown rather than plaintext. 
+
+            See cline/chat_markdown.md for some expert advice and a suggested library
+            to use.
         </current-step-within-task>
     </current-task>
 </cline-context>

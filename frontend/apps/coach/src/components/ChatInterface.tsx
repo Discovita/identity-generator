@@ -3,6 +3,7 @@ import { ChatMessage } from '../api/types'
 import { apiClient } from '../api/client'
 import { LoadingBubbles } from './LoadingBubbles'
 import { ConversationExporter } from './ConversationExporter'
+import MarkdownRenderer from './MarkdownRenderer'
 
 interface Props {
   userId: string
@@ -61,7 +62,11 @@ export const ChatInterface: React.FC<Props> = ({ userId, initialMessages = [] })
       <div className="messages">
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.role}`}>
-            {message.content}
+            {message.role === 'assistant' ? (
+              <MarkdownRenderer content={message.content} />
+            ) : (
+              message.content
+            )}
           </div>
         ))}
         {isLoading && <LoadingBubbles />}
