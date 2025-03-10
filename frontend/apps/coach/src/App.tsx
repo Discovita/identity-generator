@@ -9,6 +9,7 @@ const App: React.FC = () => {
     []
   )
 
+
   if (config.enableTestStates) {
     return <TestScreen />
   }
