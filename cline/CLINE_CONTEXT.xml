@@ -82,9 +82,9 @@
             3. Include the updated apiTypes.ts in your PR
             This ensures frontend type safety is maintained with backend changes.
         </note>
-        <note>
-          We're in the middle of adding a major new set of features to the coach.
-          
+
+    </long-term-memory>
+    <current-task>
         Re-read:
         cline/coach_planning/coach_plan_start.txt
 
@@ -112,24 +112,13 @@
           <step>Built a test wrapper for the coach app so that we can 
           easily inject state into the app to test certain functionality
           easily.</step>
-            </steps-already-done>
-        </note>
-    </long-term-memory>
-    <current-task>
-      Before we continue, I need you to clean my git branches.  Write a bash
-      script in ./scripts that called clean-git.sh.  Usage is
+        </steps-already-done>
+        <current-step-within-task>
+            Coach messages to the user are in markdown format.  Let's make the
+            app render them as markdown rather than plaintext. 
 
-      ./clean-git.sh 
-
-      which prints out git branches to delete and 
-
-      ./clean-git.sh --delete
-
-      which prints AND deletes those branches, locally and on remote.
-
-      A branch should be deleted if BOTH criteria are satisfied:
-
-      1. The branch doesn't exist on remote.
-      2. The latest commit to the branch is more than one week old.
+            See cline/chat_markdown.md for some expert advice and a suggested library
+            to use.
+        </current-step-within-task>
     </current-task>
 </cline-context>
