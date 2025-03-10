@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { ChatMessage } from '../api/types'
 import { apiClient } from '../api/client'
 import { LoadingBubbles } from './LoadingBubbles'
 import { ConversationExporter } from './ConversationExporter'
 import MarkdownRenderer from './MarkdownRenderer'
+import { initialMessage } from '../constants/initialMessage'
 
 interface Props {
   userId: string
@@ -16,46 +17,39 @@ export const ChatInterface: React.FC<Props> = ({ userId, initialMessages = [] })
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
-
+  // Add initial message on mount if no messages exist
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    if (messages.length === 0) {
+      setMessages([{ role: 'assistant', content: initialMessage }])
+    }
+  }, []) // Runs only on mount
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+  }, [])
+
+  // Scroll when messages change
+  useEffect(scrollToBottom, [messages])
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     if (!inputMessage.trim() || isLoading) return
 
-    const userMessage: ChatMessage = {
-      role: 'user',
-      content: inputMessage.trim()
-    }
-
+    const userMessage: ChatMessage = { role: 'user', content: inputMessage.trim() }
     setMessages(prev => [...prev, userMessage])
     setInputMessage('')
     setIsLoading(true)
 
     try {
       const response = await apiClient.sendMessage(userId, userMessage.content, messages)
-      const assistantMessage: ChatMessage = {
-        role: 'assistant',
-        content: response.message
-      }
-      setMessages(prev => [...prev, assistantMessage])
+      setMessages(prev => [...prev, { role: 'assistant', content: response.message }])
     } catch (error) {
       console.error('Failed to send message:', error)
-      // Add error message to chat
-      const errorMessage: ChatMessage = {
-        role: 'system',
-        content: 'Sorry, there was an error sending your message. Please try again.'
-      }
-      setMessages(prev => [...prev, errorMessage])
+      setMessages(prev => [...prev, { role: 'system', content: 'Error sending message. Please try again.' }])
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [inputMessage, isLoading, messages, userId])
 
   return (
     <div className="chat-container">
