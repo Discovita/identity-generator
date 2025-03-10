@@ -112,13 +112,17 @@
           <step>Built a test wrapper for the coach app so that we can 
           easily inject state into the app to test certain functionality
           easily.</step>
+          <step>
+          Coach app correctly renders markdown when the chatbot's response is 
+          in markdown format.
+          </step>
         </steps-already-done>
         <current-step-within-task>
-            Coach messages to the user are in markdown format.  Let's make the
-            app render them as markdown rather than plaintext. 
-
-            See cline/chat_markdown.md for some expert advice and a suggested library
-            to use.
+            Modify the application logic so that when someone lands on the 
+            coach for the first time, the initial message from the coach is
+            precisely that contained in 
+            
+            cline/coach_planning/initial_message.md
         </current-step-within-task>
     </current-task>
 </cline-context>

@@ -1,6 +1,4 @@
-Here's the content converted to markdown:
-
-# Identity Creation Exercise – Simple Role-Playing Dialog
+export const initialMessage = `# Identity Creation Exercise – Simple Role-Playing Dialog
 
 Today, we're going to do something incredibly powerful.
 
@@ -71,4 +69,4 @@ And on the days when you slip? That's okay. You will have this **identity map st
 
 Today, we take the first step.
 
-🚀 **Are you ready?**
+🚀 **Are you ready?**`
