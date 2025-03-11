@@ -7,6 +7,11 @@ export interface TestState {
 }
 
 export const testStates: Record<string, TestState> = {
+  emptyState: {
+    name: 'Empty State',
+    description: 'Empty state to test initial message loading',
+    messages: []
+  },
   xmlExportTest: {
     name: 'XML Export Test',
     description: 'Test state with malformed HTML and special characters',

@@ -10,6 +10,14 @@ class ContextBuilder:
     def __init__(self):
         self.sample_dialogue = load_sample_dialogue()
 
+    def get_system_prompt(self) -> str:
+        """Get the system prompt."""
+        return SYSTEM_PROMPT
+    
+    def get_sample_dialogue(self) -> str:
+        """Get the sample dialogue."""
+        return self.sample_dialogue
+
     def build_context(
         self,
         context: List[ChatMessage],

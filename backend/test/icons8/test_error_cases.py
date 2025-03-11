@@ -2,7 +2,7 @@
 
 import pytest
 from discovita.service.icons8.client.client import Icons8Client
-from .mock_response import MockResponse
+from .mock_response import MockLandmarksResponse
 
 pytestmark = pytest.mark.asyncio
 
@@ -11,8 +11,8 @@ async def test_no_faces_error() -> None:
     client = Icons8Client(api_key="test-key", base_url="https://api.icons8.com")
     
     # Create mock post function with proper typing
-    async def mock_post(url: str, **kwargs) -> MockResponse:
-        return MockResponse([
+    async def mock_post(url: str, **kwargs):
+        return MockLandmarksResponse([
             {
                 "img_url": "https://example.com/source.jpg",
                 "faces": []

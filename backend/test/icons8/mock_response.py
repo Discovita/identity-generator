@@ -1,7 +1,7 @@
 """Mock response and request classes for testing Icons8 client."""
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Dict, List, Any
 
 @dataclass
 class MockRequest:
@@ -14,11 +14,10 @@ class MockRequest:
         """Decode content to string."""
         return self.content.decode() if self.content else ""
 
-class MockResponse:
-    """Mock implementation of httpx.Response."""
+class BaseMockResponse:
+    """Base mock implementation of httpx.Response."""
     
-    def __init__(self, data: dict, status_code: int = 200, url: str = "https://api.icons8.com"):
-        self._data = data
+    def __init__(self, status_code: int = 200, url: str = "https://api.icons8.com"):
         self.status_code = status_code
         # Add required Response attributes
         self.http_version = "1.1"
@@ -28,11 +27,6 @@ class MockResponse:
         self.next_request = None
         # Add request attribute required for logging
         self.request = MockRequest(url=url)
-        self.text = str(data)
-
-    def json(self) -> dict:
-        """Return mock response data."""
-        return self._data
 
     def read(self) -> bytes:
         """Mock read method."""
@@ -49,3 +43,27 @@ class MockResponse:
     async def aclose(self) -> None:
         """Mock async close method."""
         pass
+
+class MockLandmarksResponse(BaseMockResponse):
+    """Mock response for the get_landmarks endpoint."""
+    
+    def __init__(self, data: List[Dict[str, Any]], status_code: int = 200, url: str = "https://api.icons8.com"):
+        super().__init__(status_code, url)
+        self._data = data
+        self.text = str(data)
+
+    def json(self) -> List[Dict[str, Any]]:
+        """Return mock response data."""
+        return self._data
+
+class MockSwapResponse(BaseMockResponse):
+    """Mock response for the process_image endpoint."""
+    
+    def __init__(self, data: Dict[str, Any], status_code: int = 200, url: str = "https://api.icons8.com"):
+        super().__init__(status_code, url)
+        self._data = data
+        self.text = str(data)
+
+    def json(self) -> Dict[str, Any]:
+        """Return mock response data."""
+        return self._data

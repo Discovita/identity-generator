@@ -1,12 +1,15 @@
 """OpenAI API client implementation."""
 
 import os
-from typing import Optional
+from typing import Optional, TypeVar, Type, List, Dict, Any
 from openai import AsyncOpenAI
-from pydantic import AnyHttpUrl
+from pydantic import AnyHttpUrl, BaseModel
+from discovita.service.openai.models.llm_response import LLMResponseModel
 from discovita.service.openai.models import ImageResponse, OpenAIMode, SafeImageResponse
 from discovita.service.openai.client import operations
 from discovita.service.openai.client.test import operations as test_operations
+
+T = TypeVar('T', bound=LLMResponseModel)
 
 class OpenAIClient:
     """Client for interacting with OpenAI's APIs (DALL-E, Vision, Chat)."""
@@ -34,6 +37,18 @@ class OpenAIClient:
     async def get_completion(self, prompt: str) -> str:
         """Get a completion from GPT-4o."""
         return await self.ops.get_completion(self.client, prompt)
+
+    async def get_structured_completion(
+        self,
+        messages: List[Dict[str, Any]],
+        response_model: Type[T]
+    ) -> T:
+        """Get a structured completion from GPT-4o."""
+        return await self.ops.get_structured_completion(
+            self.client,
+            messages,
+            response_model
+        )
 
     async def generate_image(self, prompt: str) -> ImageResponse:
         """Generate an image from a text prompt using DALL-E."""
