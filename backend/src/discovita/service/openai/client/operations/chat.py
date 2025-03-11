@@ -3,6 +3,7 @@
 from typing import TypeVar, Type, List, Dict, Any
 from openai import AsyncOpenAI
 from pydantic import BaseModel
+from discovita.service.openai.models.llm_response import LLMResponseModel
 from discovita.service.openai.client import logging
 from discovita.service.openai.models import (
     CompletionRequest,
@@ -10,7 +11,7 @@ from discovita.service.openai.models import (
     ChatResponse
 )
 
-T = TypeVar('T', bound=BaseModel)
+T = TypeVar('T', bound=LLMResponseModel)
 
 async def get_completion(client: AsyncOpenAI, prompt: str) -> str:
     """Get a completion from GPT-4."""

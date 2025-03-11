@@ -32,18 +32,19 @@ class CoachService:
             response_model=CoachStructuredResponse
         )
         
-        # Extract visualization prompt if identities were suggested
+        # Extract visualization prompt if an identity was proposed or confirmed
         visualization_prompt = None
-        if structured_response.identities:
-            # Use the visualization from the first identity as the prompt
-            visualization_prompt = next(
-                (identity.visualization for identity in structured_response.identities 
-                 if identity.visualization is not None),
-                None
-            )
+        
+        # Check proposed identity first
+        if structured_response.proposed_identity and structured_response.proposed_identity.visualization:
+            visualization_prompt = structured_response.proposed_identity.visualization
+        # If no proposed identity with visualization, check confirmed identity
+        elif structured_response.confirmed_identity and structured_response.confirmed_identity.visualization:
+            visualization_prompt = structured_response.confirmed_identity.visualization
         
         return CoachResponse(
             message=structured_response.message,
-            suggested_identities=structured_response.identities,
+            proposed_identity=structured_response.proposed_identity,
+            confirmed_identity=structured_response.confirmed_identity,
             visualization_prompt=visualization_prompt
         )

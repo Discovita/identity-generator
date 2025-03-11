@@ -47,6 +47,8 @@ class VisionRequest(ChatRequest):
 class CompletionRequest(ChatRequest):
     """Request model for GPT-4 text completion."""
     model: str = "gpt-4o"
+    response_format: Optional[Dict[str, str]] = None
+    max_tokens: int = 1000  # Increase default token limit
 
 class SafeChatRequest(ChatRequest):
     """Request model for safety-enhanced chat completion."""

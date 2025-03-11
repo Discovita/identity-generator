@@ -45,5 +45,6 @@ class CoachRequest(BaseModel):
 class CoachResponse(LLMResponseModel):
     """Response model for coach API."""
     message: str = Field(..., description="Coach's response message")
-    suggested_identities: Optional[List[Identity]] = Field(None, description="Suggested new identities")
+    proposed_identity: Optional[Identity] = Field(None, description="A single identity being proposed for user confirmation")
+    confirmed_identity: Optional[Identity] = Field(None, description="A single identity that has been confirmed by the user in this response")
     visualization_prompt: Optional[Dict] = Field(None, description="Prompt for identity visualization")

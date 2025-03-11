@@ -39,15 +39,25 @@ class IdentityTester:
         # Update conversation history
         self.conversation_history.append({"role": "assistant", "content": coach_message})
         
-        # Extract identities if any
-        new_identities = extract_identities(response)
-        if new_identities:
-            print("Identities generated:")
-            for identity in new_identities:
-                print(f"- {identity.get('name')}: {identity.get('affirmation')}")
-                self.identities.append(identity)
-        else:
-            print("No identities generated in this response.")
+        # Check for proposed identity
+        proposed_identity = response.get("proposed_identity")
+        if proposed_identity:
+            print("Proposed identity:")
+            print(f"- {proposed_identity.get('name')}: {proposed_identity.get('affirmation')}")
+            print("To confirm this identity, respond with 'yes' or express your agreement.")
+        
+        # Check for confirmed identity
+        confirmed_identity = response.get("confirmed_identity")
+        if confirmed_identity:
+            print("Confirmed identity:")
+            print(f"- {confirmed_identity.get('name')}: {confirmed_identity.get('affirmation')}")
+            # Add to our tracking list if not already there
+            if confirmed_identity not in self.identities:
+                self.identities.append(confirmed_identity)
+        
+        # If no proposed or confirmed identity
+        if not proposed_identity and not confirmed_identity:
+            print("No identity proposed or confirmed in this response.")
     
     def run_test(self) -> None:
         """Run the identity generation test."""
@@ -58,6 +68,10 @@ class IdentityTester:
         print(f"\nUser: {self.last_user_message}")
         
         # Send the message and process the response
+        # Ensure session_id is not None
+        if not self.session_id:
+            self.session_id = f"identity-test-{id(self)}"
+            
         response = send_message(
             self.base_url, 
             self.session_id, 
@@ -88,6 +102,10 @@ class IdentityTester:
             print(f"\nUser: {self.last_user_message}")
             
             # Send the message and process the response
+            # Ensure session_id is not None
+            if not self.session_id:
+                self.session_id = f"identity-test-{id(self)}"
+                
             response = send_message(
                 self.base_url, 
                 self.session_id, 

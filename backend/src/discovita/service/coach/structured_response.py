@@ -8,7 +8,11 @@ from discovita.service.openai.models.llm_response import LLMResponseModel
 class CoachStructuredResponse(LLMResponseModel):
     """Structured response from the coach."""
     message: str = Field(..., description="Main response message to show the user")
-    identities: Optional[List[Identity]] = Field(
+    proposed_identity: Optional[Identity] = Field(
         None,
-        description="List of suggested identities if any were discussed"
+        description="A single identity being proposed for user confirmation"
+    )
+    confirmed_identity: Optional[Identity] = Field(
+        None,
+        description="A single identity that has been confirmed by the user in this response"
     )

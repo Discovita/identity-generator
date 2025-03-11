@@ -20,16 +20,24 @@ async def test_identity_extraction():
     request = CoachRequest(
         user_id="test_user",
         message="I want to be more creative in my work. I'm a software engineer but I feel stuck in a rut, just implementing the same patterns over and over. I want to bring more innovation and artistic thinking to my code.",
-        context=context
+        context=context,
+        profile=None
     )
     
     response = await service.get_response(request)
     print("\nCoach Response:")
     print(response.message)
     
-    if response.suggested_identities:
+    # Check for proposed or confirmed identities
+    identities = []
+    if response.proposed_identity:
+        identities.append(response.proposed_identity)
+    if response.confirmed_identity:
+        identities.append(response.confirmed_identity)
+    
+    if identities:
         print("\nExtracted Identities:")
-        for identity in response.suggested_identities:
+        for identity in identities:
             print(f"\nCategory: {identity.category}")
             print(f"Name: {identity.name}")
             print(f"Affirmation: {identity.affirmation}")

@@ -31,19 +31,37 @@ async def test_structured_output():
     print(response.choices[0].message.content)
     
     print("\nParsed Response:")
-    parsed_response = CoachResponse.model_validate_json(
-        response.choices[0].message.content
-    )
+    # Handle potential None value
+    content = response.choices[0].message.content
+    if content is None:
+        print("Error: Received None content from OpenAI")
+        return
+        
+    parsed_response = CoachResponse.model_validate_json(content)
     print(f"\nCoach Message: {parsed_response.message}")
     
-    if parsed_response.suggested_identities:
-        print("\nExtracted Identities:")
-        for identity in parsed_response.suggested_identities:
-            print(f"\nCategory: {identity.category}")
-            print(f"Name: {identity.name}")
-            print(f"Affirmation: {identity.affirmation}")
-            if identity.visualization:
-                print("Visualization:", identity.visualization)
+    # Check for proposed or confirmed identities
+    identities = []
+    if parsed_response.proposed_identity:
+        identities.append(parsed_response.proposed_identity)
+        print("\nProposed Identity:")
+        print(f"Category: {parsed_response.proposed_identity.category}")
+        print(f"Name: {parsed_response.proposed_identity.name}")
+        print(f"Affirmation: {parsed_response.proposed_identity.affirmation}")
+        if parsed_response.proposed_identity.visualization:
+            print("Visualization:", parsed_response.proposed_identity.visualization)
+    
+    if parsed_response.confirmed_identity:
+        identities.append(parsed_response.confirmed_identity)
+        print("\nConfirmed Identity:")
+        print(f"Category: {parsed_response.confirmed_identity.category}")
+        print(f"Name: {parsed_response.confirmed_identity.name}")
+        print(f"Affirmation: {parsed_response.confirmed_identity.affirmation}")
+        if parsed_response.confirmed_identity.visualization:
+            print("Visualization:", parsed_response.confirmed_identity.visualization)
+    
+    if not identities:
+        print("\nNo identities were extracted")
 
 if __name__ == "__main__":
     asyncio.run(test_structured_output())

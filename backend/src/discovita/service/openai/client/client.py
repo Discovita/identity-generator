@@ -4,11 +4,12 @@ import os
 from typing import Optional, TypeVar, Type, List, Dict, Any
 from openai import AsyncOpenAI
 from pydantic import AnyHttpUrl, BaseModel
+from discovita.service.openai.models.llm_response import LLMResponseModel
 from discovita.service.openai.models import ImageResponse, OpenAIMode, SafeImageResponse
 from discovita.service.openai.client import operations
 from discovita.service.openai.client.test import operations as test_operations
 
-T = TypeVar('T', bound=BaseModel)
+T = TypeVar('T', bound=LLMResponseModel)
 
 class OpenAIClient:
     """Client for interacting with OpenAI's APIs (DALL-E, Vision, Chat)."""
