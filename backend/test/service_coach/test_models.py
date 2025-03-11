@@ -85,7 +85,8 @@ def test_coach_response_creation():
     )
     response = CoachResponse(
         message="Let's explore your creative identity",
-        suggested_identities=[identity],
+        proposed_identity=identity,
+        confirmed_identity=None,
         visualization_prompt={
             "setting": "Modern studio",
             "appearance": "Artistic attire",
@@ -93,7 +94,8 @@ def test_coach_response_creation():
         }
     )
     assert "creative identity" in response.message
-    assert response.suggested_identities is not None
-    assert len(response.suggested_identities) == 1
+    assert response.proposed_identity is not None
+    assert response.proposed_identity.name == "Creative Visionary"
+    assert response.confirmed_identity is None
     assert response.visualization_prompt is not None
     assert response.visualization_prompt.get("setting") == "Modern studio"

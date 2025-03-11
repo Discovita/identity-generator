@@ -1,13 +1,16 @@
 """Test operations that return static responses."""
 
 from pathlib import Path
+from typing import TypeVar, Type, List, Dict, Any
 from openai import AsyncOpenAI
-from pydantic import AnyHttpUrl
+from pydantic import AnyHttpUrl, BaseModel
 from discovita.service.openai.models import (
     ImageResponse,
     GeneratedImage,
     SafeImageResponse
 )
+
+T = TypeVar('T', bound=BaseModel)
 
 DUMMY_IMAGE_PATH = Path("backend/src/discovita/service/icons8/client/example_images/base_face_darth.png")
 
@@ -43,12 +46,18 @@ async def describe_image_with_vision(
     """Return dummy image description."""
     return "A person with dark brown hair, hazel eyes, and a warm smile. They have defined cheekbones and a strong jawline."
 
-async def get_completion(
-    client: AsyncOpenAI,
-    prompt: str
-) -> str:
+async def get_completion(client: AsyncOpenAI, prompt: str) -> str:
     """Return dummy completion."""
     return "Dark brown hair, hazel eyes, defined cheekbones, strong jawline."
+
+async def get_structured_completion(
+    client: AsyncOpenAI,
+    messages: List[Dict[str, Any]],
+    response_model: Type[T]
+) -> T:
+    """Return dummy structured completion."""
+    # Return a basic instance of the response model
+    return response_model.model_validate({})
 
 async def generate_image(
     client: AsyncOpenAI,

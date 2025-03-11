@@ -4,7 +4,7 @@ import pytest
 from discovita.service.icons8.models import ProcessStatus
 
 @pytest.fixture
-def mock_landmarks_response() -> dict:
+def mock_landmarks_response() -> list[dict]:
     """Mock response for get_landmarks endpoint."""
     return [
         {

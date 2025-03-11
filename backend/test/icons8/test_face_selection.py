@@ -7,20 +7,20 @@ from discovita.service.icons8.models import (
     ProcessedImage,
     ProcessStatus,
 )
-from .mock_response import MockResponse
+from .mock_response import MockLandmarksResponse, MockSwapResponse
 from fixtures.icons8 import mock_landmarks_response, mock_swap_response
 
 pytestmark = pytest.mark.asyncio
 
-async def test_face_selection_in_swap(mock_landmarks_response: dict, mock_swap_response: dict) -> None:
+async def test_face_selection_in_swap(mock_landmarks_response: list[dict], mock_swap_response: dict) -> None:
     """Test that face swap selects largest faces from source and target images."""
     client = Icons8Client(api_key="test-key", base_url="https://api.icons8.com")
     
     # Create mock post function with proper typing
-    async def mock_post(url: str, **kwargs) -> MockResponse:
+    async def mock_post(url: str, **kwargs):
         if "/get_bbox" in url:
-            return MockResponse(mock_landmarks_response, url="https://api.icons8.com/get_bbox")
-        return MockResponse(mock_swap_response, url="https://api.icons8.com/process_image")
+            return MockLandmarksResponse(mock_landmarks_response, url="https://api.icons8.com/get_bbox")
+        return MockSwapResponse(mock_swap_response, url="https://api.icons8.com/process_image")
 
     # Monkey patch the client's post method
     setattr(client.client, "post", mock_post)
