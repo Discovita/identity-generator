@@ -49,6 +49,11 @@
         <rule>Primary git branch is `master`.</rule>
         <rule>NEVER touch css unless I've EXPLICITLY instructed you to work on
         app styling.</rule>
+        <rule>The ./cline directory has files you may reference which describe
+        product goals and implementation strategies in detail.  Do not ever try
+        to read files in any subdirectories titled "archive" as they are no
+        longer relevant. 
+        </rule>
     </rules>
 
     <long-term-memory>
@@ -123,13 +128,101 @@
           </step>
         </steps-already-done>
         <current-step-within-task>
-            Build a conversation export button that exports the conversation
-            to XML and downloads it for the user from the coach app.
+            I took steps to introduce strong-typed OpenAI chatbot responses
+            so that we can impose structure and allow the AI to make certain
+            decisions and actions for the user.  
 
-            It will be useful for users and for our team to debug coach issues.
+            In particular, the "coach" is supposed to be able to create 
+            "identities" for the user.  
 
-            Come up with a reasonable XML format that captures any
-            relevant details about the conversation state.
+            I have a complete, or at least partial, implementation of 
+            this but need a robust test script to test it out. 
+
+            Write a script (.../backend/scripts/identity_tests) which
+            runs the backend server and does a dialogue geared toward
+            generating an identity, "I am a talented engineer".  The 
+            aim of the test is to ensure that the coach returns a 
+            an identity.
+
+            This script will make LIVE calls to my coach API which
+            will make LIVE calls to OpenAI - it is NOT a unit test.
+            
+            Make the script interactive.  Print out the last response
+            from the coach AND any identities that were generated,
+            then (a) terminate if the test was successful and the 
+            engineer identity was created, or (b) allow the user (me)
+            to type a message into the terminal to further confirm
+            that I want to create an identity.
+
+            Update: the script is already written BUT we revealed the API
+            request to the coach is falling over with a 500.  
+
+            Troubleshoot:
+            
+            <error>
+            [backend] INFO:     127.0.0.1:57203 - "GET /api/v1/health HTTP/1.1" 200 OK
+[backend] INFO:     127.0.0.1:57205 - "POST /api/v1/coach/user_input HTTP/1.1" 500 Internal Server Error
+[backend] ERROR:    Exception in ASGI application
+[backend] Traceback (most recent call last):
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+[backend]     result = await app(  # type: ignore[func-returns-value]
+[backend]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+[backend]     return await self.app(scope, receive, send)
+[backend]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
+[backend]     await super().__call__(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/applications.py", line 112, in __call__
+[backend]     await self.middleware_stack(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
+[backend]     raise exc
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
+[backend]     await self.app(scope, receive, _send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 85, in __call__
+[backend]     await self.app(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+[backend]     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+[backend]     raise exc
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+[backend]     await app(scope, receive, sender)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
+[backend]     await self.middleware_stack(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
+[backend]     await route.handle(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
+[backend]     await self.app(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
+[backend]     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+[backend]     raise exc
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+[backend]     await app(scope, receive, sender)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
+[backend]     response = await f(request)
+[backend]                ^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
+[backend]     raw_response = await run_endpoint_function(
+[backend]                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+[backend]     return await dependant.call(**values)
+[backend]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/api/routes/coach.py", line 16, in handle_user_input
+[backend]     return await service.get_response(request)
+[backend]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/service.py", line 27, in get_response
+[backend]     structured_response = await self.client.get_structured_completion(
+[backend]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/openai/client/client.py", line 46, in get_structured_completion
+[backend]     return await self.ops.get_structured_completion(
+[backend]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/openai/client/operations/chat.py", line 39, in get_structured_completion
+[backend]     schema_instruction = response_model.get_prompt_instruction()
+[backend]                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 264, in __getattr__
+[backend]     raise AttributeError(item)
+[backend] AttributeError: get_prompt_instruction
+            </error>
         </current-step-within-task>
     </current-task>
 </cline-context>
