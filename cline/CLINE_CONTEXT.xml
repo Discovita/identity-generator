@@ -136,7 +136,10 @@
           </step>
         </steps-already-done>
         <current-step-within-task>
-            We are i
+            Continue going through .../identity_confirmation.txt which 
+            has a description of a product feature we're adding and the 
+            implementation strategy.  We might have already begun some 
+            of the steps.
         </current-step-within-task>
     </current-task>
 </cline-context>
