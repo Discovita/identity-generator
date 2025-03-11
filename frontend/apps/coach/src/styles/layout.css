@@ -1,0 +1,31 @@
+@import './variables.css';
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+header h1 {
+  color: var(--primary-color);
+  margin-bottom: 8px;
+}
+
+header p {
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app {
+    padding: 20px 10px;
+  }
+}

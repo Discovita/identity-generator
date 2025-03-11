@@ -1,0 +1,102 @@
+@import './variables.css';
+
+/* Test Mode Styles */
+.test-mode {
+  position: relative;
+  z-index: 10;
+}
+
+.test-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--primary-light);
+  color: var(--text-color);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--gold-shadow-md);
+  z-index: 100;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.test-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--primary-dark);
+}
+
+.test-header button {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  box-shadow: var(--gold-shadow-sm);
+}
+
+.test-header button:hover {
+  background-color: var(--primary-dark);
+  box-shadow: var(--gold-shadow-md);
+}
+
+.test-screen {
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--gold-shadow-md);
+  padding: 40px;
+  max-width: 800px;
+  margin: 40px auto;
+  border: 1px solid var(--primary-light);
+}
+
+.test-screen h1 {
+  color: var(--primary-color);
+  margin-bottom: 16px;
+}
+
+.state-selector {
+  margin-top: 20px;
+}
+
+.state-selector select {
+  padding: 8px;
+  margin-right: 10px;
+  min-width: 200px;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  background-color: var(--background-light);
+}
+
+.state-selector select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(208, 169, 89, 0.2);
+}
+
+.state-selector button {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: var(--gold-shadow-sm);
+}
+
+.state-selector button:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--gold-shadow-md);
+}
+
+.state-selector button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--gold-shadow-sm);
+}
