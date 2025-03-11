@@ -1,0 +1,202 @@
+# Identity Confirmation Implementation Plan
+
+## Overview
+
+We're implementing a more reliable identity confirmation process by moving the confirmation logic from the LLM to the application layer. This approach will:
+
+1. Add a UI component for explicit identity confirmation
+2. Simplify the LLM's responsibility to only proposing identities
+3. Track confirmed identities in the front-end conversation context
+4. Send the complete context with each API request
+
+## Current Architecture
+
+- The LLM currently handles both proposing and confirming identities
+- The model has both `proposed_identity` and `confirmed_identity` fields
+- The front-end displays these identities as part of the coach's response
+- Confirmation relies on the LLM correctly interpreting "yes" responses
+
+## Implementation Tasks
+
+### 1. Backend Changes
+
+#### 1.1. Update Coach Response Model (backend/src/discovita/service/coach/models.py)
+- Remove `confirmed_identity` field from `CoachResponse`
+- Keep only `proposed_identity` for new identity proposals
+- Add documentation to clarify the new approach
+
+```python
+class CoachResponse(LLMResponseModel):
+    """Response model for coach API."""
+    message: str = Field(..., description="Coach's response message")
+    proposed_identity: Optional[Identity] = Field(None, description="A single identity being proposed for user confirmation")
+    # confirmed_identity field removed - now handled by frontend
+    visualization_prompt: Optional[Dict] = Field(None, description="Prompt for identity visualization")
+```
+
+#### 1.2. Update Structured Response Model (backend/src/discovita/service/coach/structured_response.py)
+- Remove `confirmed_identity` field from `CoachStructuredResponse`
+- Update documentation to reflect the new approach
+
+```python
+class CoachStructuredResponse(LLMResponseModel):
+    """Structured response from the coach."""
+    message: str = Field(..., description="Main response message to show the user")
+    proposed_identity: Optional[Identity] = Field(
+        None,
+        description="A single identity being proposed for user confirmation"
+    )
+    # confirmed_identity field removed - now handled by frontend
+```
+
+#### 1.3. Update Service Implementation (backend/src/discovita/service/coach/service.py)
+- Remove code that handles the `confirmed_identity` field
+- Update the visualization prompt extraction logic to only check `proposed_identity`
+
+```python
+# Extract visualization prompt if an identity was proposed
+visualization_prompt = None
+if structured_response.proposed_identity and structured_response.proposed_identity.visualization:
+    visualization_prompt = structured_response.proposed_identity.visualization
+
+return CoachResponse(
+    message=structured_response.message,
+    proposed_identity=structured_response.proposed_identity,
+    visualization_prompt=visualization_prompt
+)
+```
+
+#### 1.4. Update Prompts (backend/src/discovita/service/coach/prompts.txt)
+- Remove instructions about moving identities to `confirmed_identity`
+- Simplify to focus only on proposing identities
+- Remove the example dialogue section that shows confirmation
+- Update response structure rules to remove `confirmed_identity` references
+
+### 2. Frontend Changes
+
+#### 2.1. Update Chat Message Component
+- Add a confirmation button/UI element when a proposed identity is displayed
+- Style the confirmation UI to be clear and intuitive
+- Add hover states and accessibility features
+
+```tsx
+// Example component structure
+const ProposedIdentity = ({ identity, onConfirm }) => (
+  <div className="proposed-identity">
+    <h4>{identity.name}</h4>
+    <p>{identity.affirmation}</p>
+    <button 
+      className="confirm-button" 
+      onClick={onConfirm}
+      aria-label="Confirm this identity"
+    >
+      Confirm this identity
+    </button>
+  </div>
+);
+```
+
+#### 2.2. Add Identity Confirmation Handler
+- Create a function to handle identity confirmation
+- Add the confirmed identity to the conversation context
+- Update the UI to show the identity has been confirmed
+
+```tsx
+const handleIdentityConfirmation = (identity) => {
+  // Add to confirmed identities list in context
+  setConversationContext(prev => ({
+    ...prev,
+    profile: {
+      ...prev.profile,
+      identities: [...(prev.profile?.identities || []), identity]
+    }
+  }));
+  
+  // Show confirmation message
+  setConfirmationMessage(`"${identity.name}" has been confirmed as part of your identity.`);
+};
+```
+
+#### 2.3. Update Conversation Context Management
+- Ensure the conversation context includes all confirmed identities
+- Send the complete context with each API request
+- Implement proper state management for the identity list
+
+```tsx
+// When sending a new message to the API
+const sendMessage = async (message) => {
+  const response = await api.sendCoachMessage({
+    user_id: sessionId,
+    message: message,
+    context: conversationHistory,
+    profile: {
+      user_id: sessionId,
+      identities: confirmedIdentities, // Include all confirmed identities
+      current_focus: currentFocus
+    }
+  });
+  
+  // Process response...
+};
+```
+
+#### 2.4. Add Visual Feedback for Confirmed Identities
+- Create a component to display all confirmed identities
+- Add this to the chat interface (sidebar or collapsible panel)
+- Include options to review and manage identities
+
+```tsx
+const ConfirmedIdentitiesList = ({ identities }) => (
+  <div className="confirmed-identities">
+    <h3>Your Confirmed Identities</h3>
+    {identities.map(identity => (
+      <div key={identity.name} className="identity-card">
+        <h4>{identity.name}</h4>
+        <p>{identity.affirmation}</p>
+      </div>
+    ))}
+  </div>
+);
+```
+
+### 3. Testing
+
+#### 3.1. Update Test Scripts
+- Modify identity_tests to check for proposed identities only
+- Add tests for the new front-end confirmation flow
+- Update the identity checker to work with the new structure
+
+#### 3.2. Manual Testing Scenarios
+- Test proposing and confirming multiple identities
+- Test the persistence of confirmed identities across conversations
+- Test edge cases (confirming without a proposal, etc.)
+
+### 4. Documentation
+
+#### 4.1. Update Technical Documentation
+- Document the new confirmation flow
+- Update API documentation to reflect the changes
+- Add comments to code explaining the new approach
+
+#### 4.2. Update User Documentation
+- Explain how to confirm identities in the UI
+- Describe how to view and manage confirmed identities
+
+## Implementation Order
+
+1. Backend model changes (remove confirmed_identity)
+2. Update prompts.txt to simplify LLM instructions
+3. Update service implementation
+4. Implement frontend confirmation UI
+5. Add frontend context management for confirmed identities
+6. Update tests
+7. Test end-to-end flow
+8. Document changes
+
+## Verification
+
+After implementation, verify that:
+- The LLM consistently proposes identities
+- Users can explicitly confirm identities through the UI
+- Confirmed identities persist in the conversation context
+- The visualization process works correctly with the new flow
