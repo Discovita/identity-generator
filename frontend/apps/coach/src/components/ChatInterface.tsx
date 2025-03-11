@@ -22,14 +22,14 @@ export const ChatInterface: React.FC<Props> = ({ userId, initialMessages = [] })
     if (messages.length === 0) {
       setMessages([{ role: 'assistant', content: initialMessage }])
     }
-  }, []) // Runs only on mount
+  }, [messages.length]) // Include messages.length as dependency
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [])
 
   // Scroll when messages change
-  useEffect(scrollToBottom, [messages])
+  useEffect(scrollToBottom, [messages, scrollToBottom])
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
