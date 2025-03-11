@@ -1,8 +1,7 @@
 """Coaching service implementation."""
 
-from .models import CoachRequest, CoachResponse
+from .models import CoachRequest, CoachResponse, CoachStructuredResponse
 from .context_builder import ContextBuilder
-from .structured_response import CoachStructuredResponse
 from ..openai.client.client import OpenAIClient
 
 class CoachService:
