@@ -51,6 +51,7 @@ logger.info("Environment variables loaded", extra={
     "S3_BUCKET": os.getenv("S3_BUCKET"),
     "OPENAI_API_KEY": bool(os.getenv("OPENAI_API_KEY"))
 })
+logger.info("VERSION 1.8")
 
 app = FastAPI(title="Face Swap API")
 
