@@ -70,9 +70,12 @@ def test_build_context_maintains_message_order():
     ]
     context = builder.build_context(messages, None)
     
-    # Check message order using string positions
-    first_msg_pos = context.find("First message")
-    first_resp_pos = context.find("First response")
-    second_msg_pos = context.find("Second message")
+    # Extract just the user and assistant messages from the context
+    context_lines = context.split('\n')
+    user_assistant_lines = [line for line in context_lines 
+                           if line.startswith("user:") or line.startswith("assistant:")]
     
-    assert first_msg_pos < first_resp_pos < second_msg_pos
+    # Check that the messages appear in the correct order
+    assert user_assistant_lines[0] == "user: First message"
+    assert user_assistant_lines[1] == "assistant: First response"
+    assert user_assistant_lines[2] == "user: Second message"
