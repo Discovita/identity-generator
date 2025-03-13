@@ -87,6 +87,23 @@
         </note>
     </long-term-memory>
     <current-task>
-      Check for compiler errors and that tests pass.
+      I just wrote 
+      
+      cline/coach_planning/state_machine_planning/master_plan/v1/plan/master_plan_v1.md
+      
+      However, the engineer who helped me write it was not aware of some details
+      of our codebase.  Review that doc.  We are going to write a step-by-step
+      plan called 
+      
+      cline/coach_planning/state_machine_planning/master_plan/v1/implementation_plan/master_plan_v1_impl.md
+
+      which adapts the plan to our codebase and writes out our strategy for implementing
+      it step-by-step.  That doc will be a high-level overview which references detail docs
+      which go into more detail and provide specific files and expected code changes. 
+      The detail docs will live in this directory:
+
+      cline/coach_planning/state_machine_planning/master_plan/v1/implementation_plan/steps
+
+      Take a first stab at writing master_plan_v1_impl.md.  Solicit my feedback frequently.
     </current-task>
 </cline-context>
