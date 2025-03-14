@@ -1,0 +1,48 @@
+{
+    // Python settings for backend
+    "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/backend/src"
+    ],
+    
+    // Poetry configuration
+    "python.poetryPath": "poetry",
+    "python.terminal.activateEnvironment": true,
+    
+    // Language-specific settings
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        },
+        "editor.tabSize": 4
+    },
+    "[typescript]": {
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    "[typescriptreact]": {
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    
+    // Search settings
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.venv": true,
+        "**/dist": true,
+        "**/__pycache__": true
+    },
+    
+    // Terminal settings
+    "terminal.integrated.env.osx": {
+        "PYTHONPATH": "${workspaceFolder}/backend/src"
+    },
+    
+    // Exclude files from explorer
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/*.egg-info": true
+    }
+} 

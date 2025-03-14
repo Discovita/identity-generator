@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = "Identity Generator Backend"
+authors = ["Discovitas Team"]
+readme = "README.md"
+packages = [{include = "discovita", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.115.11"
+uvicorn = "^0.34.0"
+python-multipart = "^0.0.20"
+boto3 = "^1.37.12"
+httpx = {extras = ["http2"], version = "^0.28.1"}
+python-dotenv = "^1.0.1"
+pydantic = "^2.10.6"
+openai = "^1.66.3"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+requests = "^2.32.3"
+
+[tool.pytest.ini_options]
+pythonpath = [".", "test"]
+asyncio_mode = "strict"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
