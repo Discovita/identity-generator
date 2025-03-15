@@ -21,10 +21,20 @@ openai = "^1.66.3"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
 requests = "^2.32.3"
+pytest-asyncio = "^0.23.5"
+black = "^25.1.0"
 
 [tool.pytest.ini_options]
 pythonpath = [".", "test"]
-asyncio_mode = "strict"
+
+# Black formatter configuration
+# See https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+# Exclude specific files or directories if needed
+# extend-exclude = ''
 
 [build-system]
 requires = ["poetry-core"]
