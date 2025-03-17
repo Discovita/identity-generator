@@ -5,14 +5,25 @@ from typing import Optional, TypeVar, Type, List, Dict, Any
 from openai import AsyncOpenAI
 from pydantic import AnyHttpUrl, BaseModel
 from discovita.service.openai.models.llm_response import LLMResponseModel
-from discovita.service.openai.models import ImageResponse, OpenAIMode, SafeImageResponse
+from discovita.service.openai.models import (
+    ImageResponse,
+    OpenAIMode,
+    SafeImageResponse,
+)
 from discovita.service.openai.client import operations
 from discovita.service.openai.client.test import operations as test_operations
+from discovita.service.openai.client.responses_client import (
+    create_response_with_responses,
+    call_function_with_responses,
+    call_functions_with_responses,
+    submit_function_results_with_responses,
+    get_structured_response_with_responses
+)
 
 T = TypeVar('T', bound=LLMResponseModel)
 
 class OpenAIClient:
-    """Client for interacting with OpenAI's APIs (DALL-E, Vision, Chat)."""
+    """Client for interacting with OpenAI's APIs (DALL-E, Vision, Chat, Responses)."""
     
     def __init__(
         self,
@@ -61,3 +72,10 @@ class OpenAIClient:
     async def describe_image_with_vision(self, image_url: AnyHttpUrl, prompt: str) -> str:
         """Get a description of an image using GPT-4 Vision."""
         return await self.ops.describe_image_with_vision(self.client, image_url, prompt)
+    
+    # Responses API methods
+    create_response_with_responses = create_response_with_responses
+    call_function_with_responses = call_function_with_responses
+    call_functions_with_responses = call_functions_with_responses
+    submit_function_results_with_responses = submit_function_results_with_responses
+    get_structured_response_with_responses = get_structured_response_with_responses
