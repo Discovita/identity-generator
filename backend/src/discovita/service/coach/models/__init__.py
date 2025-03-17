@@ -5,7 +5,7 @@ from .chat import ChatMessage
 from .identity import Identity, IdentityCategory
 from .request_response import CoachRequest, CoachResponse, CoachStructuredResponse
 from .user import UserProfile
-from .state import CoachingState, StateTransition
+from .state import CoachingState, StateTransition, TransitionCondition, ContextMetadataKey
 from .action import ActionType, Action, ActionResult
 from .context import CoachContext
 
@@ -19,6 +19,8 @@ __all__ = [
     'UserProfile',
     'CoachingState',
     'StateTransition',
+    'TransitionCondition',
+    'ContextMetadataKey',
     'ActionType',
     'Action',
     'ActionResult',

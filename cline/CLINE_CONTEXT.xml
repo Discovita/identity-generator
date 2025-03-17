@@ -3,8 +3,8 @@
         <!-- These rules are common to all my coding projects. -->
         <rule>
             Never start an import with `from src.`. src is not a module. Also never
-            use relative imports beyond a single `.` for same package.  We use
-            a setup.py file to implement this standard.  We also indicate in a vscode
+            use relative imports beyond a single `.` for same package. We use
+            a setup.py file to implement this standard. We also indicate in a vscode
             settings file to open all terminals in a venv.
         </rule>
         <rule>
@@ -35,23 +35,25 @@
             `reference` section
                 of this XML doc with `note`s.</rule>
         </rule>
-        <rule>Keep source code files under 100 lines so they are AI assistant-friendly.  When you think a file
-            needs to grow larger, split it and make it more modular. 
+        <rule>Keep source code files under 100 lines so they are AI assistant-friendly. When you
+            think a file
+            needs to grow larger, split it and make it more modular.
         </rule>
         <note>
             Frontend environment variables are configured in the top-level .env file and accessed
-            in React components using process.env.REACT_APP_* (e.g. process.env.REACT_APP_API_BASE_URL).
+            in React components using process.env.REACT_APP_* (e.g.
+            process.env.REACT_APP_API_BASE_URL).
             Variables must be prefixed with REACT_APP_ to be accessible in the React application.
         </note>
-        <rule>Inline comments are almost always bad and a code smell.  Good code should
+        <rule>Inline comments are almost always bad and a code smell. Good code should
             explain itself.
         </rule>
-        <rule>No try-excepts.  Fail fast everywhere possible.</rule>
+        <rule>No try-excepts. Fail fast everywhere possible.</rule>
         <rule>Primary git branch is `master`.</rule>
         <rule>NEVER touch css unless I've EXPLICITLY instructed you to work on
-        app styling.</rule>
-        <rule>When working with CSS, use variables for shared values across components, 
-        particularly for colors.  Avoid haphazard use of hard-coded values.
+            app styling.</rule>
+        <rule>When working with CSS, use variables for shared values across components,
+            particularly for colors. Avoid haphazard use of hard-coded values.
         </rule>
     </rules>
 
@@ -59,21 +61,21 @@
         <!-- -->
         <note>
             I'm building a simple API and UI to automate a workflow
-            for doing an image face-swap using an existing API.  
+            for doing an image face-swap using an existing API.
         </note>
         <note>
             Start app:
             ```
-            <![CDATA[
+        <![CDATA[
             cd backend && uvicorn discovita.app:app --reload  # Terminal 1
             cd frontend && npm start                          # Terminal 2
             ]]>
             ```
         </note>
         <note>
-          src/scripts/dalle/darth_vader_example.py demonstrates how to generate
+            src/scripts/dalle/darth_vader_example.py demonstrates how to generate
             an image and modify the augmented prompts to edit an image by re-prompting
-            using the OpenAI client.  This will be necessary when we are implementing
+            using the OpenAI client. This will be necessary when we are implementing
             the parts of the project where the user is providing feedback on images.
         </note>
         <note>
@@ -83,39 +85,54 @@
         <note>
             TypeScript types must be regenerated when API signatures change:
             1. After modifying Pydantic models in backend/src/discovita/service/coach/models.py
-            2. Run the generate-types script: `npm run generate-types` from frontend/apps/coach directory
+            2. Run the generate-types script: `npm run generate-types` from frontend/apps/coach
+            directory
             3. Include the updated apiTypes.ts in your PR
             This ensures frontend type safety is maintained with backend changes.
         </note>
     </long-term-memory>
     <current-task>
-      <gather-context-instructions>
-         Familiarize yourself with
+        <gather-context-instructions>
+            Familiarize yourself with
 
-         cline/coach_planning/state_machine_planning/v1
+            cline/coach_planning/state_machine_planning/v1
 
-         Print out the file tree for your reference, from this directory.
-         
-         Particularly, read 
+            Print out the file tree for your reference, from this directory.
 
-         cline/coach_planning/state_machine_planning/v1/plan/master_plan_v1.md
-         cline/coach_planning/state_machine_planning/v1/implementation_plan/master_plan_v1_impl.md
+            Particularly, read
 
-         We will be carrying out the steps 
+            cline/coach_planning/state_machine_planning/v1/plan/master_plan_v1.md
+            cline/coach_planning/state_machine_planning/v1/implementation_plan/master_plan_v1_impl.md
+            We will be carrying out the steps
+            cline/coach_planning/state_machine_planning/v1/implementation_plan/steps
 
-         cline/coach_planning/state_machine_planning/v1/implementation_plan/steps
+            For each step we will be making a non-breaking PR against the codebase.
+            You may use version-gating if needed to avoid breaking the server, but
+            avoid that when it is not needed.
 
-         For each step we will be making a non-breaking PR against the codebase.
-         You may use version-gating if needed to avoid breaking the server, but 
-         avoid that when it is not needed.
+            Avoid over-engineering and make the code testable by unit tests, and test it.
 
-         Avoid over-engineering and make the code testable by unit tests, and test it.
-      </gather-context-instructions>
+            After each step we leave one or more notes about what we did.
+            We just finished Step 1, which resulted in these summaries, which
+            you should read:
+            cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/summary_of_changes.md
+            cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/alignment_with_next_steps.md
+        </gather-context-instructions>
+        <tasks-already-done>
+            <task>
+                Carry out the implementation plan for Step 1:
+                cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models.md
+                Do not go further than that. We'll be merging this code before we continue.
+            </task>
+        </tasks-already-done>
+        <current-step-within-task>
+          Carry out Step 2 as we did Step 1.  In particular, when you're finished, write 
+          files analogous to
 
-      Carry out the implementation plan for Step 1:
+          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/summary_of_changes.md
+          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/alignment_with_next_steps.md
 
-      cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models.md
-
-      Do not go further than that.  We'll be merging this code before we continue.    
+          in the step 2 directory.
+        </current-step-within-task>
     </current-task>
 </cline-context>
