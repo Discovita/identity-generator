@@ -1,5 +1,6 @@
 <cline-context>
     <rules>
+        <!-- These rules are common to all my coding projects. -->
         <rule>
             Never start an import with `from src.`. src is not a module. Also never
             use relative imports beyond a single `.` for same package.  We use
@@ -55,6 +56,7 @@
     </rules>
 
     <long-term-memory>
+        <!-- -->
         <note>
             I'm building a simple API and UI to automate a workflow
             for doing an image face-swap using an existing API.  
@@ -86,27 +88,34 @@
             This ensures frontend type safety is maintained with backend changes.
         </note>
     </long-term-memory>
-    <recent-tasks>
-      I just wrote 
-      
-      cline/coach_planning/state_machine_planning/master_plan/v1/plan/master_plan_v1.md
-      
-      However, the engineer who helped me write it was not aware of some details
-      of our codebase.  Review that doc.  We are going to write a step-by-step
-      plan called 
-      
-      cline/coach_planning/state_machine_planning/master_plan/v1/implementation_plan/master_plan_v1_impl.md
-
-      which adapts the plan to our codebase and writes out our strategy for implementing
-      it step-by-step.  That doc will be a high-level overview which references detail docs
-      which go into more detail and provide specific files and expected code changes. 
-      The detail docs will live in this directory:
-
-      cline/coach_planning/state_machine_planning/master_plan/v1/implementation_plan/steps
-
-      Take a first stab at writing master_plan_v1_impl.md.  Solicit my feedback
-    </recent-tasks>
     <current-task>
-    (1) print out recursively the file tree under cline/coach_planning/state_machine_planning, as I moved stuff around and I want you to observe the new directory structure.  (2) Write a doc cline/coach_planning/state_machine_planning/README.md which explains (to future AI assistant sessions) how these docs are structured and how they should be used, particularly how the markdown files reference detail files that can be read as-needed.  (3) re-read @/cline/coach_planning/state_machine_planning/v1/master_plan_v1.md  as it proposes that we create an executor for actions.  The coach should invoke that service rather than implementing it itself.  
+      <gather-context-instructions>
+         Familiarize yourself with
+
+         cline/coach_planning/state_machine_planning/v1
+
+         Print out the file tree for your reference, from this directory.
+         
+         Particularly, read 
+
+         cline/coach_planning/state_machine_planning/v1/plan/master_plan_v1.md
+         cline/coach_planning/state_machine_planning/v1/implementation_plan/master_plan_v1_impl.md
+
+         We will be carrying out the steps 
+
+         cline/coach_planning/state_machine_planning/v1/implementation_plan/steps
+
+         For each step we will be making a non-breaking PR against the codebase.
+         You may use version-gating if needed to avoid breaking the server, but 
+         avoid that when it is not needed.
+
+         Avoid over-engineering and make the code testable by unit tests, and test it.
+      </gather-context-instructions>
+
+      Carry out the implementation plan for Step 1:
+
+      cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models.md
+
+      Do not go further than that.  We'll be merging this code before we continue.    
     </current-task>
 </cline-context>
