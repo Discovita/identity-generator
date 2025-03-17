@@ -18,6 +18,19 @@ from .chat_models import (
     SafeChatRequest
 )
 from .errors import OpenAIError
+from .responses import (
+    ResponsesMessage,
+    ResponsesRequest,
+    ResponsesResponse,
+    ResponseFunctionToolCall,
+    FunctionTool,
+    FunctionParameter,
+    FunctionParameters,
+    OutputText,
+    ResponsesOutput,
+    StructuredOutputSchema,
+    parse_function_call_arguments
+)
 
 __all__ = [
     # LLM Response
@@ -40,5 +53,18 @@ __all__ = [
     'SafeChatRequest',
     
     # Error Models
-    'OpenAIError'
+    'OpenAIError',
+    
+    # Responses API Models
+    'ResponsesMessage',
+    'ResponsesRequest',
+    'ResponsesResponse',
+    'ResponseFunctionToolCall',
+    'FunctionTool',
+    'FunctionParameter',
+    'FunctionParameters',
+    'OutputText',
+    'ResponsesOutput',
+    'StructuredOutputSchema',
+    'parse_function_call_arguments'
 ]
