@@ -17,7 +17,6 @@ export const ChatInterface: React.FC<Props> = ({ userId, initialMessages = [] })
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages)
   const [inputMessage, setInputMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  // Store the most recently proposed identity
   const [proposedIdentity, setProposedIdentity] = useState<Identity | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -45,15 +44,10 @@ export const ChatInterface: React.FC<Props> = ({ userId, initialMessages = [] })
 
     try {
       const response = await apiClient.sendMessage(userId, userMessage.content, messages)
-      console.log('Received response:', response)
       setMessages(prev => [...prev, { role: 'assistant', content: response.message }])
-      
-      // Store the proposed identity from the response if it exists
       if ('proposed_identity' in response && response.proposed_identity) {
         setProposedIdentity(response.proposed_identity as Identity)
       } else {
-        // Clear the proposed identity if none exists in the response
-        // This ensures we don't show choices for a previously proposed identity
         setProposedIdentity(null)
       }
     } catch (error) {
@@ -83,8 +77,6 @@ export const ChatInterface: React.FC<Props> = ({ userId, initialMessages = [] })
             {message.role === 'assistant' ? (
               <>
                 <MarkdownRenderer content={message.content} />
-                {/* Show identity choice buttons after the message if this is the most recent assistant message
-                    and there's a proposed identity and we're not currently loading */}
                 {index === messages.length - 1 && proposedIdentity && !isLoading && (
                   <IdentityChoice 
                     identity={proposedIdentity}
