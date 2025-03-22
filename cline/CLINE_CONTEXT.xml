@@ -124,15 +124,18 @@
                 cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models.md
                 Do not go further than that. We'll be merging this code before we continue.
             </task>
-        </tasks-already-done>
-        <current-step-within-task>
-          Carry out Step 2 as we did Step 1.  In particular, when you're finished, write 
+            <task>
+                      Carry out Step 2 as we did Step 1.  In particular, when you're finished, write 
           files analogous to
 
           cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/summary_of_changes.md
           cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/alignment_with_next_steps.md
 
           in the step 2 directory.
+            </task>
+        </tasks-already-done>
+        <current-step-within-task>
+          Carry out Step 3 analogous to Step 2 above.
         </current-step-within-task>
     </current-task>
 </cline-context>
