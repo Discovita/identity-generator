@@ -35,12 +35,23 @@ export interface CoachRequest {
    */
   context?: ChatMessage[];
 }
-/**
- * Response model for coach API.
- */
+
+export interface Identity {
+  category: string;
+  name: string;
+  affirmation: string;
+  visualization?: Visualization;
+}
+
+export interface Visualization {
+  appearance: string;
+  energy: string;
+  setting: string;
+}
+
 export interface CoachResponse {
-  /**
-   * Coach's response message
-   */
   message: string;
+  proposed_identity?: Identity;
+  confirmed_identity?: Identity;
+  visualization_prompt?: Visualization;
 }
