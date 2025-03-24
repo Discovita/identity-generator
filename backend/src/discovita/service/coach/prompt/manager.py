@@ -11,7 +11,7 @@ from .loader import PromptLoader
 class PromptManager:
     """Manages prompt templates and generates prompts for the coaching system."""
     
-    def __init__(self, prompts_dir: str = None):
+    def __init__(self, prompts_dir: Optional[str] = None):
         """Initialize the prompt manager."""
         self.loader = PromptLoader(prompts_dir)
         self.templates: Dict[CoachingState, PromptTemplate] = {}

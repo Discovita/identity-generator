@@ -1,11 +1,12 @@
 """Prompt management for coaching service."""
 
 from pathlib import Path
+from typing import Optional
 from .manager import PromptManager
 from .loader import PromptLoader
 from .templates import PromptTemplate, Example, ExamplesCollection
 
-def create_prompt_manager(prompts_dir: str = None) -> PromptManager:
+def create_prompt_manager(prompts_dir: Optional[str] = None) -> PromptManager:
     """Create and configure a prompt manager.
     
     Args:

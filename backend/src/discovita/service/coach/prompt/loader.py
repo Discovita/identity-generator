@@ -3,7 +3,7 @@
 import os
 import json
 import re
-from typing import Dict, Any, List, Optional, Set, Tuple
+from typing import Dict, Any, List, Optional, Set, Tuple, Union
 import yaml
 from pathlib import Path
 
@@ -13,7 +13,7 @@ from .templates import PromptTemplate, Example, ExamplesCollection
 class PromptLoader:
     """Loads prompt templates from markdown files."""
     
-    def __init__(self, prompts_dir: str = None):
+    def __init__(self, prompts_dir: Optional[str] = None):
         """Initialize the loader with the prompts directory."""
         if prompts_dir is None:
             # Default to the prompts directory in the same package
@@ -117,7 +117,7 @@ class PromptLoader:
             return ""
             
         # More flexible pattern to handle various markdown formats
-        pattern = f"{re.escape(section_header)}(.*?)(?:(?:^|\n)#|$)"
+        pattern = f"{re.escape(section_header)}(.*?)(?:(?:^|\n)# |$)"
         match = re.search(pattern, content, re.DOTALL)
         if not match:
             return ""
@@ -129,21 +129,15 @@ class PromptLoader:
         
         if not section:
             return examples
-        
-        # Print the section for debugging
-        print(f"Parsing section: {section}")
             
-        # Simpler pattern that's more lenient with whitespace and formatting
-        example_pattern = r"##\s+(.*?)(?:\n|\r\n)[\s\n]*User:\s+(.*?)(?:\n|\r\n)[\s\n]*Coach:\s+(.*?)(?=\s*(?:##|\Z))"
-        matches = re.finditer(example_pattern, section, re.DOTALL)
+        # Basic pattern for test files
+        basic_pattern = r"## ([^\n]+)\n+User: ([^\n]+)\n+Coach: ([^\n]+)"
+        matches = re.finditer(basic_pattern, section, re.DOTALL)
         
         for match in matches:
             description = match.group(1).strip()
             user_message = match.group(2).strip()
             coach_response = match.group(3).strip()
-            
-            # Print the extracted values for debugging
-            print(f"Found example: {description}, User: {user_message[:20]}..., Coach: {coach_response[:20]}...")
             
             examples.append(Example(
                 user=user_message,
@@ -151,18 +145,16 @@ class PromptLoader:
                 description=description
             ))
         
-        # If no examples were found, try a more permissive pattern as a fallback
+        # If no examples were found with the basic pattern, try more complex patterns
         if not examples:
-            print("No examples found with primary pattern, trying fallback pattern")
-            fallback_pattern = r"##.*?([^\n]+).*?User:([^\n]*(?:\n(?!Coach:)[^\n]*)*).*?Coach:([^\n]*(?:\n(?!##)[^\n]*)*)"
-            matches = re.finditer(fallback_pattern, section, re.DOTALL)
+            # More complex pattern for multi-line messages
+            complex_pattern = r"## ([^\n]+)\n+User: (.*?)\n+Coach: (.*?)(?=\n+## |\Z)"
+            matches = re.finditer(complex_pattern, section, re.DOTALL)
             
             for match in matches:
                 description = match.group(1).strip()
                 user_message = match.group(2).strip()
                 coach_response = match.group(3).strip()
-                
-                print(f"Found example with fallback: {description}, User: {user_message[:20]}..., Coach: {coach_response[:20]}...")
                 
                 examples.append(Example(
                     user=user_message,
