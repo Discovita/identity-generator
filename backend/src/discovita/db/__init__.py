@@ -1,8 +1,13 @@
-"""Database interfaces and implementations."""
+"""Database package for the Discovita application."""
 
-from .state_store import StateStore, InMemoryStateStore
+from discovita.db.interface import DatabaseInterface
+from discovita.db.in_memory_db import InMemoryDatabase
+from discovita.db.factory import DatabaseType, create_database, initialize_database
 
 __all__ = [
-    'StateStore',
-    'InMemoryStateStore'
+    "DatabaseInterface",
+    "InMemoryDatabase",
+    "DatabaseType",
+    "create_database",
+    "initialize_database",
 ]

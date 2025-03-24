@@ -8,3 +8,7 @@ pydantic
 openai
 pytest
 requests
+sqlalchemy
+aiosqlite
+greenlet
+pytest-asyncio
