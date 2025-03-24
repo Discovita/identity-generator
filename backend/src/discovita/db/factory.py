@@ -17,22 +17,27 @@ class DatabaseType(Enum):
     SQL = auto()
 
 def create_database(
-    db_type: DatabaseType,
+    db_type: Optional[DatabaseType] = None,
     connection_string: Optional[str] = None
 ) -> DatabaseInterface:
     """
     Create a database implementation based on the specified type.
+    Defaults to in-memory database if no type is specified.
     
     Args:
         db_type: The type of database to create (DatabaseType.MEMORY, DatabaseType.SQL)
+                Defaults to DatabaseType.MEMORY if not specified
         connection_string: The connection string for the database (required for SQL)
     
     Returns:
         An implementation of the DatabaseInterface
     
     Raises:
-        ValueError: If an invalid database type is specified or if a required parameter is missing
+        ValueError: If an invalid database type is specified or if SQL is specified without a connection string
     """
+    # Default to in-memory database
+    if db_type is None:
+        db_type = DatabaseType.MEMORY
     if db_type == DatabaseType.MEMORY:
         logger.info("Creating in-memory database")
         return InMemoryDatabase()

@@ -1,175 +1,138 @@
-# Step 4B: Enhance Context Management
-
-This document details the implementation of the context manager component for the coaching system, which builds upon the persistence layer implemented in Step 4A.
+# Step 4B: Context Manager Implementation
 
 ## Overview
 
-The context manager is responsible for:
+The context manager is responsible for maintaining conversation state and user data across interactions. It builds upon the persistence layer (Step 4A) to provide reliable state management.
 
-1. Maintaining conversation history across user sessions
-2. Consolidating older messages into summaries to manage token usage
-3. Tracking user data including identities and progress
-4. Providing formatted context for prompt templates
-5. Leveraging the persistence layer to store and retrieve context data
+## Key Requirements
 
-## Implementation Details
+1. **Session Management**
+   - Track user sessions using the persistence layer's session operations
+   - Support multiple active sessions per user
+   - Handle session creation and retrieval
 
-### 1. Create Context Manager Directory Structure
+2. **Conversation History**
+   - Store and retrieve message history
+   - Implement message consolidation for long conversations
+   - Maintain conversation continuity across sessions
 
-First, create the directory structure for the context manager components:
+3. **State Management**
+   - Track current coaching state
+   - Store state-specific metadata
+   - Support state transitions
 
-```
-backend/src/discovita/service/coach/context/
-├── __init__.py
-├── manager.py        # Context manager implementation
-└── models.py         # Context-specific models and conversion utilities
-```
+4. **User Data**
+   - Maintain user profiles and preferences
+   - Track progress and achievements
+   - Store identity-related information
 
-### 2. Implement Context Manager Class
+## Architecture
 
-The context manager handles maintaining conversation history and user data. See [manager.py](./manager.py) for implementation details.
+### Models
 
-Key features:
-- Loads and creates user context using the persistence layer
-- Adds messages to conversation history
-- Consolidates older messages into summaries
-- Updates user profile and metadata
-- Converts between domain models and persistence models
+1. **Domain Models**
+   ```python
+   class CoachContext(BaseModel):
+       user_id: str
+       session_id: str
+       current_state: CoachingState
+       conversation_history: List[ChatMessage]
+       consolidated_summary: Optional[str] = None
+       metadata: Dict[str, Any]
+   ```
 
-### 3. Implement Model Conversions
+2. **Persistence Models**
+   - Leverage existing `ContextRecord` from persistence layer
+   - Add any additional fields needed for context management
+   - Ensure proper enum handling for state fields
 
-Create utilities to convert between domain models and persistence models. See [models.py](./models.py) for implementation details.
+### Components
 
-Key features:
-- Conversion between `CoachContext` and `ContextRecord`
-- Serialization and deserialization of complex types
-- Type safety with Pydantic models
+1. **Context Manager**
+   - Core class managing context operations
+   - Interfaces with persistence layer
+   - Handles context loading and saving
+   - Implements conversation consolidation logic
 
-### 4. Service Integration
+2. **Context Builder**
+   - Constructs prompt context from current state
+   - Formats conversation history for LLM
+   - Applies consolidation rules
 
-The context manager integrates with the coach service to provide stateful conversations. See [service_integration.py](./service_integration.py) for implementation details.
+3. **Context Converter**
+   - Converts between domain and persistence models
+   - Handles serialization of complex types
+   - Maintains type safety
 
-Key features:
-- Initializes the persistence layer using the factory
-- Loads user context at the start of each request
-- Updates context with new messages
-- Provides context for prompt formatting
-- Executes actions that modify context
-- Persists context at the end of each request
+## Integration Points
 
-## API Flow with Context Manager
+1. **Persistence Layer**
+   - Uses in-memory database by default (configured via factory)
+   - Falls back to SQL database when persistence is required
+   - Leverages session management capabilities
 
-The context manager plays a central role in the coach API flow:
+2. **State Machine**
+   - Provides state information to context
+   - Receives context updates for transition evaluation
+   - Maintains state consistency
 
-1. **Request Handling**:
-   - When a request comes in, the service loads the user's context from the persistence layer
-   - If no context exists, a new one is created with the initial state
-   - The user's message is added to the conversation history
+3. **LLM Service**
+   - Receives formatted context for prompts
+   - Returns structured responses
+   - Updates context based on responses
 
-2. **State-Based Prompting**:
-   - The current state from the context determines which prompt to use
-   - The context manager formats the context for the prompt template
-   - This includes recent messages, consolidated history, and user profile
+## Implementation Steps
 
-3. **LLM Interaction**:
-   - The formatted prompt is sent to the LLM
-   - The LLM response includes structured data (identities, actions)
-   - The assistant's response is added to the conversation history
+1. Create context manager module structure
+2. Implement core context manager class
+3. Add context building utilities
+4. Integrate with persistence layer
+5. Add conversation consolidation
+6. Implement context conversion
+7. Add tests
 
-4. **Action Execution**:
-   - Actions extracted from the LLM response modify the context
-   - For example, saving identities or marking steps as complete
-   - These context changes trigger state transitions
+## Testing Strategy
 
-5. **State Transitions**:
-   - The state machine evaluates transitions based on context
-   - If conditions are met, the state is updated in the context
-   - The new state will be used for the next request
+1. **Unit Tests**
+   - Context manager operations
+   - Conversation consolidation
+   - Model conversions
+   - State handling
 
-6. **Context Persistence**:
-   - At the end of the request, the updated context is saved to the persistence layer
-   - This ensures continuity across user sessions
-   - The context includes conversation history, state, and user data
+2. **Integration Tests**
+   - Persistence layer integration
+   - State machine interaction
+   - LLM service integration
 
-7. **Response Formation**:
-   - The response includes the current state from the context
-   - This allows the frontend to adapt the UI based on state
+3. **End-to-End Tests**
+   - Complete conversation flows
+   - Session management
+   - State transitions
 
-## Context Consolidation
+## Success Criteria
 
-To manage token usage in long conversations, the context manager implements a consolidation mechanism:
+1. Context persists across sessions
+2. Conversation history is properly maintained
+3. State transitions are reliable
+4. Type safety is maintained
+5. All tests pass
 
-1. When the conversation history exceeds a threshold, older messages are summarized
-2. The LLM generates a summary of key information from these messages
-3. This summary is stored in the consolidated_summary field
-4. The summary is included in prompts to provide long-term context
-5. Only recent messages are kept in full in the conversation history
+## Dependencies
 
-This approach balances comprehensive context with token efficiency.
+1. Persistence Layer (Step 4A)
+   - Must be completed and tested
+   - Both in-memory and SQL implementations working
+   - Enum handling implemented
 
-## Context Data Structure
+2. State Machine Models
+   - CoachingState enum
+   - State transition definitions
+   - State-specific metadata
 
-The `CoachContext` model includes:
+## Future Considerations
 
-```python
-class CoachContext(BaseModel):
-    user_id: str
-    session_id: str  # Added to align with persistence layer
-    current_state: CoachingState
-    conversation_history: List[ChatMessage]
-    consolidated_summary: str
-    user_profile: Optional[UserProfile]
-    metadata: Dict[str, Any]
-```
-
-The `metadata` field stores state-specific data that influences transitions:
-- `introduction_completed`: Boolean flag for completing introduction
-- `draft_identities`: List of identities being worked on
-- `current_identity_refined`: Boolean flag for identity refinement
-- `current_identity_visualized`: Boolean flag for visualization
-- `action_items`: List of action items for the user
-
-## Integration with Persistence Layer
-
-The context manager uses the persistence layer (Step 4A) for storing and retrieving context data:
-
-```python
-class ContextManager:
-    def __init__(
-        self, 
-        llm_client: OpenAIClient,
-        db: DatabaseInterface,  # Database interface from persistence layer
-        max_recent_messages: int = 10
-    ):
-        self.llm_client = llm_client
-        self.db = db
-        self.max_recent_messages = max_recent_messages
-    
-    async def load_context(self, user_id: str, session_id: str) -> CoachContext:
-        """Load or create context for a user session."""
-        # Try to load existing context from persistence layer
-        context_record = await self.db.get_context(user_id, session_id)
-        
-        # If no existing context, create a new one
-        if not context_record:
-            return self._create_new_context(user_id, session_id)
-        
-        # Convert from persistence model to domain model
-        return self._convert_to_coach_context(context_record)
-    
-    async def save_context(self, context: CoachContext) -> None:
-        """Save context to persistence layer."""
-        # Convert from domain model to persistence model
-        context_record = self._convert_to_context_record(context)
-        
-        # Save to persistence layer
-        await self.db.save_context(context_record)
-```
-
-## Next Steps
-
-After implementing the context manager:
-
-1. Ensure it integrates well with the state machine and prompt manager
-2. Implement the action system in Step 5
-3. Update the API layer to use the new stateful service
+1. Performance optimization for large contexts
+2. Additional consolidation strategies
+3. Context versioning
+4. Migration handling
+5. Backup and recovery
