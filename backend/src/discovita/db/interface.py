@@ -15,6 +15,11 @@ T = TypeVar('T', bound=BaseModel)
 class DatabaseInterface(ABC):
     """Interface for database operations."""
     
+    @abstractmethod
+    async def initialize(self) -> None:
+        """Initialize the database. Must be called before using the database."""
+        pass
+    
     # Generic operations
     
     @abstractmethod
