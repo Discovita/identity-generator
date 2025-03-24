@@ -18,6 +18,7 @@
   --accent-color: #d0a959; /* Using gold as accent */
   --error-color: #c25450;
   --success-color: #5d9a6f;
+  --success-dark: #4a7c59; /* Darker shade for hover states */
   
   /* Spacing and sizing */
   --border-radius: 12px;

@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 # Load environment variables from .env file
 current_file = Path(__file__)
-project_root = current_file.parents[6]
+project_root = current_file.parents[3]
 env_path = project_root / ".env"
 
 # Load environment variables
@@ -101,6 +101,7 @@ weather_function = FunctionTool(
 # Function handlers
 async def calculator(args: Dict[str, Any]) -> str:
     """Handle calculator function calls."""
+    logger.info(f"*****************[FUNCTION] calculator: {args}")
     operation = args["operation"]
     a = args["a"]
     b = args["b"]
@@ -126,6 +127,7 @@ async def get_weather(args: Dict[str, Any]) -> str:
     In a real implementation, this would call a weather API.
     For this example, we'll return mock data.
     """
+    logger.info(f"*****************[FUNCTION] get_weather")
     location = args["location"]
     
     # Mock weather data
@@ -168,10 +170,10 @@ async def main():
     client = OpenAIClient(api_key=API_KEY)
     
     examples = [
-        "What is 25 plus 17?",
-        "What's the weather like in Paris today?",
-        "If I have 120 divided by 4, what do I get?",
-        "What's the weather in Tokyo and New York?",
+        # "What is 25 plus 17?",
+        # "What's the weather like in Paris today?",
+        # "If I have 120 divided by 4, what do I get?",
+        # "What's the weather in Tokyo and New York?",
         "Calculate 15 * 7"
     ]
     

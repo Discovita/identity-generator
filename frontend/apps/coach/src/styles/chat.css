@@ -144,6 +144,68 @@
   border-left: 3px solid var(--primary-color);
 }
 
+/* Identity Choice Buttons */
+.identity-choice-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+  animation: fadeIn 0.3s ease;
+}
+
+.identity-button {
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.identity-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.identity-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.identity-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.identity-button.accept-button {
+  background-color: var(--success-color);
+  color: var(--text-on-primary);
+}
+
+.identity-button.accept-button:hover:not(:disabled) {
+  background-color: var(--success-dark);
+}
+
+.identity-button.refine-button {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.identity-button.refine-button:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+}
+
+.identity-button.reject-button {
+  background-color: var(--background-dark);
+  color: var(--text-color);
+  border: 1px solid var(--primary-light);
+}
+
+.identity-button.reject-button:hover:not(:disabled) {
+  background-color: var(--background-light);
+}
+
 @media (max-width: 768px) {
   .chat-container {
     height: 80vh;
@@ -151,5 +213,14 @@
   
   .message {
     max-width: 85%;
+  }
+  
+  .identity-choice-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .identity-button {
+    width: 100%;
   }
 }
