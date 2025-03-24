@@ -1,54 +1,67 @@
 """Prompt manager for coaching service."""
 
-from typing import List, Dict, Any, Set
-from discovita.service.coach.models import CoachingState, ActionType
+from typing import Dict, Any, List, Set, Optional
+import os
+from pathlib import Path
+
+from discovita.service.coach.models import CoachingState, ActionType, CoachContext
+from .templates import PromptTemplate
+from .loader import PromptLoader
 
 class PromptManager:
-    """Manager for state-specific prompts and allowed actions."""
+    """Manages prompt templates and generates prompts for the coaching system."""
     
-    def __init__(self):
+    def __init__(self, prompts_dir: Optional[str] = None):
         """Initialize the prompt manager."""
-        # This is a stub that will be fully implemented in Step 3
-        raise NotImplementedError("PromptManager will be implemented in Step 3: Prompt Manager")
+        self.loader = PromptLoader(prompts_dir)
+        self.templates: Dict[CoachingState, PromptTemplate] = {}
+        self._load_templates()
     
-    def get_prompt(self, state: CoachingState, context: Dict[str, Any]) -> str:
-        """Get a prompt for the given state and context."""
-        # This is a stub that will be fully implemented in Step 3
-        raise NotImplementedError("PromptManager will be implemented in Step 3: Prompt Manager")
+    def _load_templates(self) -> None:
+        """Load all prompt templates."""
+        for state in CoachingState:
+            self.templates[state] = self.loader.load_template(state)
     
-    def get_allowed_actions(self, state: CoachingState) -> Set[str]:
-        """Get the set of allowed actions for a given state."""
-        # This is a stub that will be fully implemented in Step 3
-        # For now, return a placeholder mapping of states to allowed actions
-        allowed_actions_map = {
-            CoachingState.INTRODUCTION: {
-                ActionType.SAVE_USER_INFO.value,
-                ActionType.MARK_INTRODUCTION_COMPLETE.value,
-                ActionType.TRANSITION_STATE.value
-            },
-            CoachingState.IDENTITY_BRAINSTORMING: {
-                ActionType.SAVE_IDENTITY.value,
-                ActionType.TRANSITION_STATE.value
-            },
-            CoachingState.IDENTITY_REFINEMENT: {
-                ActionType.SAVE_IDENTITY.value,
-                ActionType.SET_FOCUS_IDENTITY.value,
-                ActionType.TRANSITION_STATE.value
-            },
-            CoachingState.IDENTITY_VISUALIZATION: {
-                ActionType.SAVE_VISUALIZATION.value,
-                ActionType.TRANSITION_STATE.value
-            },
-            CoachingState.ACTION_PLANNING: {
-                ActionType.CREATE_ACTION_ITEM.value,
-                ActionType.TRANSITION_STATE.value
-            },
-            CoachingState.ACCOUNTABILITY: {
-                ActionType.MARK_ACTION_COMPLETE.value,
-                ActionType.CREATE_ACTION_ITEM.value,
-                ActionType.TRANSITION_STATE.value
-            }
-        }
+    def get_prompt(self, state: CoachingState, context: CoachContext) -> str:
+        """Get a formatted prompt for the current state using the provided context."""
+        if state not in self.templates:
+            raise ValueError(f"No template found for state: {state}")
+            
+        template = self.templates[state]
         
-        # Return the allowed actions for the given state, or an empty set if not defined
-        return allowed_actions_map.get(state, set())
+        # Ensure all required context keys are present
+        prompt_context = context.get_prompt_context()
+        missing_keys = [key for key in template.required_context_keys if key not in prompt_context or not prompt_context[key]]
+        if missing_keys:
+            raise ValueError(f"Missing required context keys: {missing_keys}")
+        
+        # Format the template with the context
+        formatted_prompt = template.template.format(**prompt_context)
+        
+        # Add examples if available
+        if template.examples:
+            examples_text = "\n\n# Examples\n\n"
+            for example in template.examples:
+                description = f"## {example.description}\n\n" if example.description else ""
+                examples_text += f"{description}User: {example.user}\n\nCoach: {example.coach}\n\n"
+            formatted_prompt += examples_text
+        
+        # Add counter-examples if available
+        if template.counter_examples:
+            counter_examples_text = "\n\n# Counter-Examples (Do Not Respond Like This)\n\n"
+            for example in template.counter_examples:
+                description = f"## {example.description}\n\n" if example.description else ""
+                counter_examples_text += f"{description}User: {example.user}\n\nCoach: {example.coach}\n\n"
+            formatted_prompt += counter_examples_text
+        
+        return formatted_prompt
+    
+    def get_allowed_actions(self, state: CoachingState) -> Set[ActionType]:
+        """Get the set of allowed actions for the current state."""
+        if state not in self.templates:
+            return set()
+        return self.templates[state].allowed_actions
+    
+    def reload_templates(self) -> None:
+        """Reload all templates from disk."""
+        self._load_templates()
