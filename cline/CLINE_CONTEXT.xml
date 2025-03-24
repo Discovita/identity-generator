@@ -91,51 +91,81 @@
             This ensures frontend type safety is maintained with backend changes.
         </note>
     </long-term-memory>
-    <current-task>
-        <gather-context-instructions>
-            Familiarize yourself with
+    <gather-context-instructions>
+        Familiarize yourself with
 
-            cline/coach_planning/state_machine_planning/v1
+        cline/coach_planning/state_machine_planning/v1
 
-            Print out the file tree for your reference, from this directory.
+        Print out the file tree for your reference, from this directory.
 
-            Particularly, read
+        Particularly, read
 
-            cline/coach_planning/state_machine_planning/v1/plan/master_plan_v1.md
-            cline/coach_planning/state_machine_planning/v1/implementation_plan/master_plan_v1_impl.md
-            We will be carrying out the steps
-            cline/coach_planning/state_machine_planning/v1/implementation_plan/steps
+        cline/coach_planning/state_machine_planning/v1/plan/master_plan_v1.md
+        cline/coach_planning/state_machine_planning/v1/implementation_plan/master_plan_v1_impl.md
+        We will be carrying out the steps
+        cline/coach_planning/state_machine_planning/v1/implementation_plan/steps
 
-            For each step we will be making a non-breaking PR against the codebase.
-            You may use version-gating if needed to avoid breaking the server, but
-            avoid that when it is not needed.
+        For each step we will be making a non-breaking PR against the codebase.
+        You may use version-gating if needed to avoid breaking the server, but
+        avoid that when it is not needed.
 
-            Avoid over-engineering and make the code testable by unit tests, and test it.
+        Avoid over-engineering and make the code testable by unit tests, and test it.
 
-            After each step we leave one or more notes about what we did.
-            We just finished Step 1, which resulted in these summaries, which
-            you should read:
+        After each step we leave one or more notes about what we did.
+        We just finished Step 1, which resulted in these summaries, which
+        you should read:
+        cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/summary_of_changes.md
+        cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/alignment_with_next_steps.md
+    </gather-context-instructions>
+    <tasks-already-done>
+        <task>
+            Carry out the implementation plan for Step 1:
+            cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models.md
+            Do not go further than that. We'll be merging this code before we continue.
+        </task>
+        <task>
+            Carry out Step 2 as we did Step 1.  In particular, when you're finished, write 
+            files analogous to
+
             cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/summary_of_changes.md
             cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/alignment_with_next_steps.md
-        </gather-context-instructions>
-        <tasks-already-done>
-            <task>
-                Carry out the implementation plan for Step 1:
-                cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models.md
-                Do not go further than that. We'll be merging this code before we continue.
-            </task>
-            <task>
-                      Carry out Step 2 as we did Step 1.  In particular, when you're finished, write 
-          files analogous to
 
-          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/summary_of_changes.md
-          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/alignment_with_next_steps.md
+            in the step 2 directory.
+        </task>
+        <task>
+            Carry out Step 3 analogous to Step 2 above.
 
-          in the step 2 directory.
-            </task>
-        </tasks-already-done>
-        <current-step-within-task>
-          Carry out Step 3 analogous to Step 2 above.
-        </current-step-within-task>
+            I believe you've already gotten started on this task.  You may even
+            have already finished for all you know.  Write
+            ./cline/progress_report.md with your assessment of what's been done 
+            already and what remains to be done for Step 3 once you understand
+            Step 3.
+        </task>
+        <task>
+            There is significant overlaps bewteen Steps 7 (persistence layer)
+            and step 4 (context manager).  
+
+            Rename cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/07_persistence_layer
+            to .../04A (we will just append the letter A to insert it before step 04).
+
+            Review Step 04 and ensure it is aligned with and uses the models
+            and concepts we will develop in the persistence layer.
+        </task>
+    </tasks-already-done>
+    <current-task>
+        Implement Step 4A: Persistence Layer as outlined in:
+        cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/04A_persistence_layer/04A_persistence_layer.md
+        
+        Follow the implementation plan to create a persistence layer that will:
+        1. Provide a consistent interface for data storage operations
+        2. Support multiple storage backends (in-memory, SQL)
+        3. Persist state, context, identities, and user data
+        4. Enable session continuity across multiple interactions
+        
+        Refer to the updated master implementation plan:
+        cline/coach_planning/state_machine_planning/v1/implementation_plan/master_plan_v1B_impl.md
+        
+        As with previous steps, write summary_of_changes.md and alignment_with_next_steps.md
+        files when complete.
     </current-task>
 </cline-context>
