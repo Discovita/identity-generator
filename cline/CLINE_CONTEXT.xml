@@ -167,5 +167,9 @@
         
         As with previous steps, write summary_of_changes.md and alignment_with_next_steps.md
         files when complete.
+
+        ALL OF THE ABOVE IS DONE, but the tests aren't passing yet.  
+        Run the tests and troubleshoot any remaining issues.  YOU DO NOT
+        need to review all of the context files to do this.
     </current-task>
 </cline-context>
