@@ -11,7 +11,6 @@ from dotenv import load_dotenv
 current_file = Path(__file__)
 project_root = current_file.parents[5]
 env_path = project_root / ".env"
-print(f"Logger - {env_path}")
 # Load environment variables
 if env_path.exists():
     load_dotenv(dotenv_path=env_path)
@@ -20,7 +19,6 @@ if env_path.exists():
 # Flag to toggle context information in console output
 # Options: "none", "function", "class_function", "full"
 CONTEXT_DISPLAY = os.getenv("CONTEXT_DISPLAY", "none")
-print(f"Logger - {CONTEXT_DISPLAY}")
 
 # ------------------------------------------------------
 #                 Define the FINE level
