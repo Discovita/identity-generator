@@ -188,6 +188,10 @@
         </task>
     </tasks-already-done>
     <current-task> 
-        Fix any compiler errors and failing tests in the project.
+        Carry out Step 4, implement the service layer.  
+
+        I just checked that there are no compiler errors in the project currently.
+
+        Ensure there aren't any before completing.
     </current-task>
 </cline-context>

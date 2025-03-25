@@ -1,27 +1,32 @@
 """Action models for coaching service."""
 
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, List
 from pydantic import BaseModel, Field
 from enum import Enum
+from discovita.service.openai.models.llm_response import LLMResponseModel
 
 class ActionType(str, Enum):
-    """Types of actions that can be triggered by the coach."""
-    SAVE_USER_INFO = "save_user_info"
-    SAVE_IDENTITY = "save_identity"
-    MARK_INTRODUCTION_COMPLETE = "mark_introduction_complete"
-    TRANSITION_STATE = "transition_state"
-    SAVE_VISUALIZATION = "save_visualization"
-    SET_FOCUS_IDENTITY = "set_focus_identity"
-    CREATE_ACTION_ITEM = "create_action_item"
-    MARK_ACTION_COMPLETE = "mark_action_complete"
+    """Types of actions that can be performed on the coaching state."""
+    CREATE_IDENTITY = "create_identity"  # Create a new identity during brainstorming
+    UPDATE_IDENTITY = "update_identity"  # Update an identity during refinement
+    ACCEPT_IDENTITY = "accept_identity"  # Mark an identity as accepted
+    COMPLETE_INTRODUCTION = "complete_introduction"  # Mark introduction as complete
+    TRANSITION_STATE = "transition_state"  # Request state transition
 
 class Action(BaseModel):
-    """Model for an action triggered by the coach."""
-    type: ActionType = Field(..., description="Type of action")
+    """An action to be performed on the coaching state."""
+    type: ActionType = Field(..., description="Type of action to perform")
     params: Dict[str, Any] = Field(default_factory=dict, description="Parameters for the action")
 
-class ActionResult(BaseModel):
-    """Result of executing an action."""
-    success: bool = Field(..., description="Whether the action was successful")
-    message: str = Field("", description="Message describing the result")
-    data: Optional[Dict[str, Any]] = Field(None, description="Any data returned by the action")
+class ProcessMessageResult(LLMResponseModel):
+    """
+    Result of processing a user message.
+    Contains the coach's response, updated state, and any actions taken.
+    """
+    message: str = Field(..., description="Coach's response message")
+    state: "CoachState" = Field(..., description="Updated coaching state")  # Forward reference
+    actions: List[Action] = Field(default_factory=list, description="Actions performed")
+
+# Import at bottom to avoid circular imports
+from .state import CoachState
+ProcessMessageResult.model_rebuild()  # Update forward refs

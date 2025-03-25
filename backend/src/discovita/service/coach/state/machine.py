@@ -1,88 +1,37 @@
 """State machine for managing the coaching process flow."""
 
-from typing import Dict, Any, List, Optional, Callable, Set
-from discovita.service.coach.models import (
-    CoachingState, 
-    StateTransition, 
-    CoachContext, 
-    TransitionCondition,
-    ActionType
-)
+from typing import Dict, Any, Optional
+from ..models.state import CoachState, CoachingState
 
-class CoachStateMachine:
+class StateMachine:
     """State machine for managing the coaching process flow."""
     
-    def __init__(self):
-        self.transitions: List[StateTransition] = []
-        self.condition_registry: Dict[TransitionCondition, Callable[[CoachContext], bool]] = {}
-    
-    def register_condition(self, name: TransitionCondition, condition_func: Callable[[CoachContext], bool]) -> None:
-        """Register a condition function for state transitions."""
-        self.condition_registry[name] = condition_func
-    
-    def add_transition(
-        self, 
-        from_state: CoachingState, 
-        to_state: CoachingState,
-        condition_name: TransitionCondition,
-        priority: int = 0
-    ) -> None:
-        """Add a transition to the state machine."""
-        if condition_name not in self.condition_registry:
-            raise ValueError(f"Condition '{condition_name}' not registered")
+    def check_transitions(self, state: CoachState) -> CoachState:
+        """Check and apply any state transitions based on current state."""
+        new_state = state.model_copy(deep=True)
+        
+        # Check for explicit transition request
+        if "requested_state" in new_state.metadata:
+            requested = new_state.metadata["requested_state"]
+            del new_state.metadata["requested_state"]
+            new_state.current_state = CoachingState(requested)
+            return new_state
             
-        transition = StateTransition(
-            from_state=from_state,
-            to_state=to_state,
-            condition_name=condition_name,
-            priority=priority
-        )
-        self.transitions.append(transition)
-    
-    def get_available_transitions(self, context: CoachContext) -> List[StateTransition]:
-        """Get all transitions available from the current state."""
-        return [
-            t for t in self.transitions 
-            if t.from_state == context.current_state
-        ]
-    
-    def evaluate_transitions(self, context: CoachContext) -> Optional[CoachingState]:
-        """Evaluate if any transitions should occur based on the current context."""
-        current_state = context.current_state
-        eligible_transitions = []
-        
-        for transition in self.transitions:
-            if transition.from_state != current_state:
-                continue
+        # Check for automatic transitions based on state
+        if new_state.current_state == CoachingState.INTRODUCTION:
+            if new_state.metadata.get("introduction_completed"):
+                new_state.current_state = CoachingState.IDENTITY_BRAINSTORMING
                 
-            condition_func = self.condition_registry.get(transition.condition_name)
-            if not condition_func:
-                continue
+        elif new_state.current_state == CoachingState.IDENTITY_BRAINSTORMING:
+            # Transition to refinement when we have 5 identities
+            if len(new_state.identities) >= 5:
+                new_state.current_state = CoachingState.IDENTITY_REFINEMENT
+                new_state.current_identity_index = 0
                 
-            if condition_func(context):
-                eligible_transitions.append(transition)
+        elif new_state.current_state == CoachingState.IDENTITY_REFINEMENT:
+            # Check if all identities are accepted
+            if all(i.is_accepted for i in new_state.identities):
+                # We stay in refinement state but mark completion in metadata
+                new_state.metadata["refinement_completed"] = True
         
-        if not eligible_transitions:
-            return None
-            
-        # Select transition with highest priority
-        next_transition = max(eligible_transitions, key=lambda t: t.priority)
-        return next_transition.to_state
-    
-    def transition(self, context: CoachContext) -> bool:
-        """Attempt to transition to a new state based on context."""
-        next_state = self.evaluate_transitions(context)
-        if next_state:
-            context.current_state = next_state
-            return True
-        return False
-    
-    def get_allowed_actions(self, state: CoachingState) -> Set[ActionType]:
-        """Get the set of allowed actions for a given state."""
-        from discovita.service.coach.prompt.manager import PromptManager
-        
-        # Create a PromptManager instance and delegate to it
-        # Note: PromptManager.__init__ will raise NotImplementedError in Step 2,
-        # but this shows how it will be used in Step 3
-        prompt_manager = PromptManager()
-        return prompt_manager.get_allowed_actions(state)
+        return new_state
