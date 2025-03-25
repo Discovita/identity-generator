@@ -55,6 +55,11 @@
         <rule>When working with CSS, use variables for shared values across components,
             particularly for colors. Avoid haphazard use of hard-coded values.
         </rule>
+        <rule>
+          For simple file operations by command line, please batch together
+          multiple mkdir / mv commands into a single mutli-line bash command
+          so as to avoid wasting time and AI API calls.
+        </rule>
     </rules>
 
     <long-term-memory>
@@ -116,6 +121,23 @@
         you should read:
         cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/summary_of_changes.md
         cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/alignment_with_next_steps.md
+
+        Aggressively simplify all code.  Do not overcomplicate.  This version of the coach
+        is going to be quite simple: (1) no database, just passing JSON between
+        front-end and backend where front-end sends current state and user message
+        and backend returns updated state and coach message (and any other needed metadata
+        for the front-end to show). (2) Key internal feature of the coach will be
+        a prompt manager which uses specialized prompts so that the coach has specialized
+        instructions for each stage of coaching.  (3) We're only going to have three
+        stages: (a) Introduction, (b) Brainstorming session (user comes up with 5 identities
+        through conversation with the coach), and (c) identity creation, where the coach
+        goes through the identities one at a time with the user and gets user buy-in 
+        on each identity, at the end of which the coach uses a "CREATE_IDENTITY" "action"
+        (we won't even implement this yet, just indicate that the coach would make
+        a function call that we'll implement later to actually create an identity - however,
+        we will shove the "identity" into the coach state so that it can at least be 
+        viewed and tested in test mode), and (d) conclusion where the coach reviews
+        what they came up with and indicates that more features are coming soon.
     </gather-context-instructions>
     <tasks-already-done>
         <task>
@@ -151,21 +173,21 @@
             Review Step 04 and ensure it is aligned with and uses the models
             and concepts we will develop in the persistence layer.
         </task>
+        <task>
+          Remove all references to persistence (database) layer.  This entire 
+          version of the coach will not make any use of the database.  
+
+          The six steps will now simply be:
+
+          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models
+          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/02_state_machine
+          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/03_prompt_manager
+          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/04_service_layer
+          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/05_api_layer
+          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/06_frontend_integration
+        </task>
     </tasks-already-done>
-    <current-task>
-        Implement Step 4A: Persistence Layer as outlined in:
-        cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/04A_persistence_layer/04A_persistence_layer.md
-        
-        Follow the implementation plan to create a persistence layer that will:
-        1. Provide a consistent interface for data storage operations
-        2. Support multiple storage backends (in-memory, SQL)
-        3. Persist state, context, identities, and user data
-        4. Enable session continuity across multiple interactions
-        
-        Refer to the updated master implementation plan:
-        cline/coach_planning/state_machine_planning/v1/implementation_plan/master_plan_v1B_impl.md
-        
-        As with previous steps, write summary_of_changes.md and alignment_with_next_steps.md
-        files when complete.
+    <current-task> 
+        Fix any compiler errors and failing tests in the project.
     </current-task>
 </cline-context>

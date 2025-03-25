@@ -27,12 +27,34 @@ FINE_LEVEL = 15
 logging.addLevelName(FINE_LEVEL, "FINE")
 
 
-def fine(self, message, *args, **kwargs):
-    if self.isEnabledFor(FINE_LEVEL):
-        self._log(FINE_LEVEL, message, args, **kwargs)
+def add_fine_level(cls):
+    """Add fine level to Logger class."""
+    def fine(self, message, *args, **kwargs):
+        if self.isEnabledFor(FINE_LEVEL):
+            self._log(FINE_LEVEL, message, args, **kwargs)
+    cls.fine = fine
+    return cls
 
+def add_success_level(cls):
+    """Add success level to Logger class."""
+    def success(self, message, *args, **kwargs):
+        if self.isEnabledFor(SUCCESS_LEVEL):
+            self._log(SUCCESS_LEVEL, message, args, **kwargs)
+    cls.success = success
+    return cls
 
-logging.Logger.fine = fine
+def add_step_level(cls):
+    """Add step level to Logger class."""
+    def step(self, message, *args, **kwargs):
+        if self.isEnabledFor(STEP_LEVEL):
+            self._log(STEP_LEVEL, message, args, **kwargs)
+    cls.step = step
+    return cls
+
+# Apply the decorators to add the new levels
+logging.Logger = add_fine_level(logging.Logger)
+logging.Logger = add_success_level(logging.Logger)
+logging.Logger = add_step_level(logging.Logger)
 
 # ------------------------------------------------------
 #              Define the SUCCESS level
@@ -40,27 +62,11 @@ logging.Logger.fine = fine
 SUCCESS_LEVEL = 22
 logging.addLevelName(SUCCESS_LEVEL, "SUCCESS")
 
-
-def success(self, message, *args, **kwargs):
-    if self.isEnabledFor(SUCCESS_LEVEL):
-        self._log(SUCCESS_LEVEL, message, args, **kwargs)
-
-
-logging.Logger.success = success
-
 # ------------------------------------------------------
 #              Define the STEP level
 # ------------------------------------------------------
 STEP_LEVEL = 25
 logging.addLevelName(STEP_LEVEL, "STEP")
-
-
-def step(self, message, *args, **kwargs):
-    if self.isEnabledFor(STEP_LEVEL):
-        self._log(STEP_LEVEL, message, args, **kwargs)
-
-
-logging.Logger.step = step
 
 
 # ------------------------------------------------------

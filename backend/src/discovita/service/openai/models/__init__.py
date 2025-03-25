@@ -31,6 +31,7 @@ from .responses import (
     StructuredOutputSchema,
     parse_function_call_arguments
 )
+from .tool_choice import ToolChoice, ToolChoiceMode, SpecificToolChoice
 
 __all__ = [
     # LLM Response
@@ -66,5 +67,10 @@ __all__ = [
     'OutputText',
     'ResponsesOutput',
     'StructuredOutputSchema',
-    'parse_function_call_arguments'
+    'parse_function_call_arguments',
+    
+    # Tool Choice Models
+    'ToolChoice',
+    'ToolChoiceMode',
+    'SpecificToolChoice'
 ]

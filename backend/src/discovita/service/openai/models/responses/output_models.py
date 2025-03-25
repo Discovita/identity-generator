@@ -71,6 +71,12 @@ class ResponsesOutput(BaseModel):
         if not self.is_function_call():
             raise ValueError("This output is not a function call")
         
+        # Fail fast if required fields are missing
+        assert self.id is not None, "Function call must have an id"
+        assert self.call_id is not None, "Function call must have a call_id"
+        assert self.name is not None, "Function call must have a name"
+        assert self.arguments is not None, "Function call must have arguments"
+        
         return ResponseFunctionToolCall(
             id=self.id,
             call_id=self.call_id,
@@ -91,6 +97,9 @@ class ResponsesOutput(BaseModel):
         """
         if not self.is_text():
             raise ValueError("This output is not text")
+        
+        # Fail fast if required fields are missing
+        assert self.text is not None, "Output text must have text content"
         
         return OutputText(
             type="output_text",
@@ -138,4 +147,4 @@ class ResponsesResponseCompat(OpenAIResponse):
         Returns:
             bool: True if the response has function calls, False otherwise
         """
-        return any(hasattr(item, 'type') and item.type == 'function_call' for item in self.output) 
+        return any(hasattr(item, 'type') and item.type == 'function_call' for item in self.output)
