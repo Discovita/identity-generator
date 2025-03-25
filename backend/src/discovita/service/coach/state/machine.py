@@ -1,7 +1,13 @@
 """State machine for managing the coaching process flow."""
 
 from typing import Dict, Any, List, Optional, Callable, Set
-from discovita.service.coach.models import CoachingState, StateTransition, CoachContext, TransitionCondition
+from discovita.service.coach.models import (
+    CoachingState, 
+    StateTransition, 
+    CoachContext, 
+    TransitionCondition,
+    ActionType
+)
 
 class CoachStateMachine:
     """State machine for managing the coaching process flow."""
@@ -71,7 +77,7 @@ class CoachStateMachine:
             return True
         return False
     
-    def get_allowed_actions(self, state: CoachingState) -> Set[str]:
+    def get_allowed_actions(self, state: CoachingState) -> Set[ActionType]:
         """Get the set of allowed actions for a given state."""
         from discovita.service.coach.prompt.manager import PromptManager
         

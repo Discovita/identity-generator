@@ -18,7 +18,7 @@ class StructuredOutputSchema(BaseModel):
     Responses API.
     """
     name: str = Field(..., description="The name of the schema")
-    schema: Dict[str, Any] = Field(..., description="The JSON schema")
+    json_schema: Dict[str, Any] = Field(..., description="The JSON schema")
     strict: bool = Field(True, description="Whether to enforce strict mode for the schema")
     
     @classmethod
@@ -37,6 +37,6 @@ class StructuredOutputSchema(BaseModel):
         
         return cls(
             name=schema_name,
-            schema=schema,
+            json_schema=schema,
             strict=True
-        ) 
+        )
