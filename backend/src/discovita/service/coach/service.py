@@ -36,10 +36,13 @@ class CoachService:
         )
         
         # Get LLM response
-        messages = [
-            {"role": "system", "content": self.prompt_manager.get_prompt(state)},
-            *[msg.model_dump() for msg in state.conversation_history]
-        ]
+        # Start with system prompt
+        messages = [{"role": "system", "content": self.prompt_manager.get_prompt(state)}]
+        
+        # Add conversation history with correct roles
+        for msg in state.conversation_history:
+            role = "assistant" if msg.role == "coach" else msg.role
+            messages.append({"role": role, "content": msg.content})
         
         # Get structured completion
         input_data = ResponseInput.from_dict_list(messages)

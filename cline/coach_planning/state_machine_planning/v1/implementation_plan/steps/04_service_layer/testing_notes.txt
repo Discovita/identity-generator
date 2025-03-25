@@ -1,0 +1,43 @@
+      We now have a coach service that I claim is fully implemented but probably has bugs
+      and details to work out.  
+
+      At a high level, it is simple enough to describe:
+
+      You pass in a "current state" which includes (1) the conversation context up to and
+      including the current user message, (2) internal details like the identities that have 
+      been created so far for the user, (3) the current "state" enum, (4) available actions
+      in the current state.  At least, that's what I think should comprise the overall 
+      coach state.  
+
+      Based on the current state, an appropriate prompt is selected by the coach's prompt
+      manager and sent to an LLM, which sends back a _structured_ response which drives
+      state transitions, actions, and includes a message back to the user.  The entire
+      state should be appropriately updated _based on_ the parsing and processing of this 
+      response from the LLM.  This updated state should be returned by the service.
+      Recall, for now, this state blob will be sent directly back to the front-end - we're
+      not persisting anything in a database.
+
+      We've been deep in the weeds with implementation.  Now it's time to test.
+      The beauty of our chosen approach is, integration-testing the coach is simply
+      a matter of constructing a coach state object, passing it to the coach service's main
+      coaching function, and checking that the returned object with the coach's response
+      and updated state is reasonable.  We will use real OpenAI API calls, so these
+      are not going to be unit tests.  Make 
+
+      backend/src/discovita/service/coach/test_scripts
+
+      directory and let's build up some test cases.  Let's start by 
+      checking that a coach on the initial "introduction" state with an
+      empty conversation history and a simple "Hello" message from the 
+      user responds with an introductory message that introduces the 
+      coaching program and asks the user if they have questions, etc...
+      whatever we wrote in our prompts corresponding to the introduction stage.
+
+      As a reminder, prompts are in 
+
+      1.  backend/src/discovita/service/coach/prompt
+      Python files for prompt management and
+
+      2.  backend/src/discovita/service/coach/prompts
+      Markdown files with (chunks of) prompts, some of which are specific
+      to one stage of coaching, others being shared across all stages of coaching.

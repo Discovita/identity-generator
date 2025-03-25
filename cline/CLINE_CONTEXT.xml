@@ -186,12 +186,17 @@
           cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/05_api_layer
           cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/06_frontend_integration
         </task>
-    </tasks-already-done>
-    <current-task> 
+        <task> 
         Carry out Step 4, implement the service layer.  
 
         I just checked that there are no compiler errors in the project currently.
 
         Ensure there aren't any before completing.
+    </task>
+    </tasks-already-done>
+    <current-task> 
+    cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/04_service_layer/testing_notes.txt
+
+    has detailed instructions for your current task.
     </current-task>
 </cline-context>
