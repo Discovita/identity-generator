@@ -1,17 +1,16 @@
-"""State record model for persistence layer."""
+"""SQL model for state persistence."""
 
 from sqlalchemy import Column, Integer, String, JSON, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
-from discovita.db.models.base import Base, TimestampMixin
+from discovita.db.sql.base import Base, TimestampMixin
 from discovita.db.models.constants import (
     ID, USER_ID, SESSION_ID, STATE_DATA,
     STATES_TABLE, USERS_TABLE, USER
 )
-from discovita.service.coach.models.state import CoachingState
 
-class StateRecord(Base, TimestampMixin):
-    """Model for storing state information."""
+class SQLState(Base, TimestampMixin):
+    """SQLAlchemy model for state table."""
     __tablename__ = STATES_TABLE
     
     id = Column(ID, Integer, primary_key=True, autoincrement=True)
@@ -26,11 +25,3 @@ class StateRecord(Base, TimestampMixin):
     
     # Relationship to user
     user = relationship(USER, back_populates=STATES_TABLE)
-    
-    def get_state(self) -> CoachingState:
-        """Get the deserialized state object."""
-        return CoachingState.model_validate(self.state_data)
-    
-    def set_state(self, state: CoachingState) -> None:
-        """Set the state from a CoachingState object."""
-        self.state_data = state.model_dump()

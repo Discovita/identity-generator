@@ -2,6 +2,7 @@
 
 import os
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -21,6 +22,9 @@ class Settings:
     openai_api_key: str
     adalo_app_id: str
     adalo_api_key: str
+    database_url: str
+    use_sql_database: bool
+    debug: bool
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -62,5 +66,17 @@ class Settings:
             s3_bucket=s3_bucket,
             openai_api_key=openai_api_key,
             adalo_app_id=adalo_app_id,
-            adalo_api_key=adalo_api_key
+            adalo_api_key=adalo_api_key,
+            database_url=os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./test.db"),
+            use_sql_database=os.getenv("USE_SQL_DATABASE", "false").lower() == "true",
+            debug=os.getenv("DEBUG", "false").lower() == "true"
         )
+
+@lru_cache()
+def get_settings() -> Settings:
+    """Get application settings.
+    
+    Returns:
+        Settings instance (cached)
+    """
+    return Settings.from_env()

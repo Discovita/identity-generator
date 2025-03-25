@@ -153,23 +153,30 @@
         </task>
     </tasks-already-done>
     <current-task>
-        Implement Step 4A: Persistence Layer as outlined in:
-        cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/04A_persistence_layer/04A_persistence_layer.md
-        
-        Follow the implementation plan to create a persistence layer that will:
-        1. Provide a consistent interface for data storage operations
-        2. Support multiple storage backends (in-memory, SQL)
-        3. Persist state, context, identities, and user data
-        4. Enable session continuity across multiple interactions
-        
-        Refer to the updated master implementation plan:
-        cline/coach_planning/state_machine_planning/v1/implementation_plan/master_plan_v1B_impl.md
-        
-        As with previous steps, write summary_of_changes.md and alignment_with_next_steps.md
-        files when complete.
-
-        ALL OF THE ABOVE IS DONE, but the tests aren't passing yet.  
-        Run the tests and troubleshoot any remaining issues.  YOU DO NOT
-        need to review all of the context files to do this.
+    Address compiler errors:
+    
+        (venv) ➜  identity-generator git:(mazerakham/state-machine/step-4a-persistence-layer) ✗ pyright ./backend/src 
+/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/factory.py
+  /Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/factory.py:43:16 - error: Cannot instantiate abstract class "InMemoryDatabase"
+    "DatabaseInterface.initialize" is not implemented (reportAbstractUsage)
+/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/in_memory_db.py
+  /Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/in_memory_db.py:100:43 - error: Cannot access attribute "user_id" for class "BaseModel*"
+    Attribute "user_id" is unknown (reportAttributeAccessIssue)
+  /Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/in_memory_db.py:100:73 - error: Cannot access attribute "session_id" for class "BaseModel*"
+    Attribute "session_id" is unknown (reportAttributeAccessIssue)
+  /Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/in_memory_db.py:102:42 - error: Cannot access attribute "session_id" for class "BaseModel*"
+    Attribute "session_id" is unknown (reportAttributeAccessIssue)
+  /Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/in_memory_db.py:102:63 - error: Cannot access attribute "user_id" for class "BaseModel*"
+    Attribute "user_id" is unknown (reportAttributeAccessIssue)
+  /Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/in_memory_db.py:104:43 - error: Cannot access attribute "user_id" for class "BaseModel*"
+    Attribute "user_id" is unknown (reportAttributeAccessIssue)
+  /Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/in_memory_db.py:104:65 - error: Cannot access attribute "id" for class "BaseModel*"
+    Attribute "id" is unknown (reportAttributeAccessIssue)
+  /Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/in_memory_db.py:107:38 - error: Cannot access attribute "id" for class "BaseModel*"
+    Attribute "id" is unknown (reportAttributeAccessIssue)
+  /Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/in_memory_db.py:113:9 - error: Argument of type "Tuple[Unknown, ...] | None" cannot be assigned to parameter "key" of type "Tuple[Unknown, ...]" in function "__setitem__"
+    Type "Tuple[Unknown, ...] | None" is not assignable to type "Tuple[Unknown, ...]"
+      "None" is not assignable to "Tuple[Unknown, ...]" (reportArgumentType)
+/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/db/interface.py
     </current-task>
 </cline-context>
