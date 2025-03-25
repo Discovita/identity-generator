@@ -1,28 +1,15 @@
-"""Data models for coaching service."""
+"""Coach service models."""
 
-# Re-export all models
-from .chat import ChatMessage
-from .identity import Identity, IdentityCategory
-from .request_response import CoachRequest, CoachResponse, CoachStructuredResponse
-from .user import UserProfile
-from .state import CoachingState, StateTransition, TransitionCondition, ContextMetadataKey
-from .action import ActionType, Action, ActionResult
-from .context import CoachContext
+from .state import CoachState, CoachingState, Message, Identity, UserProfile
+from .action import Action, ActionType, ProcessMessageResult
 
 __all__ = [
-    'ChatMessage',
-    'Identity',
-    'IdentityCategory',
-    'CoachRequest',
-    'CoachResponse',
-    'CoachStructuredResponse',
-    'UserProfile',
+    'CoachState',
     'CoachingState',
-    'StateTransition',
-    'TransitionCondition',
-    'ContextMetadataKey',
-    'ActionType',
+    'Message',
+    'Identity',
+    'UserProfile',
     'Action',
-    'ActionResult',
-    'CoachContext'
+    'ActionType',
+    'ProcessMessageResult'
 ]

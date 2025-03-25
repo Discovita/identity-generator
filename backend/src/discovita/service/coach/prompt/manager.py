@@ -1,10 +1,10 @@
 """Prompt manager for coaching service."""
 
-from typing import Dict, Any, List, Set, Optional
-import os
+from typing import Dict, Set, Optional
 from pathlib import Path
 
-from discovita.service.coach.models import CoachingState, ActionType, CoachContext
+from ..models import CoachState, CoachingState, ActionType
+from .models import PromptContext
 from .templates import PromptTemplate
 from .loader import PromptLoader
 
@@ -22,21 +22,41 @@ class PromptManager:
         for state in CoachingState:
             self.templates[state] = self.loader.load_template(state)
     
-    def get_prompt(self, state: CoachingState, context: CoachContext) -> str:
-        """Get a formatted prompt for the current state using the provided context."""
-        if state not in self.templates:
-            raise ValueError(f"No template found for state: {state}")
+    def _build_prompt_context(self, state: CoachState) -> PromptContext:
+        """Build prompt context from coach state."""
+        current_identity_desc = None
+        if (state.current_identity_index is not None 
+            and state.current_identity_index < len(state.identities)):
+            current_identity_desc = state.identities[state.current_identity_index].description
             
-        template = self.templates[state]
-        
-        # Ensure all required context keys are present
-        prompt_context = context.get_prompt_context()
-        missing_keys = [key for key in template.required_context_keys if key not in prompt_context or not prompt_context[key]]
-        if missing_keys:
-            raise ValueError(f"Missing required context keys: {missing_keys}")
+        return PromptContext(
+            user_name=state.user_profile.name,
+            user_goals=state.user_profile.goals,
+            num_identities=len(state.identities),
+            current_identity_description=current_identity_desc,
+            identities_summary=[
+                (i.description, i.is_accepted) for i in state.identities
+            ],
+            phase=state.current_state.value
+        )
+    
+    def get_prompt(self, state: CoachState) -> str:
+        """Get a formatted prompt for the current state using the provided context."""
+        if state.current_state not in self.templates:
+            raise ValueError(f"No template found for state: {state.current_state}")
+            
+        template = self.templates[state.current_state]
+        context = self._build_prompt_context(state)
         
         # Format the template with the context
-        formatted_prompt = template.template.format(**prompt_context)
+        formatted_prompt = template.template.format(
+            user_name=context.user_name,
+            user_goals=context.format_goals(),
+            num_identities=context.num_identities,
+            current_identity=context.current_identity_description or "None",
+            identities_summary=context.format_identities(),
+            phase=context.phase
+        )
         
         # Add examples if available
         if template.examples:
