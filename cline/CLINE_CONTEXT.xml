@@ -216,27 +216,9 @@ The entirety of the coach logic is quite easy to describe:
 
     </tasks-already-done>
     <current-task> 
-      During identity brainstorming and identity refinement, 
+      Fix the issue of the coach creating redundant identities.
 
-      I would like the coach to ADD_IDENTITY_NOTE whenever it believes
-      it has learned valuable information about how the user perceives
-      a certain identity that they have already created. 
-
-      1.  When using the CREATE_IDENTITY action, add a required `note`
-      field for the first note, indicating why the coach created this
-      identity for the user.  This will be the first note in the array
-      of notes that will eventually be created for the identity. 
-
-      2.  At any time during brainstorming and coaching, ADD_IDENTITY_NOTE
-      can be used to save (append) a new piece of information about the given
-      identity.  
-
-      First update the actions and action handler code to support these
-      features; then make sure the prompts are updated so the coach knows
-      it can use this feature during identity brainstorming
-      and identity refinement stages.
-
-      Before you begin, read cline/coach_planning/identity_note_context.md
-      which has valuable context for this task.
+      See cline/coach_planning/non_redundant_identities_context.md 
+      for very useful context.
     </current-task>
 </cline-context>
