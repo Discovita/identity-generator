@@ -6,6 +6,7 @@ from ..models.state import IdentityState
 
 class IdentitySummary(BaseModel):
     """Summary of an identity for prompt context."""
+    id: str = Field(..., description="Unique identifier for the identity")
     description: str = Field(..., description="Description of the identity")
     state: IdentityState = Field(..., description="Current state of the identity")
 
@@ -24,9 +25,12 @@ class PromptContext(BaseModel):
         return ", ".join(self.user_goals)
 
     def format_identities(self) -> str:
-        """Format identities summary as bulleted list."""
+        """Format identities summary as bulleted list with IDs."""
+        if not self.identities_summary:
+            return "No identities created yet."
+            
         return "\n".join(
-            f"- {identity.description} (state: {identity.state.value})"
+            f"- ID: {identity.id} | {identity.description} (state: {identity.state.value})"
             for identity in self.identities_summary
         )
         

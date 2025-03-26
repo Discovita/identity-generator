@@ -39,7 +39,8 @@ Current user information: {user_summary}
 
 Recent conversation: {recent_messages}
 
-Current identities: {identities}
+### Current identities
+{identities}
 
 ## Response Guidelines
 
@@ -60,8 +61,10 @@ Current identities: {identities}
 
 ## Action Guidelines
 
-- Use create_identity action when:
-  - The user expresses a new clear identity statement
+- IMPORTANT: Always check the "Current identities" list before creating a new identity. If a similar identity already exists, update it instead of creating a redundant one.
+
+- Use create_identity action ONLY when:
+  - The user expresses a completely new identity that doesn't exist in any form in the "Current identities" list
   - You've helped refine their thoughts into an "I am" statement
   - Include the full identity description as a single "description" parameter
   - Example: "Innovative Engineer and Entrepreneur"
@@ -71,6 +74,7 @@ Current identities: {identities}
 - Use update_identity action when:
   - The user provides new information about an existing identity
   - You need to refine or enhance an existing identity statement
+  - The user wants to modify an existing identity (even slightly)
   - Include the identity_id and updated description
 
 - Use accept_identity action when:

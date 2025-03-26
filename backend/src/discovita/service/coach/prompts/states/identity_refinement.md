@@ -37,7 +37,8 @@ Current user information: {user_summary}
 
 Recent conversation: {recent_messages}
 
-Current identities: {identities}
+### Current Identities
+{identities}
 
 Current focus identity: {current_focus}
 
@@ -63,6 +64,9 @@ Current focus identity: {current_focus}
   4. Use the ACCEPT_IDENTITY_REFINEMENT action to transition it to the REFINEMENT_COMPLETE state
 
 ## Action Guidelines
+
+- IMPORTANT: Make sure you don't create duplicate identities.  
+Review the Current Identities in context before creating a new one.
 
 - Use update_identity action when:
   - You've helped refine an identity statement
