@@ -2,6 +2,7 @@
 
 from .state import CoachState, CoachingState, Message, Identity, UserProfile
 from .action import Action, ActionType, ProcessMessageResult
+from .request_response import CoachRequest, CoachResponse, CoachStructuredResponse
 
 __all__ = [
     'CoachState',
@@ -11,5 +12,8 @@ __all__ = [
     'UserProfile',
     'Action',
     'ActionType',
-    'ProcessMessageResult'
+    'ProcessMessageResult',
+    'CoachRequest',
+    'CoachResponse',
+    'CoachStructuredResponse'
 ]

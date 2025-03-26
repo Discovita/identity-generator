@@ -1,7 +1,8 @@
 ---
 required_context_keys:
-  - user_summary
-  - recent_messages
+  - user_name
+  - user_goals
+  - num_identities
 allowed_actions:
   - SAVE_USER_INFO
   - MARK_INTRODUCTION_COMPLETE
@@ -29,9 +30,12 @@ Explain that you'll guide them through:
 
 ## Current Context
 
-Current user information: {user_summary}
+Current user information:
+- Name: {user_name}
+- Goals: {user_goals}
 
-Recent conversation: {recent_messages}
+Current progress:
+- Identities created: {num_identities}
 
 ## Response Guidelines
 

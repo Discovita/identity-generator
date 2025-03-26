@@ -31,18 +31,19 @@ async def get_response(
     schema_name: Optional[str] = None,
     store: bool = True,
     previous_response_id: Optional[str] = None,
+    tools: Optional[ResponseTools] = None,
 ) -> StructuredResponseResult[T]:
     """Get a structured response from the OpenAI Responses API."""
     # Create schema and tools configuration
-    schema = StructuredOutputSchema.from_llm_response_model(
-        response_model, 
-        name=schema_name
-    )
-    
-    tools = ResponseTools(
-        tools=[schema.model_dump()],
-        tool_choice=ToolChoice.specific(schema.name)
-    )
+    if tools is None:
+        schema = StructuredOutputSchema.from_llm_response_model(
+            response_model, 
+            name=schema_name
+        )
+        tools = ResponseTools(
+            tools=[schema.model_dump()],
+            tool_choice=ToolChoice.specific(schema.name)
+        )
 
     # Get response with schema as tool
     response = await create_response(
@@ -54,20 +55,27 @@ async def get_response(
         previous_response_id=previous_response_id,
     )
 
-    # Create result and parse output
+    # Create result with response
     result = StructuredResponseResult(response=response)
-    text_output = next(
-        (item.text for item in response.output 
-         if isinstance(item, ResponseOutputText)),
-        None
-    )
-
-    if text_output:
-        try:
-            data = json.loads(text_output)
-            result.parsed = response_model.model_validate(data)
-            result.is_valid = True
-        except Exception as e:
-            result.error = str(e)
+    
+    # Assert response has expected structure
+    assert response.output, "Response must have output"
+    assert len(response.output) > 0, "Response output cannot be empty"
+    assert hasattr(response.output[0], 'content'), "Response output must have content"
+    assert len(response.output[0].content) > 0, "Response content cannot be empty"
+    assert hasattr(response.output[0].content[0], 'text'), "Response content must have text"
+    
+    # Extract message
+    message = response.output[0].content[0].text
+    
+    # Create response data
+    data = {
+        "message": message,
+        "actions": []  # We'll add function call handling later
+    }
+    
+    # Parse into model
+    result.parsed = response_model.model_validate(data)
+    result.is_valid = True
 
     return result

@@ -1,14 +1,3 @@
-export interface ChatMessage {
-  role: string
-  content: string
-}
+import { CoachRequest, CoachResponse, Message as ChatMessage } from '../types/apiTypes';
 
-export interface CoachRequest {
-  user_id: string
-  message: string
-  context: ChatMessage[]
-}
-
-export interface CoachResponse {
-  message: string
-}
+export type { CoachRequest, CoachResponse, ChatMessage };

@@ -32,7 +32,7 @@ export const IdentityChoice: React.FC<IdentityChoiceProps> = ({
   return (
     <div className="identity-choice-buttons">
       <button
-        onClick={() => onChoiceSelected(`Yes, I like the "${identity.name}" identity.`)}
+        onClick={() => onChoiceSelected(`Yes, I like the "${identity.description}" identity.`)}
         disabled={disabled}
         className="identity-button accept-button"
         aria-label="Accept this identity"
