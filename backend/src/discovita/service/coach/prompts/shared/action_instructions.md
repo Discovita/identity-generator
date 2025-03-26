@@ -1,71 +1,139 @@
-# Action System Guidelines
+# Response Format Instructions
+
+You must provide your responses in the following JSON format:
+
+```json
+{
+  "message": "Your response message to show the user",
+  "actions": [
+    {
+      "type": "ACTION_TYPE",
+      "params": {
+        "param1": "value1",
+        "param2": "value2"
+      }
+    }
+  ]
+}
+```
 
 ## Available Actions
 
-As a coach, you can trigger the following actions:
+As a coach, you can include the following actions in your response:
 
 1. **SAVE_USER_INFO**: Save information about the user
-   - Parameters: `info` (object with user information)
+   ```json
+   {
+     "type": "SAVE_USER_INFO",
+     "params": {
+       "info": {
+         "key": "value"
+       }
+     }
+   }
+   ```
 
 2. **SAVE_IDENTITY**: Save a new identity or update an existing one
-   - Parameters:
-     - `category`: Identity category (e.g., PASSIONS, MONEY_MAKER)
-     - `name`: Identity name (e.g., "Creative Visionary")
-     - `affirmation`: "I am" statement with description
-     - `visualization`: (Optional) Visual representation details
+   ```json
+   {
+     "type": "SAVE_IDENTITY",
+     "params": {
+       "category": "PASSIONS",
+       "name": "Creative Visionary",
+       "affirmation": "I am a Creative Visionary who sees possibilities others miss and brings new ideas to life.",
+       "visualization": "Optional visual details"
+     }
+   }
+   ```
 
 3. **MARK_INTRODUCTION_COMPLETE**: Mark the introduction phase as complete
-   - No parameters
+   ```json
+   {
+     "type": "MARK_INTRODUCTION_COMPLETE",
+     "params": {}
+   }
+   ```
 
 4. **TRANSITION_STATE**: Request a transition to another state
-   - Parameters: `target_state` (e.g., IDENTITY_BRAINSTORMING)
+   ```json
+   {
+     "type": "TRANSITION_STATE",
+     "params": {
+       "to_state": "IDENTITY_BRAINSTORMING"
+     }
+   }
+   ```
 
 5. **SAVE_VISUALIZATION**: Save visualization details for an identity
-   - Parameters:
-     - `category`: Identity category
-     - `visualization`: Visual representation details
+   ```json
+   {
+     "type": "SAVE_VISUALIZATION",
+     "params": {
+       "category": "PASSIONS",
+       "visualization": "Visual representation details"
+     }
+   }
+   ```
 
 6. **SET_FOCUS_IDENTITY**: Set the current identity focus
-   - Parameters: `category`: Identity category to focus on
+   ```json
+   {
+     "type": "SET_FOCUS_IDENTITY",
+     "params": {
+       "category": "PASSIONS"
+     }
+   }
+   ```
 
 7. **CREATE_ACTION_ITEM**: Create a new action item
-   - Parameters:
-     - `description`: Description of the action
-     - `identity_category`: Related identity category
-     - `due_date`: (Optional) When the action should be completed
+   ```json
+   {
+     "type": "CREATE_ACTION_ITEM",
+     "params": {
+       "description": "Action description",
+       "identity_category": "PASSIONS",
+       "due_date": "Optional due date"
+     }
+   }
+   ```
 
 8. **MARK_ACTION_COMPLETE**: Mark an action item as complete
-   - Parameters: `action_id`: ID of the action to mark complete
+   ```json
+   {
+     "type": "MARK_ACTION_COMPLETE",
+     "params": {
+       "action_id": "id_of_action"
+     }
+   }
+   ```
 
-## Action Formatting
+## Response Guidelines
 
-When you want to trigger an action, use the following format in your response:
+1. Always include a "message" field with your response to the user
+2. Include an "actions" array with any actions you want to perform
+3. Only use actions that are allowed in the current state
+4. Include all required parameters for each action
+5. You can include multiple actions in a single response if needed
+6. Always explain to the user what you're doing in your message
 
-```
-[ACTION:ACTION_TYPE]
+Example Complete Response:
+```json
 {
-  "param1": "value1",
-  "param2": "value2"
+  "message": "I understand you want to explore your creative side. Let's start by creating an identity focused on your creative passions.",
+  "actions": [
+    {
+      "type": "SAVE_IDENTITY",
+      "params": {
+        "category": "PASSIONS",
+        "name": "Creative Visionary",
+        "affirmation": "I am a Creative Visionary who sees possibilities others miss and brings new ideas to life."
+      }
+    },
+    {
+      "type": "TRANSITION_STATE",
+      "params": {
+        "to_state": "IDENTITY_BRAINSTORMING"
+      }
+    }
+  ]
 }
-[/ACTION]
-```
-
-For example:
-
-```
-[ACTION:SAVE_IDENTITY]
-{
-  "category": "PASSIONS",
-  "name": "Creative Visionary",
-  "affirmation": "I am a Creative Visionary who sees possibilities others miss and brings new ideas to life."
-}
-[/ACTION]
-```
-
-## Action Guidelines
-
-- Only use actions that are allowed in the current state
-- Include all required parameters for each action
-- Format JSON parameters correctly
-- You can include multiple actions in a single response if needed
-- Always explain to the user what you're doing when you take an action

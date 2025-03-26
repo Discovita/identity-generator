@@ -95,6 +95,21 @@
             3. Include the updated apiTypes.ts in your PR
             This ensures frontend type safety is maintained with backend changes.
         </note>
+        <note>
+        How the coach should work:
+
+The way this works should be quite simple.  
+
+CoachState should have `current_state` which is a `CoachingState` enum value (this is defined in backend/src/discovita/service/coach/models/state.py).  When the LLM wants to transition state, it should simply use the TRANSITION_STATE action from backend/src/discovita/service/coach/models/action.py.  
+
+The entirety of the coach logic is quite easy to describe:
+
+1.  Current coach state + user message is passed to coach service. 
+2.  Appropriate prompt is selected by the coach's prompt manager and sent to the LLM, with variables filled in using the current state values. 
+3.  LLM returns a response object with a response message and actions. 
+4.  Actions are carried out by an action executor.  One of these possible actions is to transition the state.  
+
+        </note>
     </long-term-memory>
     <gather-context-instructions>
         Familiarize yourself with
@@ -195,15 +210,66 @@
     </task>
     </tasks-already-done>
     <current-task> 
-      backend/src/discovita/api/routes/coach.py
+        The app is working.  State transitions are working.  Latest error
 
-      has a single route for handling user requests to the coach API.
+        takes place during the brainstorming state. 
 
-      Have this route require a `coach_state` param in the request object 
-      body which has ALL of the coach and user session state.  
+        ```
+[backend]     result = await app(  # type: ignore[func-returns-value]
+[backend]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+[backend]     return await self.app(scope, receive, send)
+[backend]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
+[backend]     await super().__call__(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/applications.py", line 112, in __call__
+[backend]     await self.middleware_stack(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
+[backend]     raise exc
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
+[backend]     await self.app(scope, receive, _send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 93, in __call__
+[backend]     await self.simple_response(scope, receive, send, request_headers=headers)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+[backend]     await self.app(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+[backend]     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+[backend]     raise exc
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+[backend]     await app(scope, receive, sender)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
+[backend]     await self.middleware_stack(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
+[backend]     await route.handle(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
+[backend]     await self.app(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
+[backend]     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+[backend]     raise exc
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+[backend]     await app(scope, receive, sender)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
+[backend]     response = await f(request)
+[backend]                ^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
+[backend]     raw_response = await run_endpoint_function(
+[backend]                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+[backend]     return await dependant.call(**values)
+[backend]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/api/routes/coach.py", line 16, in handle_user_input
+[backend]     result = await service.process_message(request.message, request.coach_state)
+[backend]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/service.py", line 49, in process_message
+[backend]     system_prompt = self.prompt_manager.get_prompt(state)
+[backend]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/prompt/manager.py", line 56, in get_prompt
+[backend]     formatted_prompt = template.template.format(
+[backend]                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend] KeyError: 'user_summary'
+```
 
-      NOW... we have mostly done this, but there are some typescript issues
-      remaining in front-end.  Start at ChatInterface.tsx's typescript errors
-      and continue to solve typescript errors till none remain.
     </current-task>
 </cline-context>

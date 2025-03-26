@@ -55,8 +55,10 @@ def log_request(operation: str, **kwargs: Any) -> None:
         if "messages" in safe_kwargs:
             logger.info("Messages:")
             for msg in safe_kwargs["messages"]:
-                role = msg.get('role', 'unknown')
-                content = msg.get('content', '')
+                logger.debug(f"Message type: {type(msg)}")
+                logger.debug(f"Message dir: {dir(msg)}")
+                role = msg.role
+                content = msg.content
                 logger.info(f"  {role}: {content}")
         
         # Log other parameters

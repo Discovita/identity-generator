@@ -4,11 +4,21 @@ from enum import Enum
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
 
-class CoachingState(Enum):
+class CoachingState(str, Enum):
     """Represents the possible states in the coaching process."""
     INTRODUCTION = "introduction"
     IDENTITY_BRAINSTORMING = "identity_brainstorming"
     IDENTITY_REFINEMENT = "identity_refinement"
+    
+    @classmethod
+    def _missing_(cls, value):
+        """Handle case-insensitive enum values."""
+        if isinstance(value, str):
+            # Try to match case-insensitively
+            for member in cls:
+                if member.value.lower() == value.lower():
+                    return member
+        return None
 
 class Message(BaseModel):
     """A single message in the conversation history."""

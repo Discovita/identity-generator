@@ -1,49 +1,45 @@
-"""OpenAI Responses API basic operations."""
+"""OpenAI chat completions with structured output."""
 
-from typing import Optional
+from typing import Optional, Dict, Any
 from openai import AsyncOpenAI
-from openai.types.responses import Response
+from openai.types.chat import ChatCompletion
 from discovita.service.openai.client import logging
-from discovita.service.openai.models import ResponsesRequest
-from .responses import ResponseInput, ResponseTools
+from .responses import ResponseInput
 
 async def create_response(
     client: AsyncOpenAI,
     input_data: ResponseInput,
     model: str = "gpt-4o",
-    tools: Optional[ResponseTools] = None,
+    response_format: Optional[Dict[str, Any]] = None,
     store: bool = True,
     previous_response_id: Optional[str] = None
-) -> Response:
-    """Create a response using the OpenAI Responses API.
+) -> ChatCompletion:
+    """Create a chat completion with structured output.
     
     Args:
         client: OpenAI client instance
         input_data: Input data as a ResponseInput object
         model: The model to use (default: "gpt-4o")
-        tools: Optional tools configuration
+        response_format: Optional response format (e.g. {"type": "json_object"})
         store: Whether to store the response for future reference
         previous_response_id: ID of the previous response in a conversation
         
     Returns:
-        Response: The raw response from the OpenAI Responses API
+        ChatCompletion: The response from the OpenAI Chat API
     """
-    request = ResponsesRequest(
-        model=model,
-        input=input_data.messages,  # Already List[ResponsesMessage] from our earlier fix
-        tools=tools.tools if tools else None,
-        tool_choice=tools.tool_choice.model_dump() if tools and tools.tool_choice else None,
-        store=store,
-        previous_response_id=previous_response_id
-    )
+    request = {
+        "model": model,
+        "messages": input_data.messages,
+        "response_format": response_format or {"type": "json_object"},
+    }
     
     # Log the request
-    logging.log_request("responses_create", **request.model_dump())
+    logging.log_request("chat.completions.create", **request)
     
     # Send the request to the API
-    response = await client.responses.create(**request.model_dump())
+    response = await client.chat.completions.create(**request)
     
     # Log the response
-    logging.log_response("responses_create", response)
+    logging.log_response("chat.completions.create", response)
     
     return response

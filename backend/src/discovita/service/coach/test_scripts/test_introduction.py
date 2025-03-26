@@ -37,7 +37,9 @@ async def test_introduction():
             goals=[]
         ),
         identities=[],
-        conversation_history=[]
+        conversation_history=[],
+        proposed_identity=None,
+        current_identity_index=None
     )
     
     # Process a simple hello message

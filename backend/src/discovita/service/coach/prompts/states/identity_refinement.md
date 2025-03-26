@@ -7,7 +7,6 @@ required_context_keys:
 allowed_actions:
   - SAVE_IDENTITY
   - SET_FOCUS_IDENTITY
-  - TRANSITION_STATE
 ---
 
 # Identity Refinement State
@@ -44,5 +43,24 @@ Current focus identity: {current_focus}
 - Focus exclusively on the current identity being refined
 - Ask probing questions to help them clarify their thinking
 - Suggest improvements to make their identity statement more powerful
-- When the identity is well-refined, prepare them for visualization
-- Use the SET_FOCUS_IDENTITY action if they want to work on a different identity
+- When the identity is well-refined, either:
+  - Move on to refining another identity if there are more to refine
+  - If all identities are refined, provide a positive concluding message that:
+    1. Reviews all the identities they've created
+    2. Acknowledges their work and progress
+    3. Invites them to continue open dialogue until they're ready to end the session
+
+## Action Guidelines
+
+- Use SAVE_IDENTITY action when:
+  - You've helped refine an identity statement
+  - The user agrees with the refined version
+  - Include the existing identity ID and updated description
+
+- Use SET_FOCUS_IDENTITY action when:
+  - The user wants to work on a different identity
+  - You need to switch focus to another identity
+  - Include the identity ID to focus on
+
+Remember: Always follow the response format specified in the response format instructions, providing both a message to the user and any actions in the correct JSON structure.
+
