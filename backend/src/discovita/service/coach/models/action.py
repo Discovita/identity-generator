@@ -3,8 +3,6 @@
 from typing import Dict, Any, List
 from pydantic import BaseModel, Field
 from enum import Enum
-from discovita.service.openai.models.llm_response import LLMResponseModel
-
 class ActionType(str, Enum):
     """Types of actions that can be performed on the coaching state."""
     CREATE_IDENTITY = "create_identity"  # Create a new identity during brainstorming
@@ -18,7 +16,7 @@ class Action(BaseModel):
     type: ActionType = Field(..., description="Type of action to perform")
     params: Dict[str, Any] = Field(default_factory=dict, description="Parameters for the action")
 
-class ProcessMessageResult(LLMResponseModel):
+class ProcessMessageResult(BaseModel):
     """
     Result of processing a user message.
     Contains the coach's response, updated state, and any actions taken.

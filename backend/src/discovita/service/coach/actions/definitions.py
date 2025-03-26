@@ -6,6 +6,7 @@ def get_available_actions() -> List[dict]:
     """Get available actions as OpenAI function definitions."""
     return [
         {
+            "type": "function",
             "name": "create_identity",
             "description": "Create a new identity during brainstorming",
             "parameters": {
@@ -20,6 +21,7 @@ def get_available_actions() -> List[dict]:
             }
         },
         {
+            "type": "function",
             "name": "update_identity",
             "description": "Update an identity during refinement",
             "parameters": {
@@ -38,6 +40,7 @@ def get_available_actions() -> List[dict]:
             }
         },
         {
+            "type": "function",
             "name": "accept_identity",
             "description": "Mark an identity as accepted",
             "parameters": {
@@ -52,6 +55,7 @@ def get_available_actions() -> List[dict]:
             }
         },
         {
+            "type": "function",
             "name": "complete_introduction",
             "description": "Mark the introduction phase as complete",
             "parameters": {
@@ -60,6 +64,7 @@ def get_available_actions() -> List[dict]:
             }
         },
         {
+            "type": "function",
             "name": "transition_state",
             "description": "Request a state transition",
             "parameters": {
