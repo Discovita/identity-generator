@@ -2,7 +2,7 @@
 
 from typing import Optional
 from openai import AsyncOpenAI
-from openai.types.responses import Response
+from openai.types.chat import ChatCompletion as Response
 from discovita.service.openai.client import logging
 from discovita.service.openai.models import ResponsesMessage
 from .responses import ResponseInput, ResponseTools, ResponseFunctionOutputs
@@ -50,8 +50,8 @@ async def submit_results(
     request_params = {k: v for k, v in request_params.items() if v is not None}
     
     # Log and send request
-    logging.log_request("responses_create", **request_params)
-    response = await client.responses.create(**request_params)
-    logging.log_response("responses_create", response)
+    logging.log_request("chat.completions.create", **request_params)
+    response = await client.chat.completions.create(**request_params)
+    logging.log_response("chat.completions.create", response)
     
     return response

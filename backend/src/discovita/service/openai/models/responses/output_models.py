@@ -6,7 +6,8 @@ including text output and response models.
 
 from typing import List, Dict, Any, Optional, Literal
 from pydantic import BaseModel, Field, field_validator
-from openai.types.responses import ResponseFunctionToolCall, Response as OpenAIResponse
+from openai.types.chat import ChatCompletionMessageToolCall as ResponseFunctionToolCall
+from openai.types.chat import ChatCompletion as OpenAIResponse
 
 class OutputText(BaseModel):
     """Output text model for the Responses API.
@@ -73,17 +74,15 @@ class ResponsesOutput(BaseModel):
         
         # Fail fast if required fields are missing
         assert self.id is not None, "Function call must have an id"
-        assert self.call_id is not None, "Function call must have a call_id"
         assert self.name is not None, "Function call must have a name"
         assert self.arguments is not None, "Function call must have arguments"
         
+        # Create and return the ResponseFunctionToolCall
+        # Use type: ignore to bypass the type checker since we know this works at runtime
         return ResponseFunctionToolCall(
             id=self.id,
-            call_id=self.call_id,
-            type="function_call",
-            name=self.name,
-            arguments=self.arguments,
-            status="completed"  # Adding the status field which is required in ResponseFunctionToolCall
+            function={"name": self.name, "arguments": self.arguments},  # type: ignore
+            type="function"
         )
     
     def as_text(self) -> OutputText:
@@ -127,18 +126,11 @@ class ResponsesResponseCompat(OpenAIResponse):
             List[ResponseFunctionToolCall]: The function calls, or an empty list if there are no function calls
         """
         result = []
-        for item in self.output:
-            # In the SDK's model, function calls are in a different format
-            # We need to extract them accordingly
-            if hasattr(item, 'type') and item.type == 'function_call':
-                result.append(ResponseFunctionToolCall(
-                    id=item.id,
-                    call_id=item.call_id,
-                    type="function_call",
-                    name=item.name,
-                    arguments=item.arguments,
-                    status="completed"
-                ))
+        for choice in self.choices:
+            if choice.message and choice.message.tool_calls:
+                for tool_call in choice.message.tool_calls:
+                    if tool_call.type == "function":
+                        result.append(tool_call)
         return result
     
     def has_function_calls(self) -> bool:
@@ -147,4 +139,9 @@ class ResponsesResponseCompat(OpenAIResponse):
         Returns:
             bool: True if the response has function calls, False otherwise
         """
-        return any(hasattr(item, 'type') and item.type == 'function_call' for item in self.output)
+        for choice in self.choices:
+            if choice.message and choice.message.tool_calls:
+                for tool_call in choice.message.tool_calls:
+                    if tool_call.type == "function":
+                        return True
+        return False

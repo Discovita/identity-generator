@@ -3,7 +3,9 @@
 This module exports models for the OpenAI Responses API.
 """
 
-from openai.types.responses import FunctionTool, ResponseFunctionToolCall, Response as OpenAIResponse
+from openai.types.chat import ChatCompletion as OpenAIResponse
+from openai.types.chat import ChatCompletionMessageToolCall as ResponseFunctionToolCall
+from openai.types.chat import ChatCompletionToolParam as FunctionTool
 from .function_models import (
     FunctionParameter,
     FunctionParameters,
@@ -37,4 +39,4 @@ __all__ = [
     'OutputText',
     'ResponsesOutput',
     'StructuredOutputSchema'
-] 
+]

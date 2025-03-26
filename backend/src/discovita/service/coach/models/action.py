@@ -9,6 +9,16 @@ class ActionType(str, Enum):
     UPDATE_IDENTITY = "update_identity"  # Update an identity during refinement
     ACCEPT_IDENTITY = "accept_identity"  # Mark an identity as accepted
     TRANSITION_STATE = "transition_state"  # Request state transition
+    
+    @classmethod
+    def _missing_(cls, value):
+        """Handle case-insensitive enum values."""
+        if isinstance(value, str):
+            # Try to match case-insensitively
+            for member in cls:
+                if member.value.lower() == value.lower():
+                    return member
+        return None
 
 class Action(BaseModel):
     """An action to be performed on the coaching state."""

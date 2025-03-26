@@ -48,6 +48,10 @@ class PromptManager:
         template = self.templates[state.current_state]
         context = self._build_prompt_context(state)
         
+        # Load action instructions
+        action_instructions_path = self.loader.prompts_dir / "shared" / "action_instructions.md"
+        action_instructions = self.loader._read_markdown_file(action_instructions_path)
+        
         # Format the template with the context
         formatted_prompt = template.template.format(
             user_name=context.user_name,
@@ -57,6 +61,9 @@ class PromptManager:
             identities_summary=context.format_identities(),
             phase=context.phase
         )
+        
+        # Add action instructions at the beginning
+        formatted_prompt = f"{action_instructions}\n\n{formatted_prompt}"
         
         # Add examples if available
         if template.examples:

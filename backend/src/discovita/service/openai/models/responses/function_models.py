@@ -7,7 +7,8 @@ for the OpenAI Responses API.
 from typing import Dict, Any, Optional, Union, List, Literal
 from pydantic import BaseModel, Field, model_serializer
 import json
-from openai.types.responses import FunctionTool, ResponseFunctionToolCall
+from openai.types.chat import ChatCompletionToolParam as FunctionTool
+from openai.types.chat import ChatCompletionMessageToolCall as ResponseFunctionToolCall
 
 class FunctionParameter(BaseModel):
     """Function parameter model for the Responses API.
@@ -56,4 +57,7 @@ def parse_function_call_arguments(function_call: ResponseFunctionToolCall) -> Di
     Returns:
         Dict[str, Any]: The parsed arguments
     """
-    return json.loads(function_call.arguments) 
+    if hasattr(function_call, 'function') and isinstance(function_call.function, dict) and 'arguments' in function_call.function:
+        return json.loads(function_call.function['arguments'])
+    else:
+        raise ValueError(f"Could not find arguments in function call: {function_call}")

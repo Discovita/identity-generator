@@ -59,7 +59,7 @@ As a coach, you can include the following actions in your response:
    {
      "type": "TRANSITION_STATE",
      "params": {
-       "target_state": "IDENTITY_BRAINSTORMING"
+       "to_state": "IDENTITY_BRAINSTORMING"
      }
    }
    ```
@@ -132,7 +132,7 @@ Example Complete Response:
     {
       "type": "TRANSITION_STATE",
       "params": {
-        "target_state": "IDENTITY_BRAINSTORMING"
+        "to_state": "IDENTITY_BRAINSTORMING"
       }
     }
   ]

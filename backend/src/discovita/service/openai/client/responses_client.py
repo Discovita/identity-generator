@@ -1,7 +1,7 @@
 """OpenAI Responses API client methods."""
 
 from typing import TypeVar, Type, Optional
-from openai.types.responses import Response
+from openai.types.chat import ChatCompletion as Response
 from discovita.service.openai.models.llm_response import LLMResponseModel
 from discovita.service.openai.client.operations.responses.responses import (
     ResponseInput,

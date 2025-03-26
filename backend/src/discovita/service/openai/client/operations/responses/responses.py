@@ -2,7 +2,7 @@
 
 from typing import Dict, Any, List, Callable, Awaitable, Union, Optional
 from pydantic import BaseModel
-from openai.types.responses import FunctionTool
+from openai.types.chat import ChatCompletionToolParam as FunctionTool
 from discovita.service.openai.models import ResponsesMessage, ToolChoice
 
 class ResponseInput(BaseModel):
