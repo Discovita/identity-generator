@@ -29,6 +29,16 @@ class PromptManager:
             and state.current_identity_index < len(state.identities)):
             current_identity_desc = state.identities[state.current_identity_index].description
             
+        # Format recent messages from conversation history
+        recent_messages = []
+        if state.conversation_history:
+            # Take the last 5 messages or fewer if there aren't that many
+            for entry in state.conversation_history[-5:]:
+                if entry.role == "user":
+                    recent_messages.append(f"User: {entry.content}")
+                else:
+                    recent_messages.append(f"Coach: {entry.content}")
+            
         return PromptContext(
             user_name=state.user_profile.name,
             user_goals=state.user_profile.goals,
@@ -37,7 +47,8 @@ class PromptManager:
             identities_summary=[
                 (i.description, i.is_accepted) for i in state.identities
             ],
-            phase=state.current_state.value
+            phase=state.current_state.value,
+            recent_messages=recent_messages
         )
     
     def get_prompt(self, state: CoachState) -> str:
@@ -59,7 +70,10 @@ class PromptManager:
             num_identities=context.num_identities,
             current_identity=context.current_identity_description or "None",
             identities_summary=context.format_identities(),
-            phase=context.phase
+            phase=context.phase,
+            user_summary=context.user_summary(),
+            recent_messages=context.format_recent_messages(),
+            identities=context.format_identities()
         )
         
         # Add action instructions at the beginning
