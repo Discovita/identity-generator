@@ -5,6 +5,10 @@ from pydantic import BaseModel, Field
 from ..models.action import ActionType
 from ..models.state import CoachingState
 
+class SelectIdentityFocusParams(BaseModel):
+    """Parameters for selecting an identity to focus on during refinement."""
+    id: str = Field(..., description="ID of identity to focus on")
+
 class CreateIdentityParams(BaseModel):
     """Parameters for creating a new identity."""
     description: str = Field(..., description="Description of the identity")

@@ -11,6 +11,7 @@ class ActionType(str, Enum):
     ACCEPT_IDENTITY_REFINEMENT = "accept_identity_refinement"  # Mark an identity as refinement complete (from ACCEPTED to REFINEMENT_COMPLETE)
     ADD_IDENTITY_NOTE = "add_identity_note"  # Add a note to an identity
     TRANSITION_STATE = "transition_state"  # Request state transition
+    SELECT_IDENTITY_FOCUS = "select_identity_focus"  # Select an identity to focus on during refinement
     
 
 class Action(BaseModel):

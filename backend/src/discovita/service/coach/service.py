@@ -6,7 +6,6 @@ from .models.state import CoachState, Message
 from .models.action import ProcessMessageResult, Action
 from .models.llm import CoachLLMResponse
 from .prompt.manager import PromptManager
-from .state.machine import StateMachine
 from .actions.definitions import get_available_actions
 from .actions.handler import apply_actions
 from ..openai.client.client import OpenAIClient
@@ -18,12 +17,10 @@ class CoachService:
     def __init__(
         self,
         client: OpenAIClient,
-        prompt_manager: PromptManager,
-        state_machine: StateMachine
+        prompt_manager: PromptManager
     ):
         self.client = client
         self.prompt_manager = prompt_manager
-        self.state_machine = state_machine
     
     async def process_message(
         self, 
@@ -74,9 +71,8 @@ class CoachService:
             
         llm_response = response.parsed
         
-        # Apply actions and check transitions
+        # Apply actions
         new_state = apply_actions(state, llm_response.actions)
-        new_state = self.state_machine.check_transitions(new_state)
         
         # Add coach response to history
         new_state.conversation_history.append(

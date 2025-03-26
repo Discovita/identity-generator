@@ -41,7 +41,7 @@ class ContextBuilder:
             "Current state:\n"
             f"Phase: {state.current_state.value}\n"
             f"Identities: {len(state.identities)} created\n"
-            f"Current identity: {state.current_identity_index if state.current_identity_index is not None else 'None'}"
+            f"Current identity: {state.current_identity_id if state.current_identity_id is not None else 'None'}"
         )
         messages.append(Message(role="system", content=state_context))
         

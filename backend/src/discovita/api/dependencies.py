@@ -8,7 +8,6 @@ from discovita.config import Settings
 from discovita.dependencies import get_settings
 from discovita.service.coach.prompt.manager import PromptManager
 from discovita.service.coach.service import CoachService
-from discovita.service.coach.state.machine import StateMachine
 from discovita.service.openai.client.client import OpenAIClient
 from discovita.service.openai.image_description import ImageDescriptionService
 from discovita.service.openai.image_generation import ImageGenerationService
@@ -40,5 +39,4 @@ async def get_coach_service(
 ) -> CoachService:
     """Get coach service."""
     prompt_manager = PromptManager()
-    state_machine = StateMachine()
-    return CoachService(client, prompt_manager, state_machine)
+    return CoachService(client, prompt_manager)

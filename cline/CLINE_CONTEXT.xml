@@ -219,6 +219,8 @@ The entirety of the coach logic is quite easy to describe:
       The coach has a kind of clunky transition to the
       identity refinement phase.  
 
+      cline/coach_planning/example_bad_refinement_transition.json
+
       Notice how in this conversation the user is often left
       without an open question or clear call to action from the 
       coach during the identity brainstorming phase.  
@@ -234,23 +236,18 @@ The entirety of the coach logic is quite easy to describe:
       It should also ask thoughtful, probing questions of the user
       to get them thinking deeply about the identities.  
 
-      Finally: there is a clunky "current_identity_index" key
-      that is not being set.  I think we need to add an action
-      allowing the coach to select an identity for refinement
-      (by its ID).  See
+      Adjust the prompts to accomplish this.  
 
-      backend/src/discovita/service/coach/models/action.py
+      BEFORE YOU CHANGE THE PROMPT FILES, write
+      cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/04_service_layer/refinement_prompt_updates.md
 
-      which currently doesn't have any actions supporting 
-      selecting an identity focus for refinement.  Let's call
-      the action SELECT_IDENTITY_FOCUS.  
+      with a list of proposed changes which I will approve before you 
+      execute the changes on the actual prompt files.
 
-      DO NOT DO THIS TASK.  Instead, review the relevant files 
-      and write a context pack
-      cline/coach_planning/select_identity_context.md
-      that will make it incredibly easy for me to implement 
-      the changes needed in my next coding session.  Use
-      the most succinct-possible code snippets for existing 
-      and new code to get the idea across.
+      you need to indicate which files are being updated. You also don't want to just thoughtlessly keep adding to prompt files; sometimes there will be parts of the prompt files that are dead weight.
+
+You also need to be cognizant of the fact that prompts don't live in a vaccuum, they are stitched together by the coach's prompt manager. You need to be thoughtful about which prompts should be shared across states vs which should be specific to a particular state. Finally, consider that a smooth transition TO the refinement stage needs to be prompted for in the PRECEDING stage, which is identity_brainstorming.
+
+Rewrite this with that in mind.
     </current-task>
 </cline-context>
