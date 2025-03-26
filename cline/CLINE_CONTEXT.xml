@@ -216,27 +216,41 @@ The entirety of the coach logic is quite easy to describe:
 
     </tasks-already-done>
     <current-task> 
-      You may need to review the front-end a bit for this one.  
+      The coach has a kind of clunky transition to the
+      identity refinement phase.  
 
-      THe front-end allows, in non-prod environments, for the user
-      to select a test case.  However, that mechanism is out-dated
-      since we have made several updates to the Coach State.
+      Notice how in this conversation the user is often left
+      without an open question or clear call to action from the 
+      coach during the identity brainstorming phase.  
 
-      I now believe these test cases should be powered by simply
-      dropping a Coach State JSON object into the chat application
-      and the user can pick up exactly from that point in the 
-      conversation.  Coach State should encapsulate everything
-      one needs to know.  
+      And in the message where the coach transitions to identity
+      refinement, (1) the coach calls it the 
+      "identity refinement phase" which I'd prefer it not say
+      (it should use organic dialogue that doesn't reference internal 
+      state), and (2) the initial message leaves the user not knowing
+      what to do first without even asking them a question like,
+      "which of these identities do you want to work on first?"
 
-      Couple of notes:
+      It should also ask thoughtful, probing questions of the user
+      to get them thinking deeply about the identities.  
 
-      1. No need to fix the other test cases, just delete them.
-      2. Use cline/coach_planning/refinement_test_case.json for 
-      the test case I care to test.  Also keep the "empty" test
-      case for starting a conversation, that one is still important
-      to me. 
-      3. There's a bug: whenever a user types a message, it is double
-      -added to the coach state.  I think this is a backend issue. 
-      Please tackle that as you go. 
+      Finally: there is a clunky "current_identity_index" key
+      that is not being set.  I think we need to add an action
+      allowing the coach to select an identity for refinement
+      (by its ID).  See
+
+      backend/src/discovita/service/coach/models/action.py
+
+      which currently doesn't have any actions supporting 
+      selecting an identity focus for refinement.  Let's call
+      the action SELECT_IDENTITY_FOCUS.  
+
+      DO NOT DO THIS TASK.  Instead, review the relevant files 
+      and write a context pack
+      cline/coach_planning/select_identity_context.md
+      that will make it incredibly easy for me to implement 
+      the changes needed in my next coding session.  Use
+      the most succinct-possible code snippets for existing 
+      and new code to get the idea across.
     </current-task>
 </cline-context>
