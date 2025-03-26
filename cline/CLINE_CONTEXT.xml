@@ -95,6 +95,21 @@
             3. Include the updated apiTypes.ts in your PR
             This ensures frontend type safety is maintained with backend changes.
         </note>
+        <note>
+        How the coach should work:
+
+The way this works should be quite simple.  
+
+CoachState should have `current_state` which is a `CoachingState` enum value (this is defined in backend/src/discovita/service/coach/models/state.py).  When the LLM wants to transition state, it should simply use the TRANSITION_STATE action from backend/src/discovita/service/coach/models/action.py.  
+
+The entirety of the coach logic is quite easy to describe:
+
+1.  Current coach state + user message is passed to coach service. 
+2.  Appropriate prompt is selected by the coach's prompt manager and sent to the LLM, with variables filled in using the current state values. 
+3.  LLM returns a response object with a response message and actions. 
+4.  Actions are carried out by an action executor.  One of these possible actions is to transition the state.  
+
+        </note>
     </long-term-memory>
     <gather-context-instructions>
         Familiarize yourself with
@@ -195,15 +210,47 @@
     </task>
     </tasks-already-done>
     <current-task> 
-      backend/src/discovita/api/routes/coach.py
+      I think there's been some confusion in our implementation of the coach,
+      at the LLM layer.  We have a prompt inside the coach with these instructions:
 
-      has a single route for handling user requests to the coach API.
+  <example-instructions>
+      [ACTION:SAVE_IDENTITY]
+{
+  "category": "PASSIONS",
+  "name": "Creative Visionary",
+  "affirmation": "I am a Creative Visionary who sees possibilities others miss and brings new ideas to life."
+}
+[/ACTION]
+</example-instructions>
 
-      Have this route require a `coach_state` param in the request object 
-      body which has ALL of the coach and user session state.  
+    I'm not sure about this syntax, it looks like it might be trying to use
+    OpenAI's native function-calling functionality. 
 
-      NOW... we have mostly done this, but there are some typescript issues
-      remaining in front-end.  Start at ChatInterface.tsx's typescript errors
-      and continue to solve typescript errors till none remain.
+    I do NOT want to use that functionality. 
+
+    I ONLY want to use OpenAI's structured response feature, where you tell it
+    the JSON structure it should return and it gets parsed into a python object.
+
+    If the coach/LLM "wants" to perform an action, it should "do" so by
+    returning an action in the actions array in the response object.
+
+    Trace the coach implementation down to the LLM layer and ensure that 
+    we are exclusively using structured responses to drive the functionality
+    of the coach.
+
+    Suggestions:
+
+    - clean up the OpenAI client code, it's a bit messy.  I find the responses
+    directory quite hard to understand.  
+    - Rewrite the readme in the openai service directory so that there are super
+    clean instructions on how to use the client.  
+    - Debug the prompts we're sending OpenAI.  I can run the application for you
+    whenever you're ready.  I think it already logs requests but you should make
+    sure when you're reviewing and cleaning up the code.
+
+    Already done:
+
+    We already updated the prompts to ask for the correct response structure: 
+    a JSON object with a message string and an actions array.
     </current-task>
 </cline-context>

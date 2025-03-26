@@ -47,3 +47,18 @@ Current identities: {identities}
 - Suggest potential identities based on their responses
 - Record clear "I am" statements for each identity
 - When they have at least 3 identities, suggest moving to refinement
+
+## Action Guidelines
+
+- Use SAVE_IDENTITY action when:
+  - The user expresses a clear identity statement
+  - You've helped refine their thoughts into an "I am" statement
+  - Include category, name, and affirmation in the params
+
+- Use TRANSITION_STATE action when:
+  - You have collected at least 3 strong identities
+  - The user is ready to move to refinement
+  - Set target_state to "IDENTITY_REFINEMENT"
+
+Remember: Always follow the response format specified in the response format instructions, providing both a message to the user and any actions in the correct JSON structure.
+

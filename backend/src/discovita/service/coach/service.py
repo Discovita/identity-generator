@@ -63,16 +63,10 @@ class CoachService:
         # Get structured completion
         input_data = ResponseInput.from_dict_list(messages)
         
-        # Get LLM response with function definitions
-        tools = ResponseTools(
-            tools=get_available_actions(),
-            tool_choice=None  # Allow model to choose when to use tools
-        )
-        
+        # Get structured response from LLM
         response = await self.client.get_structured_response_with_responses(
             input_data=input_data,
-            response_model=CoachLLMResponse,
-            tools=tools
+            response_model=CoachLLMResponse
         )
         
         if not response.is_valid or not response.parsed:

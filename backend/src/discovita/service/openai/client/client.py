@@ -14,16 +14,13 @@ from discovita.service.openai.client import operations
 from discovita.service.openai.client.test import operations as test_operations
 from discovita.service.openai.client.responses_client import (
     create_response_with_responses,
-    call_function_with_responses,
-    call_functions_with_responses,
-    submit_function_results_with_responses,
     get_structured_response_with_responses
 )
 
 T = TypeVar('T', bound=LLMResponseModel)
 
 class OpenAIClient:
-    """Client for interacting with OpenAI's APIs (DALL-E, Vision, Chat, Responses)."""
+    """Client for interacting with OpenAI's APIs (DALL-E, Vision, Chat)."""
     
     def __init__(
         self,
@@ -73,9 +70,6 @@ class OpenAIClient:
         """Get a description of an image using GPT-4 Vision."""
         return await self.ops.describe_image_with_vision(self.client, image_url, prompt)
     
-    # Responses API methods
+    # Structured response methods
     create_response_with_responses = create_response_with_responses
-    call_function_with_responses = call_function_with_responses
-    call_functions_with_responses = call_functions_with_responses
-    submit_function_results_with_responses = submit_function_results_with_responses
     get_structured_response_with_responses = get_structured_response_with_responses

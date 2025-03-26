@@ -18,11 +18,7 @@ class StateMachine:
             return new_state
             
         # Check for automatic transitions based on state
-        if new_state.current_state == CoachingState.INTRODUCTION:
-            if new_state.metadata.get("introduction_completed"):
-                new_state.current_state = CoachingState.IDENTITY_BRAINSTORMING
-                
-        elif new_state.current_state == CoachingState.IDENTITY_BRAINSTORMING:
+        if new_state.current_state == CoachingState.IDENTITY_BRAINSTORMING:
             # Transition to refinement when we have 5 identities
             if len(new_state.identities) >= 5:
                 new_state.current_state = CoachingState.IDENTITY_REFINEMENT

@@ -8,7 +8,6 @@ class ActionType(str, Enum):
     CREATE_IDENTITY = "create_identity"  # Create a new identity during brainstorming
     UPDATE_IDENTITY = "update_identity"  # Update an identity during refinement
     ACCEPT_IDENTITY = "accept_identity"  # Mark an identity as accepted
-    COMPLETE_INTRODUCTION = "complete_introduction"  # Mark introduction as complete
     TRANSITION_STATE = "transition_state"  # Request state transition
 
 class Action(BaseModel):
