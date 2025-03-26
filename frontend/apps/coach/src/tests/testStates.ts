@@ -1,4 +1,4 @@
-import { CoachState, Message } from '../types/apiTypes';
+import { CoachState } from '../types/apiTypes';
 
 // Import test state JSON files
 import emptyStateJson from './states/empty_state.json';

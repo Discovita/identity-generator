@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "CI=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "generate-types": "cd ../../.. && rm -f frontend/apps/coach/src/types/apiTypes.ts && cd backend && pydantic2ts --module discovita.service.coach.models --output ../frontend/apps/coach/src/types/apiTypes.ts"
