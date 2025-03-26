@@ -11,27 +11,34 @@ import { IdentityChoice } from './IdentityChoice';
 interface Props {
   userId: string;
   initialMessages?: Message[];
+  initialCoachState?: CoachState;
 }
 
-export const ChatInterface: React.FC<Props> = ({ userId, initialMessages = [] }) => {
+export const ChatInterface: React.FC<Props> = ({
+  userId,
+  initialMessages = [],
+  initialCoachState,
+}) => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Initialize coach state
-  const [coachState, setCoachState] = useState<CoachState>({
-    current_state: CoachingState.INTRODUCTION,
-    user_profile: {
-      name: userId,
-      goals: [],
-    } as UserProfile,
-    identities: [],
-    proposed_identity: null,
-    current_identity_index: null,
-    conversation_history: initialMessages,
-    metadata: {},
-  });
+  const [coachState, setCoachState] = useState<CoachState>(
+    initialCoachState || {
+      current_state: CoachingState.INTRODUCTION,
+      user_profile: {
+        name: userId,
+        goals: [],
+      } as UserProfile,
+      identities: [],
+      proposed_identity: null,
+      current_identity_index: null,
+      conversation_history: initialMessages,
+      metadata: {},
+    }
+  );
 
   // Add initial message on mount if no messages exist
   useEffect(() => {
@@ -57,13 +64,8 @@ export const ChatInterface: React.FC<Props> = ({ userId, initialMessages = [] })
       setIsLoading(true);
 
       try {
-        // Update coach state with new message
-        const updatedState = {
-          ...coachState,
-          conversation_history: [...(coachState.conversation_history ?? []), userMessage],
-        };
-
-        const response = await apiClient.sendMessage(content, updatedState);
+        // Send message without adding to conversation_history (backend will add it)
+        const response = await apiClient.sendMessage(content, coachState);
         setMessages(prev => [...prev, { role: 'assistant', content: response.message }]);
         setCoachState(response.coach_state);
       } catch (error) {

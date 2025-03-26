@@ -69,6 +69,7 @@ class PromptManager:
             user_goals=context.format_goals(),
             num_identities=context.num_identities,
             current_identity=context.current_identity_description or "None",
+            current_focus=context.current_identity_description or "None",
             identities_summary=context.format_identities(),
             phase=context.phase,
             user_summary=context.user_summary(),
