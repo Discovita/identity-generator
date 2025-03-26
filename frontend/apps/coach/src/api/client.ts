@@ -1,6 +1,6 @@
-import { CoachRequest, CoachResponse } from './types'
+import { CoachRequest, CoachResponse } from './types';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api/v1'
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api/v1';
 
 export class ApiClient {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -10,25 +10,27 @@ export class ApiClient {
         'Content-Type': 'application/json',
         ...options.headers,
       },
-    })
+    });
 
     if (!response.ok) {
-      throw new Error(`API request failed: ${response.statusText}`)
+      throw new Error(`API request failed: ${response.statusText}`);
     }
 
-    return response.json()
+    return response.json();
   }
 
-  async sendMessage(userId: string, message: string, context: CoachRequest['context']): Promise<CoachResponse> {
+  async sendMessage(
+    message: string,
+    coach_state: CoachRequest['coach_state']
+  ): Promise<CoachResponse> {
     return this.request<CoachResponse>('/coach/user_input', {
       method: 'POST',
       body: JSON.stringify({
-        user_id: userId,
         message,
-        context,
+        coach_state,
       }),
-    })
+    });
   }
 }
 
-export const apiClient = new ApiClient()
+export const apiClient = new ApiClient();

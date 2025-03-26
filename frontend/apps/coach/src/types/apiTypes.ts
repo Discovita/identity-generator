@@ -48,9 +48,13 @@ export interface CoachState {
   current_state: CoachingState;
   user_profile: UserProfile;
   /**
-   * List of identities
+   * List of confirmed identities
    */
   identities?: Identity[];
+  /**
+   * Currently proposed identity, cleared unless explicitly proposed by LLM
+   */
+  proposed_identity?: Identity | null;
   /**
    * Index of current identity being refined
    */
@@ -132,9 +136,13 @@ export interface CoachState1 {
   current_state: CoachingState;
   user_profile: UserProfile;
   /**
-   * List of identities
+   * List of confirmed identities
    */
   identities?: Identity[];
+  /**
+   * Currently proposed identity, cleared unless explicitly proposed by LLM
+   */
+  proposed_identity?: Identity | null;
   /**
    * Index of current identity being refined
    */
@@ -158,9 +166,13 @@ export interface CoachState2 {
   current_state: CoachingState;
   user_profile: UserProfile;
   /**
-   * List of identities
+   * List of confirmed identities
    */
   identities?: Identity[];
+  /**
+   * Currently proposed identity, cleared unless explicitly proposed by LLM
+   */
+  proposed_identity?: Identity | null;
   /**
    * Index of current identity being refined
    */
@@ -193,9 +205,13 @@ export interface CoachState3 {
   current_state: CoachingState;
   user_profile: UserProfile;
   /**
-   * List of identities
+   * List of confirmed identities
    */
   identities?: Identity[];
+  /**
+   * Currently proposed identity, cleared unless explicitly proposed by LLM
+   */
+  proposed_identity?: Identity | null;
   /**
    * Index of current identity being refined
    */
@@ -233,9 +249,13 @@ export interface CoachState4 {
   current_state: CoachingState;
   user_profile: UserProfile;
   /**
-   * List of identities
+   * List of confirmed identities
    */
   identities?: Identity[];
+  /**
+   * Currently proposed identity, cleared unless explicitly proposed by LLM
+   */
+  proposed_identity?: Identity | null;
   /**
    * Index of current identity being refined
    */

@@ -195,8 +195,15 @@
     </task>
     </tasks-already-done>
     <current-task> 
-      A test script is failing.  Debug and fix.
+      backend/src/discovita/api/routes/coach.py
 
-      cd backend && python -m discovita.service.coach.test_scripts.test_introduction
+      has a single route for handling user requests to the coach API.
+
+      Have this route require a `coach_state` param in the request object 
+      body which has ALL of the coach and user session state.  
+
+      NOW... we have mostly done this, but there are some typescript issues
+      remaining in front-end.  Start at ChatInterface.tsx's typescript errors
+      and continue to solve typescript errors till none remain.
     </current-task>
 </cline-context>

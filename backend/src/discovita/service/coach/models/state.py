@@ -33,7 +33,8 @@ class CoachState(BaseModel):
     """
     current_state: CoachingState = Field(..., description="Current state of the coaching session")
     user_profile: UserProfile = Field(..., description="User's profile information")
-    identities: List[Identity] = Field(default_factory=list, description="List of identities")
+    identities: List[Identity] = Field(default_factory=list, description="List of confirmed identities")
+    proposed_identity: Optional[Identity] = Field(None, description="Currently proposed identity, cleared unless explicitly proposed by LLM")
     current_identity_index: Optional[int] = Field(None, description="Index of current identity being refined")
     conversation_history: List[Message] = Field(default_factory=list, description="History of conversation")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
