@@ -216,38 +216,9 @@ The entirety of the coach logic is quite easy to describe:
 
     </tasks-already-done>
     <current-task> 
-      The coach has a kind of clunky transition to the
-      identity refinement phase.  
-
-      cline/coach_planning/example_bad_refinement_transition.json
-
-      Notice how in this conversation the user is often left
-      without an open question or clear call to action from the 
-      coach during the identity brainstorming phase.  
-
-      And in the message where the coach transitions to identity
-      refinement, (1) the coach calls it the 
-      "identity refinement phase" which I'd prefer it not say
-      (it should use organic dialogue that doesn't reference internal 
-      state), and (2) the initial message leaves the user not knowing
-      what to do first without even asking them a question like,
-      "which of these identities do you want to work on first?"
-
-      It should also ask thoughtful, probing questions of the user
-      to get them thinking deeply about the identities.  
-
-      Adjust the prompts to accomplish this.  
-
-      BEFORE YOU CHANGE THE PROMPT FILES, write
-      cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/04_service_layer/refinement_prompt_updates.md
-
-      with a list of proposed changes which I will approve before you 
-      execute the changes on the actual prompt files.
-
-      you need to indicate which files are being updated. You also don't want to just thoughtlessly keep adding to prompt files; sometimes there will be parts of the prompt files that are dead weight.
-
-You also need to be cognizant of the fact that prompts don't live in a vaccuum, they are stitched together by the coach's prompt manager. You need to be thoughtful about which prompts should be shared across states vs which should be specific to a particular state. Finally, consider that a smooth transition TO the refinement stage needs to be prompted for in the PRECEDING stage, which is identity_brainstorming.
-
-Rewrite this with that in mind.
+      Update the coach API to return, in the response object,
+      the `final_prompt`, a string with the final prompt that 
+      was used to generate the coach's response, after template
+      compilation.  
     </current-task>
 </cline-context>

@@ -17,5 +17,5 @@ async def handle_user_input(
     return CoachResponse(
         message=result.message,
         coach_state=result.state,
-        visualization_prompt=None  # We'll implement this later
+        final_prompt=result.final_prompt
     )

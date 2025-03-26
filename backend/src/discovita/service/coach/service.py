@@ -42,8 +42,11 @@ class CoachService:
             (msg for msg in state.conversation_history if msg.role == "user"),
             None
         )
+        
+        # Get the system prompt
+        system_prompt = self.prompt_manager.get_prompt(state)
+        
         if first_user_msg:
-            system_prompt = self.prompt_manager.get_prompt(state)
             combined_content = f"{system_prompt}\n\nUser message: {first_user_msg.content}"
             messages.append({"role": "user", "content": combined_content})
             
@@ -83,5 +86,6 @@ class CoachService:
         return ProcessMessageResult(
             message=llm_response.message,
             state=new_state,
-            actions=llm_response.actions
+            actions=llm_response.actions,
+            final_prompt=system_prompt
         )

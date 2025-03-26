@@ -22,11 +22,12 @@ class Action(BaseModel):
 class ProcessMessageResult(BaseModel):
     """
     Result of processing a user message.
-    Contains the coach's response, updated state, and any actions taken.
+    Contains the coach's response, updated state, any actions taken, and the final prompt used.
     """
     message: str = Field(..., description="Coach's response message")
     state: "CoachState" = Field(..., description="Updated coaching state")  # Forward reference
     actions: List[Action] = Field(default_factory=list, description="Actions performed")
+    final_prompt: str = Field("", description="The final prompt used to generate the coach's response")
 
 # Import at bottom to avoid circular imports
 from .state import CoachState

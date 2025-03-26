@@ -15,7 +15,7 @@ class CoachResponse(LLMResponseModel):
     """Response model for coach API."""
     message: str = Field(..., description="Coach's response message")
     coach_state: CoachState = Field(..., description="Updated state of the coaching session")
-    visualization_prompt: Optional[Dict] = Field(None, description="Prompt for identity visualization")
+    final_prompt: str = Field("", description="The final prompt used to generate the coach's response")
 
 class CoachStructuredResponse(LLMResponseModel):
     """Structured response from the coach."""
