@@ -12,12 +12,18 @@ export type ActionType =
   | "create_identity"
   | "update_identity"
   | "accept_identity"
-  | "complete_introduction"
-  | "transition_state";
+  | "accept_identity_refinement"
+  | "add_identity_note"
+  | "transition_state"
+  | "select_identity_focus";
 /**
  * Current state of the coaching session
  */
 export type CoachingState = "introduction" | "identity_brainstorming" | "identity_refinement";
+/**
+ * Current state of the identity
+ */
+export type IdentityState = "proposed" | "accepted" | "refinement_complete";
 
 /**
  * An action to be performed on the coaching state.
@@ -56,9 +62,9 @@ export interface CoachState {
    */
   proposed_identity?: Identity | null;
   /**
-   * Index of current identity being refined
+   * ID of current identity being refined
    */
-  current_identity_index?: number | null;
+  current_identity_id?: string | null;
   /**
    * History of conversation
    */
@@ -84,7 +90,7 @@ export interface UserProfile {
   goals?: string[];
 }
 /**
- * Represents a single identity with its acceptance status.
+ * Represents a single identity with its state.
  */
 export interface Identity {
   /**
@@ -95,10 +101,11 @@ export interface Identity {
    * Description of the identity
    */
   description: string;
+  state?: IdentityState;
   /**
-   * Whether the identity has been accepted by the user
+   * Notes about the identity
    */
-  is_accepted?: boolean;
+  notes?: string[];
 }
 /**
  * A single message in the conversation history.
@@ -123,11 +130,9 @@ export interface CoachResponse {
   message: string;
   coach_state: CoachState1;
   /**
-   * Prompt for identity visualization
+   * The final prompt used to generate the coach's response
    */
-  visualization_prompt?: {
-    [k: string]: unknown;
-  } | null;
+  final_prompt?: string;
 }
 /**
  * Updated state of the coaching session
@@ -144,9 +149,9 @@ export interface CoachState1 {
    */
   proposed_identity?: Identity | null;
   /**
-   * Index of current identity being refined
+   * ID of current identity being refined
    */
-  current_identity_index?: number | null;
+  current_identity_id?: string | null;
   /**
    * History of conversation
    */
@@ -174,9 +179,9 @@ export interface CoachState2 {
    */
   proposed_identity?: Identity | null;
   /**
-   * Index of current identity being refined
+   * ID of current identity being refined
    */
-  current_identity_index?: number | null;
+  current_identity_id?: string | null;
   /**
    * History of conversation
    */
@@ -213,9 +218,9 @@ export interface CoachState3 {
    */
   proposed_identity?: Identity | null;
   /**
-   * Index of current identity being refined
+   * ID of current identity being refined
    */
-  current_identity_index?: number | null;
+  current_identity_id?: string | null;
   /**
    * History of conversation
    */
@@ -229,7 +234,7 @@ export interface CoachState3 {
 }
 /**
  * Result of processing a user message.
- * Contains the coach's response, updated state, and any actions taken.
+ * Contains the coach's response, updated state, any actions taken, and the final prompt used.
  */
 export interface ProcessMessageResult {
   /**
@@ -241,6 +246,10 @@ export interface ProcessMessageResult {
    * Actions performed
    */
   actions?: Action[];
+  /**
+   * The final prompt used to generate the coach's response
+   */
+  final_prompt?: string;
 }
 /**
  * Updated coaching state
@@ -257,9 +266,9 @@ export interface CoachState4 {
    */
   proposed_identity?: Identity | null;
   /**
-   * Index of current identity being refined
+   * ID of current identity being refined
    */
-  current_identity_index?: number | null;
+  current_identity_id?: string | null;
   /**
    * History of conversation
    */

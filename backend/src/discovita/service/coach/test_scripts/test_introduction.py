@@ -12,7 +12,6 @@ from discovita.service.coach.models.state import (
 )
 from discovita.service.coach.service import CoachService
 from discovita.service.coach.prompt.manager import PromptManager
-from discovita.service.coach.state.machine import StateMachine
 from discovita.service.openai.client.client import OpenAIClient
 
 async def test_introduction():
@@ -21,12 +20,10 @@ async def test_introduction():
     settings = Settings.from_env()
     client = OpenAIClient(api_key=settings.openai_api_key)
     prompt_manager = PromptManager()
-    state_machine = StateMachine()
     
     service = CoachService(
         client=client,
-        prompt_manager=prompt_manager,
-        state_machine=state_machine
+        prompt_manager=prompt_manager
     )
     
     # Create initial state
@@ -39,7 +36,7 @@ async def test_introduction():
         identities=[],
         conversation_history=[],
         proposed_identity=None,
-        current_identity_index=None
+        current_identity_id=None
     )
     
     # Process a simple hello message

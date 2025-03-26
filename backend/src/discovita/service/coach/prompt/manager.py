@@ -25,9 +25,11 @@ class PromptManager:
     def _build_prompt_context(self, state: CoachState) -> PromptContext:
         """Build prompt context from coach state."""
         current_identity_desc = None
-        if (state.current_identity_index is not None 
-            and state.current_identity_index < len(state.identities)):
-            current_identity_desc = state.identities[state.current_identity_index].description
+        if state.current_identity_id is not None:
+            for identity in state.identities:
+                if identity.id == state.current_identity_id:
+                    current_identity_desc = identity.description
+                    break
             
         # Format recent messages from conversation history
         recent_messages = []

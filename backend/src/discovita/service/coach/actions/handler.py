@@ -10,7 +10,8 @@ from .models import (
     AcceptIdentityParams,
     AcceptIdentityRefinementParams,
     TransitionStateParams,
-    AddIdentityNoteParams
+    AddIdentityNoteParams,
+    SelectIdentityFocusParams
 )
 
 def apply_actions(state: CoachState, actions: List[Action]) -> CoachState:
@@ -59,5 +60,10 @@ def apply_actions(state: CoachState, actions: List[Action]) -> CoachState:
         elif action.type == ActionType.TRANSITION_STATE:
             params = TransitionStateParams(**action.params)
             new_state.current_state = params.to_state
+            
+        elif action.type == ActionType.SELECT_IDENTITY_FOCUS:
+            params = SelectIdentityFocusParams(**action.params)
+            # Set the current identity ID directly
+            new_state.current_identity_id = params.id
     
     return new_state

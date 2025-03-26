@@ -216,27 +216,9 @@ The entirety of the coach logic is quite easy to describe:
 
     </tasks-already-done>
     <current-task> 
-      You may need to review the front-end a bit for this one.  
-
-      THe front-end allows, in non-prod environments, for the user
-      to select a test case.  However, that mechanism is out-dated
-      since we have made several updates to the Coach State.
-
-      I now believe these test cases should be powered by simply
-      dropping a Coach State JSON object into the chat application
-      and the user can pick up exactly from that point in the 
-      conversation.  Coach State should encapsulate everything
-      one needs to know.  
-
-      Couple of notes:
-
-      1. No need to fix the other test cases, just delete them.
-      2. Use cline/coach_planning/refinement_test_case.json for 
-      the test case I care to test.  Also keep the "empty" test
-      case for starting a conversation, that one is still important
-      to me. 
-      3. There's a bug: whenever a user types a message, it is double
-      -added to the coach state.  I think this is a backend issue. 
-      Please tackle that as you go. 
+      Update the coach API to return, in the response object,
+      the `final_prompt`, a string with the final prompt that 
+      was used to generate the coach's response, after template
+      compilation.  
     </current-task>
 </cline-context>

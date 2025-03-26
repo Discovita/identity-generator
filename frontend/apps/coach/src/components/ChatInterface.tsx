@@ -34,7 +34,7 @@ export const ChatInterface: React.FC<Props> = ({
       } as UserProfile,
       identities: [],
       proposed_identity: null,
-      current_identity_index: null,
+      current_identity_id: null,
       conversation_history: initialMessages,
       metadata: {},
     }

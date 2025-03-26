@@ -1,8 +1,5 @@
 {
-  "name": "Identity Refinement Test Case",
-  "description": "Test case for identity refinement phase with multiple identities",
-  "coach_state": {
-    "current_state": "identity_brainstorming",
+    "current_state": "identity_refinement",
     "user_profile": {
         "name": "s15xbv8xfn",
         "goals": []
@@ -11,26 +8,30 @@
         {
             "id": "3270a699-ec31-4940-9832-63f4c5ead39b",
             "description": "Fun-Loving Parent",
-            "is_accepted": false
+            "state": "accepted",
+            "notes": []
         },
         {
             "id": "bfbd2918-7891-4429-a683-d07ef455c7e5",
             "description": "Innovative Software Engineer",
-            "is_accepted": true
+            "state": "proposed",
+            "notes": []
         },
         {
             "id": "cf17958d-73b7-42f8-84b4-d31f475ac2b0",
             "description": "Aspiring Self-Caretaker",
-            "is_accepted": false
+            "state": "proposed",
+            "notes": []
         },
         {
             "id": "14981371-93e0-4979-a016-dadcb1890f1a",
             "description": "Mindful Self-Stylist",
-            "is_accepted": false
+            "state": "accepted",
+            "notes": []
         }
     ],
     "proposed_identity": null,
-    "current_identity_id": null,
+    "current_identity_index": null,
     "conversation_history": [
         {
             "role": "user",
@@ -103,8 +104,23 @@
         {
             "role": "coach",
             "content": "Great choice! 'Mindful Self-Stylist' is a wonderful way to encapsulate your intention to prioritize self-care and personal appearance. Let's add this to your list of identities."
+        },
+        {
+            "role": "user",
+            "content": "Cool.  I'm ready to move on.  "
+        },
+        {
+            "role": "coach",
+            "content": "We've added 'Mindful Self-Stylist' to your list of identities. Now that we have a well-rounded set of identities, including your roles as a 'Fun-Loving Parent,' 'Innovative Software Engineer,' and 'Mindful Self-Stylist,' let's move on to the refinement phase to deepen and strengthen these identities."
+        },
+        {
+            "role": "user",
+            "content": "Alright.  Where should we start?  Let's start with Fun Loving Parent"
+        },
+        {
+            "role": "coach",
+            "content": "Let's begin refining your 'Fun-Loving Parent' identity. To make it more specific and powerful, consider what being a fun-loving parent means to you. Here are a few questions to guide us: What activities or behaviors make you feel like a fun-loving parent? How does this identity impact your relationship with your children? How can you express more joy and fun in your daily interactions with them? Let's refine this identity into an 'I am' statement that truly resonates with who you are."
         }
     ],
     "metadata": {}
-  }
 }
