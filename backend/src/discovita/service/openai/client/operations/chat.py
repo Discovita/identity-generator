@@ -1,36 +1,30 @@
 """OpenAI Chat API operations."""
 
-from typing import TypeVar, Type, List, Dict, Any
-from openai import AsyncOpenAI
-from pydantic import BaseModel
-from discovita.service.openai.models.llm_response import LLMResponseModel
-from discovita.service.openai.client import logging
-from discovita.service.openai.models import (
-    CompletionRequest,
-    ChatMessage,
-    ChatResponse
-)
+from typing import Any, Dict, List, Type, TypeVar
 
-T = TypeVar('T', bound=LLMResponseModel)
+from discovita.service.openai.client import logging
+from discovita.service.openai.models import ChatMessage, ChatResponse, CompletionRequest
+from discovita.service.openai.models.llm_response import LLMResponseModel
+from openai import AsyncOpenAI
+
+T = TypeVar("T", bound=LLMResponseModel)
+
 
 async def get_completion(client: AsyncOpenAI, prompt: str) -> str:
     """Get a completion from GPT-4."""
-    request = CompletionRequest(
-        messages=[ChatMessage(role="user", content=prompt)]
-    )
-    
+    request = CompletionRequest(messages=[ChatMessage(role="user", content=prompt)])
+
     logging.log_request("completion", **request.model_dump())
     response = await client.chat.completions.create(**request.model_dump())
     logging.log_response("completion", response)
     return ChatResponse.from_openai_response(response).content
 
+
 async def get_structured_completion(
-    client: AsyncOpenAI,
-    messages: List[Dict[str, Any]],
-    response_model: Type[T]
+    client: AsyncOpenAI, messages: List[Dict[str, Any]], response_model: Type[T]
 ) -> T:
     """Get a structured completion from GPT-4.
-    
+
     Args:
         client: OpenAI client instance
         messages: List of message dictionaries with role and content
@@ -38,7 +32,7 @@ async def get_structured_completion(
     """
     # Get schema instruction for the response model
     schema_instruction = response_model.get_prompt_instruction()
-    
+
     # Add schema instruction to the last message
     final_messages = messages[:-1]
     last_message = messages[-1].copy()
@@ -49,20 +43,20 @@ async def get_structured_completion(
         f"Do not include the schema in your response, only the data."
     )
     final_messages.append(last_message)
-    
+
     request = CompletionRequest(
         messages=[ChatMessage(**msg) for msg in final_messages],
         response_format={"type": "json_object"},
-        max_tokens=1000  # Increase token limit to avoid truncation
+        max_tokens=1000,  # Increase token limit to avoid truncation
     )
-    
+
     logging.log_request("structured_completion", **request.model_dump())
     response = await client.chat.completions.create(**request.model_dump())
     logging.log_response("structured_completion", response)
-    
+
     # Extract content from the response
     content = response.choices[0].message.content
-    
+
     # Handle case where content is wrapped in markdown code blocks
     if content.startswith("```") and "```" in content[3:]:
         # Extract JSON from markdown code block
@@ -71,19 +65,19 @@ async def get_structured_completion(
             content = content[5:]  # Remove "json\n" prefix
         elif content.startswith("json"):
             content = content[4:]  # Remove "json" prefix
-        
+
         # Remove trailing backticks if present
         if "```" in content:
             content = content.split("```")[0]
-    
+
     # Find the first valid JSON object in the content
     import json
     import re
-    
+
     # Try to find a JSON object pattern
-    json_pattern = r'(\{.*\})'
+    json_pattern = r"(\{.*\})"
     matches = re.findall(json_pattern, content, re.DOTALL)
-    
+
     for potential_json in matches:
         try:
             # Validate it's proper JSON by parsing it
@@ -92,6 +86,6 @@ async def get_structured_completion(
             return response_model.model_validate(parsed)
         except json.JSONDecodeError:
             continue
-    
+
     # If we couldn't find a valid JSON object, try the original content
     return response_model.model_validate_json(content)
