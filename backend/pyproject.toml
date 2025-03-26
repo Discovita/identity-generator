@@ -16,6 +16,7 @@ httpx = {extras = ["http2"], version = "^0.28.1"}
 python-dotenv = "^1.0.1"
 pydantic = "^2.10.6"
 openai = "^1.66.3"
+pyyaml = "^6.0.2"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -1,76 +1,83 @@
 """OpenAI models package."""
 
-from .llm_response import LLMResponseModel
-from .image_models import (
-    ImageResponse,
-    SafeImageResponse,
-    OpenAIMode,
-    ImageGenerationRequest,
-    GeneratedImage
+from typing import Union
+
+# Import directly from OpenAI instead of our custom implementation
+from openai.types.responses import (
+    ToolChoiceFunction,
+    ToolChoiceOptions,
+    ToolChoiceTypes,
 )
+
 from .chat_models import (
     ChatMessage,
     ChatRequest,
     ChatResponse,
-    ContentFilter,
-    VisionRequest,
     CompletionRequest,
-    SafeChatRequest
+    ContentFilter,
+    SafeChatRequest,
+    VisionRequest,
 )
 from .errors import OpenAIError
+from .image_models import (
+    GeneratedImage,
+    ImageGenerationRequest,
+    ImageResponse,
+    OpenAIMode,
+    SafeImageResponse,
+)
+from .llm_response import LLMResponseModel
 from .responses import (
-    ResponsesMessage,
-    ResponsesRequest,
-    ResponsesResponse,
-    ResponseFunctionToolCall,
-    FunctionTool,
     FunctionParameter,
     FunctionParameters,
+    FunctionTool,
     OutputText,
+    ResponseFunctionToolCall,
+    ResponseInput,
+    ResponsesMessage,
     ResponsesOutput,
-    StructuredOutputSchema,
-    parse_function_call_arguments
+    ResponsesRequest,
+    ResponsesResponse,
+    parse_function_call_arguments,
 )
-from .tool_choice import ToolChoice, ToolChoiceMode, SpecificToolChoice
+
+# Define ToolChoice as OpenAI's type
+ToolChoice = Union[str, dict, ToolChoiceOptions, ToolChoiceTypes, ToolChoiceFunction]
 
 __all__ = [
     # LLM Response
-    'LLMResponseModel',
-    
+    "LLMResponseModel",
     # Image Models
-    'ImageResponse',
-    'SafeImageResponse',
-    'OpenAIMode',
-    'ImageGenerationRequest',
-    'GeneratedImage',
-    
+    "ImageResponse",
+    "SafeImageResponse",
+    "OpenAIMode",
+    "ImageGenerationRequest",
+    "GeneratedImage",
     # Chat Models
-    'ChatMessage',
-    'ChatRequest',
-    'ChatResponse',
-    'ContentFilter',
-    'VisionRequest',
-    'CompletionRequest',
-    'SafeChatRequest',
-    
+    "ChatMessage",
+    "ChatRequest",
+    "ChatResponse",
+    "ContentFilter",
+    "VisionRequest",
+    "CompletionRequest",
+    "SafeChatRequest",
     # Error Models
-    'OpenAIError',
-    
+    "OpenAIError",
     # Responses API Models
-    'ResponsesMessage',
-    'ResponsesRequest',
-    'ResponsesResponse',
-    'ResponseFunctionToolCall',
-    'FunctionTool',
-    'FunctionParameter',
-    'FunctionParameters',
-    'OutputText',
-    'ResponsesOutput',
-    'StructuredOutputSchema',
-    'parse_function_call_arguments',
-    
-    # Tool Choice Models
-    'ToolChoice',
-    'ToolChoiceMode',
-    'SpecificToolChoice'
+    "ResponsesMessage",
+    "ResponsesRequest",
+    "ResponsesResponse",
+    "ResponseFunctionToolCall",
+    "FunctionTool",
+    "FunctionParameter",
+    "FunctionParameters",
+    "OutputText",
+    "ResponsesInput",
+    "ResponsesOutput",
+    "parse_function_call_arguments",
+    # Tool Choice Models from OpenAI
+    "ToolChoice",
+    "ToolChoiceOptions",
+    "ToolChoiceTypes",
+    "ToolChoiceFunction",
 ]
