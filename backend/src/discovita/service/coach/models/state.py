@@ -25,11 +25,28 @@ class Message(BaseModel):
     role: str = Field(..., description="Role of the message sender (user or coach)")
     content: str = Field(..., description="Content of the message")
 
+class IdentityState(str, Enum):
+    """Represents the possible states of an identity."""
+    PROPOSED = "proposed"
+    ACCEPTED = "accepted"
+    REFINEMENT_COMPLETE = "refinement_complete"
+    
+    @classmethod
+    def _missing_(cls, value):
+        """Handle case-insensitive enum values."""
+        if isinstance(value, str):
+            # Try to match case-insensitively
+            for member in cls:
+                if member.value.lower() == value.lower():
+                    return member
+        return None
+
 class Identity(BaseModel):
-    """Represents a single identity with its acceptance status."""
+    """Represents a single identity with its state."""
     id: str = Field(..., description="Unique identifier for the identity")
     description: str = Field(..., description="Description of the identity")
-    is_accepted: bool = Field(False, description="Whether the identity has been accepted by the user")
+    state: IdentityState = Field(IdentityState.PROPOSED, description="Current state of the identity")
+    notes: List[str] = Field(default_factory=list, description="Notes about the identity")
 
 class UserProfile(BaseModel):
     """User information and goals."""

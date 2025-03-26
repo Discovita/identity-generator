@@ -207,69 +207,36 @@ The entirety of the coach logic is quite easy to describe:
         I just checked that there are no compiler errors in the project currently.
 
         Ensure there aren't any before completing.
-    </task>
+        </task>
+        <task>
+          If there is ever a mismatch between what is in an LLM structured response prompt
+          and what our code expects, always first assume the issue is with
+          the accuracy of the prompt rather than our code.
+        </task>
+
     </tasks-already-done>
     <current-task> 
-        The app is working.  State transitions are working.  Latest error
+      During identity brainstorming and identity refinement, 
 
-        takes place during the brainstorming state. 
+      I would like the coach to ADD_IDENTITY_NOTE whenever it believes
+      it has learned valuable information about how the user perceives
+      a certain identity that they have already created. 
 
-        ```
-[backend]     result = await app(  # type: ignore[func-returns-value]
-[backend]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
-[backend]     return await self.app(scope, receive, send)
-[backend]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
-[backend]     await super().__call__(scope, receive, send)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/applications.py", line 112, in __call__
-[backend]     await self.middleware_stack(scope, receive, send)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
-[backend]     raise exc
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
-[backend]     await self.app(scope, receive, _send)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 93, in __call__
-[backend]     await self.simple_response(scope, receive, send, request_headers=headers)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 144, in simple_response
-[backend]     await self.app(scope, receive, send)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
-[backend]     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-[backend]     raise exc
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-[backend]     await app(scope, receive, sender)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
-[backend]     await self.middleware_stack(scope, receive, send)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
-[backend]     await route.handle(scope, receive, send)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
-[backend]     await self.app(scope, receive, send)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
-[backend]     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-[backend]     raise exc
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-[backend]     await app(scope, receive, sender)
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
-[backend]     response = await f(request)
-[backend]                ^^^^^^^^^^^^^^^^
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
-[backend]     raw_response = await run_endpoint_function(
-[backend]                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
-[backend]     return await dependant.call(**values)
-[backend]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/api/routes/coach.py", line 16, in handle_user_input
-[backend]     result = await service.process_message(request.message, request.coach_state)
-[backend]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/service.py", line 49, in process_message
-[backend]     system_prompt = self.prompt_manager.get_prompt(state)
-[backend]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/prompt/manager.py", line 56, in get_prompt
-[backend]     formatted_prompt = template.template.format(
-[backend]                        ^^^^^^^^^^^^^^^^^^^^^^^^^
-[backend] KeyError: 'user_summary'
-```
+      1.  When using the CREATE_IDENTITY action, add a required `note`
+      field for the first note, indicating why the coach created this
+      identity for the user.  This will be the first note in the array
+      of notes that will eventually be created for the identity. 
 
+      2.  At any time during brainstorming and coaching, ADD_IDENTITY_NOTE
+      can be used to save (append) a new piece of information about the given
+      identity.  
+
+      First update the actions and action handler code to support these
+      features; then make sure the prompts are updated so the coach knows
+      it can use this feature during identity brainstorming
+      and identity refinement stages.
+
+      Before you begin, read cline/coach_planning/identity_note_context.md
+      which has valuable context for this task.
     </current-task>
 </cline-context>

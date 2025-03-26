@@ -8,6 +8,7 @@ from ..models.state import CoachingState
 class CreateIdentityParams(BaseModel):
     """Parameters for creating a new identity."""
     description: str = Field(..., description="Description of the identity")
+    note: str = Field(..., description="Initial note about why this identity was created")
 
 class UpdateIdentityParams(BaseModel):
     """Parameters for updating an identity."""
@@ -15,12 +16,21 @@ class UpdateIdentityParams(BaseModel):
     description: str = Field(..., description="Updated description")
 
 class AcceptIdentityParams(BaseModel):
-    """Parameters for accepting an identity."""
+    """Parameters for accepting an identity (changing state from PROPOSED to ACCEPTED)."""
     id: str = Field(..., description="ID of identity to accept")
+
+class AcceptIdentityRefinementParams(BaseModel):
+    """Parameters for marking an identity as refinement complete (changing state from ACCEPTED to REFINEMENT_COMPLETE)."""
+    id: str = Field(..., description="ID of identity to mark as refinement complete")
 
 class TransitionStateParams(BaseModel):
     """Parameters for transitioning state."""
     to_state: CoachingState = Field(..., description="State to transition to")
+
+class AddIdentityNoteParams(BaseModel):
+    """Parameters for adding a note to an identity."""
+    id: str = Field(..., description="ID of identity to add a note to")
+    note: str = Field(..., description="Note to add to the identity")
 
 class FunctionDefinition(BaseModel):
     """OpenAI function definition."""

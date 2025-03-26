@@ -2,13 +2,15 @@
 
 from typing import List
 from uuid import uuid4
-from ..models.state import CoachState, Identity
+from ..models.state import CoachState, Identity, IdentityState
 from ..models.action import Action, ActionType
 from .models import (
     CreateIdentityParams,
     UpdateIdentityParams,
     AcceptIdentityParams,
-    TransitionStateParams
+    AcceptIdentityRefinementParams,
+    TransitionStateParams,
+    AddIdentityNoteParams
 )
 
 def apply_actions(state: CoachState, actions: List[Action]) -> CoachState:
@@ -18,10 +20,12 @@ def apply_actions(state: CoachState, actions: List[Action]) -> CoachState:
     for action in actions:
         if action.type == ActionType.CREATE_IDENTITY:
             params = CreateIdentityParams(**action.params)
+            identity_id = str(uuid4())
             new_state.identities.append(Identity(
-                id=str(uuid4()),
+                id=identity_id,
                 description=params.description,
-                is_accepted=False
+                state=IdentityState.PROPOSED,
+                notes=[params.note]
             ))
             
         elif action.type == ActionType.UPDATE_IDENTITY:
@@ -35,7 +39,21 @@ def apply_actions(state: CoachState, actions: List[Action]) -> CoachState:
             params = AcceptIdentityParams(**action.params)
             for identity in new_state.identities:
                 if identity.id == params.id:
-                    identity.is_accepted = True
+                    identity.state = IdentityState.ACCEPTED
+                    break
+                    
+        elif action.type == ActionType.ACCEPT_IDENTITY_REFINEMENT:
+            params = AcceptIdentityRefinementParams(**action.params)
+            for identity in new_state.identities:
+                if identity.id == params.id:
+                    identity.state = IdentityState.REFINEMENT_COMPLETE
+                    break
+                    
+        elif action.type == ActionType.ADD_IDENTITY_NOTE:
+            params = AddIdentityNoteParams(**action.params)
+            for identity in new_state.identities:
+                if identity.id == params.id:
+                    identity.notes.append(params.note)
                     break
                     
         elif action.type == ActionType.TRANSITION_STATE:

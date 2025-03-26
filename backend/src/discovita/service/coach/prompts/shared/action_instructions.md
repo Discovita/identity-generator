@@ -21,88 +21,65 @@ You must provide your responses in the following JSON format:
 
 As a coach, you can include the following actions in your response:
 
-1. **SAVE_USER_INFO**: Save information about the user
+1. **create_identity**: Save a new identity
    ```json
    {
-     "type": "SAVE_USER_INFO",
+     "type": "create_identity",
      "params": {
-       "info": {
-         "key": "value"
-       }
+       "description": "I am a skilled writer who creates compelling content that resonates with readers.", // Full identity description as an "I am" statement
+       "note": "Created this identity because the user expressed passion for writing and mentioned they enjoy crafting stories." // Initial note explaining why this identity was created
      }
    }
    ```
 
-2. **SAVE_IDENTITY**: Save a new identity or update an existing one
+2. **update_identity**: Update an existing identity
    ```json
    {
-     "type": "SAVE_IDENTITY",
+     "type": "update_identity",
      "params": {
-       "category": "PASSIONS",
-       "name": "Creative Visionary",
-       "affirmation": "I am a Creative Visionary who sees possibilities others miss and brings new ideas to life.",
-       "visualization": "Optional visual details"
+       "id": "id_of_identity", // ID of the identity to update
+       "description": "I am a published author whose books inspire and entertain readers worldwide." // Updated identity description
      }
    }
    ```
 
-3. **MARK_INTRODUCTION_COMPLETE**: Mark the introduction phase as complete
+3. **accept_identity**: Change an identity state from PROPOSED to ACCEPTED
    ```json
    {
-     "type": "MARK_INTRODUCTION_COMPLETE",
-     "params": {}
-   }
-   ```
-
-4. **TRANSITION_STATE**: Request a transition to another state
-   ```json
-   {
-     "type": "TRANSITION_STATE",
+     "type": "accept_identity",
      "params": {
-       "to_state": "IDENTITY_BRAINSTORMING"
+       "id": "id_of_identity" // ID of the identity to mark as accepted
      }
    }
    ```
 
-5. **SAVE_VISUALIZATION**: Save visualization details for an identity
+4. **accept_identity_refinement**: Change an identity state from ACCEPTED to REFINEMENT_COMPLETE
    ```json
    {
-     "type": "SAVE_VISUALIZATION",
+     "type": "accept_identity_refinement",
      "params": {
-       "category": "PASSIONS",
-       "visualization": "Visual representation details"
+       "id": "id_of_identity" // ID of the identity to mark as refinement complete
      }
    }
    ```
 
-6. **SET_FOCUS_IDENTITY**: Set the current identity focus
+5. **add_identity_note**: Add a note to an existing identity
    ```json
    {
-     "type": "SET_FOCUS_IDENTITY",
+     "type": "add_identity_note",
      "params": {
-       "category": "PASSIONS"
+       "id": "id_of_identity", // ID of the identity to add a note to
+       "note": "User mentioned they've been writing since childhood and have always found it therapeutic." // Note to add about the identity
      }
    }
    ```
 
-7. **CREATE_ACTION_ITEM**: Create a new action item
+6. **transition_state**: Request a transition to another state
    ```json
    {
-     "type": "CREATE_ACTION_ITEM",
+     "type": "transition_state",
      "params": {
-       "description": "Action description",
-       "identity_category": "PASSIONS",
-       "due_date": "Optional due date"
-     }
-   }
-   ```
-
-8. **MARK_ACTION_COMPLETE**: Mark an action item as complete
-   ```json
-   {
-     "type": "MARK_ACTION_COMPLETE",
-     "params": {
-       "action_id": "id_of_action"
+       "to_state": "IDENTITY_BRAINSTORMING" // or other valid state
      }
    }
    ```
@@ -122,15 +99,14 @@ Example Complete Response:
   "message": "I understand you want to explore your creative side. Let's start by creating an identity focused on your creative passions.",
   "actions": [
     {
-      "type": "SAVE_IDENTITY",
+      "type": "create_identity",
       "params": {
-        "category": "PASSIONS",
-        "name": "Creative Visionary",
-        "affirmation": "I am a Creative Visionary who sees possibilities others miss and brings new ideas to life."
+        "description": "I am a Creative Visionary who sees possibilities others miss and brings new ideas to life.",
+        "note": "Created this identity because the user expressed interest in creative pursuits and mentioned they enjoy thinking outside the box."
       }
     },
     {
-      "type": "TRANSITION_STATE",
+      "type": "transition_state",
       "params": {
         "to_state": "IDENTITY_BRAINSTORMING"
       }

@@ -4,7 +4,7 @@ from typing import Dict, Set, Optional
 from pathlib import Path
 
 from ..models import CoachState, CoachingState, ActionType
-from .models import PromptContext
+from .models import PromptContext, IdentitySummary
 from .templates import PromptTemplate
 from .loader import PromptLoader
 
@@ -45,7 +45,7 @@ class PromptManager:
             num_identities=len(state.identities),
             current_identity_description=current_identity_desc,
             identities_summary=[
-                (i.description, i.is_accepted) for i in state.identities
+                IdentitySummary(description=i.description, state=i.state) for i in state.identities
             ],
             phase=state.current_state.value,
             recent_messages=recent_messages
