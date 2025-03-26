@@ -1,7 +1,13 @@
 """Models for prompt management."""
 
 from typing import Optional, List
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from ..models.state import IdentityState
+
+class IdentitySummary(BaseModel):
+    """Summary of an identity for prompt context."""
+    description: str = Field(..., description="Description of the identity")
+    state: IdentityState = Field(..., description="Current state of the identity")
 
 class PromptContext(BaseModel):
     """Context data used to format prompt templates."""
@@ -9,7 +15,7 @@ class PromptContext(BaseModel):
     user_goals: list[str]
     num_identities: int
     current_identity_description: Optional[str] = None
-    identities_summary: list[tuple[str, bool]]  # List of (description, is_accepted) tuples
+    identities_summary: list[IdentitySummary] = Field(default_factory=list, description="List of identity summaries")
     phase: str
     recent_messages: List[str] = []  # Recent conversation messages
 
@@ -20,8 +26,8 @@ class PromptContext(BaseModel):
     def format_identities(self) -> str:
         """Format identities summary as bulleted list."""
         return "\n".join(
-            f"- {desc} ({'accepted' if accepted else 'not accepted'})"
-            for desc, accepted in self.identities_summary
+            f"- {identity.description} (state: {identity.state.value})"
+            for identity in self.identities_summary
         )
         
     def user_summary(self) -> str:

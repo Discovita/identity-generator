@@ -1,7 +1,7 @@
 """State machine for managing the coaching process flow."""
 
 from typing import Dict, Any, Optional
-from ..models.state import CoachState, CoachingState
+from ..models.state import CoachState, CoachingState, IdentityState
 
 class StateMachine:
     """State machine for managing the coaching process flow."""
@@ -25,8 +25,8 @@ class StateMachine:
                 new_state.current_identity_index = 0
                 
         elif new_state.current_state == CoachingState.IDENTITY_REFINEMENT:
-            # Check if all identities are accepted
-            if all(i.is_accepted for i in new_state.identities):
+            # Check if all identities are in REFINEMENT_COMPLETE state
+            if all(i.state == IdentityState.REFINEMENT_COMPLETE for i in new_state.identities):
                 # We stay in refinement state but mark completion in metadata
                 new_state.metadata["refinement_completed"] = True
         
