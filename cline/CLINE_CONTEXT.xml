@@ -195,8 +195,8 @@
     </task>
     </tasks-already-done>
     <current-task> 
-    cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/04_service_layer/testing_notes.txt
+      A test script is failing.  Debug and fix.
 
-    has detailed instructions for your current task.
+      cd backend && python -m discovita.service.coach.test_scripts.test_introduction
     </current-task>
 </cline-context>

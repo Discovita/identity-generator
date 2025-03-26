@@ -3,12 +3,15 @@
 from typing import AsyncGenerator
 from fastapi import Depends
 from httpx import AsyncClient, Limits, Timeout
-from ..config import Settings
-from ..dependencies import get_settings
-from ..service.openai.client.client import OpenAIClient
-from ..service.openai.image_description import ImageDescriptionService
-from ..service.openai.image_generation import ImageGenerationService
-from ..service.coach.service import CoachService
+
+from discovita.config import Settings
+from discovita.dependencies import get_settings
+from discovita.service.coach.prompt.manager import PromptManager
+from discovita.service.coach.service import CoachService
+from discovita.service.coach.state.machine import StateMachine
+from discovita.service.openai.client.client import OpenAIClient
+from discovita.service.openai.image_description import ImageDescriptionService
+from discovita.service.openai.image_generation import ImageGenerationService
 
 async def get_openai_client(
     settings: Settings = Depends(get_settings)
@@ -36,4 +39,6 @@ async def get_coach_service(
     client: OpenAIClient = Depends(get_openai_client)
 ) -> CoachService:
     """Get coach service."""
-    return CoachService(client)
+    prompt_manager = PromptManager()
+    state_machine = StateMachine()
+    return CoachService(client, prompt_manager, state_machine)
