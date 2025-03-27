@@ -8,9 +8,10 @@ check_dependencies() {
         exit 1
     fi
 
-    # Check pip
-    if ! command -v pip &> /dev/null; then
-        echo "pip is required but not installed."
+    # Check Poetry
+    if ! command -v poetry &> /dev/null; then
+        echo "Poetry is required but not installed."
+        echo "Install with: curl -sSL https://install.python-poetry.org | python3 -"
         exit 1
     fi
 
@@ -25,20 +26,6 @@ check_dependencies() {
         echo "npm is required but not installed."
         exit 1
     fi
-
-    # Check/setup Python virtual environment
-    cd backend
-    if [ ! -d ".venv" ]; then
-        echo "Creating Python virtual environment..."
-        python3 -m venv .venv
-    fi
-    
-    if [[ "$VIRTUAL_ENV" != *"/backend/.venv" ]]; then
-        echo "Activating virtual environment..."
-        . .venv/bin/activate
-        python -m pip install --upgrade pip
-    fi
-    cd ..
 }
 
 if [ $# -ne 1 ]; then
@@ -63,11 +50,12 @@ echo "Building $APP_NAME app..."
 PROJECT_ROOT="$(dirname "$0")/.."
 cd "$PROJECT_ROOT"
 
-echo "Installing Python dependencies..."
+echo "Installing Python dependencies with Poetry..."
 cd backend
-. .venv/bin/activate
-python -m pip install -r requirements.txt
-python -m pip install -e .
+# Configure poetry to create virtual environment in the project directory
+poetry config virtualenvs.in-project true --local
+# Install dependencies
+poetry install
 cd ..
 
 echo "Building frontend..."

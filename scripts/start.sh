@@ -6,16 +6,24 @@ PROJECT_ROOT="$(dirname "$0")/.."
 cd "$PROJECT_ROOT"
 
 cd backend
-if [ ! -d ".venv" ]; then
-    echo "Error: Virtual environment not found. Please run build.sh first."
+# Check if Poetry is installed
+if ! command -v poetry &> /dev/null; then
+    echo "Error: Poetry is required but not installed."
+    echo "Install with: curl -sSL https://install.python-poetry.org | python3 -"
     exit 1
 fi
 
-. .venv/bin/activate
+# Check if the Poetry environment exists
+if ! poetry env info &> /dev/null; then
+    echo "Error: Poetry environment not found. Please run build.sh first."
+    exit 1
+fi
 
 # If PORT is set, bind to 0.0.0.0 for production
 if [ -n "${PORT}" ]; then
-    uvicorn discovita.app:app --host 0.0.0.0 --port "${PORT}"
+    # Run using Poetry environment
+    poetry run uvicorn discovita.app:app --host 0.0.0.0 --port "${PORT}"
 else
-    uvicorn discovita.app:app --reload --port 8000
+    # Run in development mode
+    poetry run uvicorn discovita.app:app --reload --port 8000
 fi
