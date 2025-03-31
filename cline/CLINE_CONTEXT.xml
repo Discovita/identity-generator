@@ -213,12 +213,12 @@ The entirety of the coach logic is quite easy to describe:
           and what our code expects, always first assume the issue is with
           the accuracy of the prompt rather than our code.
         </task>
-
     </tasks-already-done>
     <current-task> 
-      Update the coach API to return, in the response object,
-      the `final_prompt`, a string with the final prompt that 
-      was used to generate the coach's response, after template
-      compilation.  
+      In the Coach application front-end, there is a button
+      called "Export Conversation".  It currently works, but
+      I want it to export, in addition to the conversation messages,
+      a separate section in the XML document which is a dump
+      of the current Coach State.
     </current-task>
 </cline-context>

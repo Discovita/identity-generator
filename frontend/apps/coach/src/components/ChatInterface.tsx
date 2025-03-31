@@ -135,7 +135,7 @@ export const ChatInterface: React.FC<Props> = ({
             {isLoading ? 'Sending...' : 'Send'}
           </button>
         </form>
-        <ConversationExporter messages={messages} userId={userId} />
+        <ConversationExporter messages={messages} userId={userId} coachState={coachState} />
       </div>
     </div>
   );
