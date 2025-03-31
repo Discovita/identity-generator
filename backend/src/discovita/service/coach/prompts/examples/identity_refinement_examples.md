@@ -20,9 +20,9 @@ Coach Response:
   "message": "Beautiful! I love how you're focusing on the impact you have on others. Let's capture this expanded vision in your identity statement.\n\nHow does this feel: \"I am a confident and inspiring public speaker who connects deeply with audiences and transforms ideas into action.\"\n\nThis identity statement captures both your confidence and your ability to create meaningful impact. Would you like to refine it further, or does this resonate with you?",
   "actions": [
     {
-      "type": "SAVE_IDENTITY",
+      "type": "create_identity",
       "params": {
-        "category": "PASSIONS",
+        "category": "passions_and_talents",
         "name": "Inspiring Speaker",
         "affirmation": "I am a confident and inspiring public speaker who connects deeply with audiences and transforms ideas into action"
       }
@@ -55,9 +55,9 @@ Coach Response (Don't do this):
   "message": "Your identity should be \"I am a fearless business leader.\" That's the best identity for career success. Let's move on to visualization now.",
   "actions": [
     {
-      "type": "SAVE_IDENTITY",
+      "type": "create_identity",
       "params": {
-        "category": "MONEY_MAKER",
+        "category": "maker_of_money",
         "name": "Fearless Leader",
         "affirmation": "I am a fearless business leader"
       }
@@ -76,9 +76,9 @@ Coach Response (Don't do this):
   "message": "That sounds good. Health is important. Let's move on to the next step in our process.",
   "actions": [
     {
-      "type": "TRANSITION_STATE",
+      "type": "transition_state",
       "params": {
-        "target_state": "IDENTITY_VISUALIZATION"
+        "to_state": "IDENTITY_VISUALIZATION"
       }
     }
   ]

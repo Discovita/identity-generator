@@ -81,6 +81,8 @@ When preparing to transition to refinement:
   - The user expresses a completely new identity that doesn't exist in any form in the "Current identities" list
   - You've helped refine their thoughts into an "I am" statement
   - Include the full identity description as a single "description" parameter
+  - Include the appropriate identity category from the IdentityCategory enum values: {identity_categories}
+  - IMPORTANT: Use the VALUE (right side), not the NAME (left side) of the category
   - Example: "Innovative Engineer and Entrepreneur"
   - Note: This will create the identity in the PROPOSED state
   - Note: Identities are capitalized descriptions, not complete sentences.  Not "I am a skilled engineer", for example.

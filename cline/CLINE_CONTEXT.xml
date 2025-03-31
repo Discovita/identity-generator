@@ -111,114 +111,177 @@ The entirety of the coach logic is quite easy to describe:
 
         </note>
     </long-term-memory>
-    <gather-context-instructions>
-        Familiarize yourself with
-
-        cline/coach_planning/state_machine_planning/v1
-
-        Print out the file tree for your reference, from this directory.
-
-        Particularly, read
-
-        cline/coach_planning/state_machine_planning/v1/plan/master_plan_v1.md
-        cline/coach_planning/state_machine_planning/v1/implementation_plan/master_plan_v1_impl.md
-        We will be carrying out the steps
-        cline/coach_planning/state_machine_planning/v1/implementation_plan/steps
-
-        For each step we will be making a non-breaking PR against the codebase.
-        You may use version-gating if needed to avoid breaking the server, but
-        avoid that when it is not needed.
-
-        Avoid over-engineering and make the code testable by unit tests, and test it.
-
-        After each step we leave one or more notes about what we did.
-        We just finished Step 1, which resulted in these summaries, which
-        you should read:
-        cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/summary_of_changes.md
-        cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/alignment_with_next_steps.md
-
-        Aggressively simplify all code.  Do not overcomplicate.  This version of the coach
-        is going to be quite simple: (1) no database, just passing JSON between
-        front-end and backend where front-end sends current state and user message
-        and backend returns updated state and coach message (and any other needed metadata
-        for the front-end to show). (2) Key internal feature of the coach will be
-        a prompt manager which uses specialized prompts so that the coach has specialized
-        instructions for each stage of coaching.  (3) We're only going to have three
-        stages: (a) Introduction, (b) Brainstorming session (user comes up with 5 identities
-        through conversation with the coach), and (c) identity creation, where the coach
-        goes through the identities one at a time with the user and gets user buy-in 
-        on each identity, at the end of which the coach uses a "CREATE_IDENTITY" "action"
-        (we won't even implement this yet, just indicate that the coach would make
-        a function call that we'll implement later to actually create an identity - however,
-        we will shove the "identity" into the coach state so that it can at least be 
-        viewed and tested in test mode), and (d) conclusion where the coach reviews
-        what they came up with and indicates that more features are coming soon.
-    </gather-context-instructions>
-    <tasks-already-done>
-        <task>
-            Carry out the implementation plan for Step 1:
-            cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models.md
-            Do not go further than that. We'll be merging this code before we continue.
-        </task>
-        <task>
-            Carry out Step 2 as we did Step 1.  In particular, when you're finished, write 
-            files analogous to
-
-            cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/summary_of_changes.md
-            cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models/alignment_with_next_steps.md
-
-            in the step 2 directory.
-        </task>
-        <task>
-            Carry out Step 3 analogous to Step 2 above.
-
-            I believe you've already gotten started on this task.  You may even
-            have already finished for all you know.  Write
-            ./cline/progress_report.md with your assessment of what's been done 
-            already and what remains to be done for Step 3 once you understand
-            Step 3.
-        </task>
-        <task>
-            There is significant overlaps bewteen Steps 7 (persistence layer)
-            and step 4 (context manager).  
-
-            Rename cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/07_persistence_layer
-            to .../04A (we will just append the letter A to insert it before step 04).
-
-            Review Step 04 and ensure it is aligned with and uses the models
-            and concepts we will develop in the persistence layer.
-        </task>
-        <task>
-          Remove all references to persistence (database) layer.  This entire 
-          version of the coach will not make any use of the database.  
-
-          The six steps will now simply be:
-
-          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/01_core_models
-          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/02_state_machine
-          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/03_prompt_manager
-          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/04_service_layer
-          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/05_api_layer
-          cline/coach_planning/state_machine_planning/v1/implementation_plan/steps/06_frontend_integration
-        </task>
-        <task> 
-        Carry out Step 4, implement the service layer.  
-
-        I just checked that there are no compiler errors in the project currently.
-
-        Ensure there aren't any before completing.
-        </task>
-        <task>
-          If there is ever a mismatch between what is in an LLM structured response prompt
-          and what our code expects, always first assume the issue is with
-          the accuracy of the prompt rather than our code.
-        </task>
-    </tasks-already-done>
     <current-task> 
-      In the Coach application front-end, there is a button
-      called "Export Conversation".  It currently works, but
-      I want it to export, in addition to the conversation messages,
-      a separate section in the XML document which is a dump
-      of the current Coach State.
+      In the coach's prompts, you will find that there are referenced,
+      I believe in the "Identity Brainstorming" phase-specific prompts,
+      a set of Identity Categories.  
+
+      These Identity Categories may or may not also be in the codebase
+      as an enum.  If they are not, I would like them to be. Moreover:
+
+      when the coach creates an identity, I would like that identity
+      to be formally and explicitly associated with an identity category.
+
+      This means the following changes need to take place:
+
+      1. The action backend/src/discovita/service/coach/models/action.py
+      for creating identities needs a new parameter for identity
+      category.
+      2.  ANY prompts which invite the LLM to take this action need
+      to describe the new parameter we are adding, including providing
+      the list of acceptable enum values for identity categories.
+      3.  The Identity object needs to be parsed by the LLM response
+      parser.  The execution should fail fast if the identity category
+      is missing or not one of the enum values.  It should be required
+      in the identity constructor.
+      4.  Global codebase search to find any usages that need to be updated.
+
+      Let me know if I missed anything in this plan.
+
+      Before you begin, write a doc 
+      cline/coach_planning/v4_planning/explicit_categories.md
+      which lists, using very short snippets labeled by their file,
+      what changes you expect to make to the actual codebase.
+
+      We made these changes, but there is now a server error when the 
+      coach attempts to make amn identity.  Debug:
+      <error>
+      [backend] INFO:openai_client:Content: {
+[backend]   "message": "Fantastic! Being a piano player and a programmer showcases your creativity and analytical skills. Let's start by creating identities that capture these passions and talents.",
+[backend]   "actions": [
+[backend]     {
+[backend]       "type": "create_identity",
+[backend]       "params": {
+[backend]         "description": "Piano Player",
+[backend]         "note": "Created this identity because the user identifies as a piano player, which highlights their musical talent and creative expression.",
+[backend]         "category": "PASSIONS"
+[backend]       }
+[backend]     },
+[backend]     {
+[backend]       "type": "create_identity",
+[backend]       "params": {
+[backend]         "description": "Programmer",
+[backend]         "note": "Created this identity because the user identifies as a programmer, showcasing their problem-solving skills and logical thinking.",
+[backend]         "category": "PASSIONS"
+[backend]       }
+[backend]     }
+[backend]   ]
+[backend] }
+[backend] 2025-03-31 14:13:36,614 - openai_client - INFO - Content: {
+[backend]   "message": "Fantastic! Being a piano player and a programmer showcases your creativity and analytical skills. Let's start by creating identities that capture these passions and talents.",
+[backend]   "actions": [
+[backend]     {
+[backend]       "type": "create_identity",
+[backend]       "params": {
+[backend]         "description": "Piano Player",
+[backend]         "note": "Created this identity because the user identifies as a piano player, which highlights their musical talent and creative expression.",
+[backend]         "category": "PASSIONS"
+[backend]       }
+[backend]     },
+[backend]     {
+[backend]       "type": "create_identity",
+[backend]       "params": {
+[backend]         "description": "Programmer",
+[backend]         "note": "Created this identity because the user identifies as a programmer, showcasing their problem-solving skills and logical thinking.",
+[backend]         "category": "PASSIONS"
+[backend]       }
+[backend]     }
+[backend]   ]
+[backend] }
+[backend] INFO:openai_client:Model: gpt-4o-2024-08-06
+[backend] 2025-03-31 14:13:36,614 - openai_client - INFO - Model: gpt-4o-2024-08-06
+[backend] INFO:openai_client:Usage: CompletionUsage(completion_tokens=165, prompt_tokens=2021, total_tokens=2186, completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0, audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0), prompt_tokens_details=PromptTokensDetails(audio_tokens=0, cached_tokens=0))
+[backend] 2025-03-31 14:13:36,614 - openai_client - INFO - Usage: CompletionUsage(completion_tokens=165, prompt_tokens=2021, total_tokens=2186, completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0, audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0), prompt_tokens_details=PromptTokensDetails(audio_tokens=0, cached_tokens=0))
+[backend] INFO:openai_client:=== End Response ===
+[backend] 2025-03-31 14:13:36,614 - openai_client - INFO - Content: {
+[backend]   "message": "Fantastic! Being a piano player and a programmer showcases your creativity and analytical skills. Let's start by creating identities that capture these passions and talents.",
+[backend]   "actions": [
+[backend]     {
+[backend]       "type": "create_identity",
+[backend]       "params": {
+[backend]         "description": "Piano Player",
+[backend]         "note": "Created this identity because the user identifies as a piano player, which highlights their musical talent and creative expression.",
+[backend]         "category": "PASSIONS"
+[backend]       }
+[backend]     },
+[backend]     {
+[backend]       "type": "create_identity",
+[backend]       "params": {
+[backend]         "description": "Programmer",
+[backend]         "note": "Created this identity because the user identifies as a programmer, showcasing their problem-solving skills and logical thinking.",
+[backend]         "category": "PASSIONS"
+[backend]       }
+[backend]     }
+[backend]   ]
+[backend] }
+[backend] 2025-03-31 14:13:36,614 - openai_client - INFO - Model: gpt-4o-2024-08-06
+[backend] 2025-03-31 14:13:36,614 - openai_client - INFO - Usage: CompletionUsage(completion_tokens=165, prompt_tokens=2021, total_tokens=2186, completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0, audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0), prompt_tokens_details=PromptTokensDetails(audio_tokens=0, cached_tokens=0))
+[backend] 2025-03-31 14:13:36,614 - openai_client - INFO - === End Response ===
+[backend] 2025-03-31 14:13:36,614 - openai_client - INFO - === End Response ===
+[backend] INFO:     127.0.0.1:55857 - "POST /api/v1/coach/user_input HTTP/1.1" 500 Internal Server Error
+[backend] ERROR:    Exception in ASGI application
+[backend] Traceback (most recent call last):
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+[backend]     result = await app(  # type: ignore[func-returns-value]
+[backend]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+[backend]     return await self.app(scope, receive, send)
+[backend]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
+[backend]     await super().__call__(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/applications.py", line 112, in __call__
+[backend]     await self.middleware_stack(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
+[backend]     raise exc
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
+[backend]     await self.app(scope, receive, _send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 93, in __call__
+[backend]     await self.simple_response(scope, receive, send, request_headers=headers)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+[backend]     await self.app(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+[backend]     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+[backend]     raise exc
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+[backend]     await app(scope, receive, sender)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
+[backend]     await self.middleware_stack(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
+[backend]     await route.handle(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
+[backend]     await self.app(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
+[backend]     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+[backend]     raise exc
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+[backend]     await app(scope, receive, sender)
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
+[backend]     response = await f(request)
+[backend]                ^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
+[backend]     raw_response = await run_endpoint_function(
+[backend]                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+[backend]     return await dependant.call(**values)
+[backend]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/api/routes/coach.py", line 16, in handle_user_input
+[backend]     result = await service.process_message(request.message, request.coach_state)
+[backend]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/service.py", line 78, in process_message
+[backend]     new_state = apply_actions(state, llm_response.actions)
+[backend]                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/actions/handler.py", line 24, in apply_actions
+[backend]     params = CreateIdentityParams(**action.params)
+[backend]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend]   File "/Users/jakemirra/workspace/discovita/identity-generator/backend/venv/lib/python3.11/site-packages/pydantic/main.py", line 214, in __init__
+[backend]     validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+[backend]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[backend] pydantic_core._pydantic_core.ValidationError: 1 validation error for CreateIdentityParams
+[backend] category
+[backend]   Input should be 'passions_and_talents', 'maker_of_money', 'keeper_of_money', 'spiritual', 'personal_appearance', 'physical_expression', 'familial_relations', 'romantic_relation' or 'doer_of_things' [type=enum, input_value='PASSIONS', input_type=str]
+[backend]     For further information visit https://errors.pydantic.dev/2.10/v/enum
+      </error>
     </current-task>
 </cline-context>

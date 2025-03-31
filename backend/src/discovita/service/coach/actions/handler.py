@@ -4,6 +4,7 @@ from typing import List
 from uuid import uuid4
 from ..models.state import CoachState, Identity, IdentityState
 from ..models.action import Action, ActionType
+from ..models.identity import IdentityCategory
 from .models import (
     CreateIdentityParams,
     UpdateIdentityParams,
@@ -26,7 +27,8 @@ def apply_actions(state: CoachState, actions: List[Action]) -> CoachState:
                 id=identity_id,
                 description=params.description,
                 state=IdentityState.PROPOSED,
-                notes=[params.note]
+                notes=[params.note],
+                category=params.category
             ))
             
         elif action.type == ActionType.UPDATE_IDENTITY:

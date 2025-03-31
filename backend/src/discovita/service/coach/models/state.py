@@ -3,6 +3,7 @@
 from enum import Enum
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
+from .identity import IdentityCategory
 
 class CoachingState(str, Enum):
     """Represents the possible states in the coaching process."""
@@ -47,6 +48,7 @@ class Identity(BaseModel):
     description: str = Field(..., description="Description of the identity")
     state: IdentityState = Field(IdentityState.PROPOSED, description="Current state of the identity")
     notes: List[str] = Field(default_factory=list, description="Notes about the identity")
+    category: IdentityCategory = Field(..., description="Category this identity belongs to")
 
 class UserProfile(BaseModel):
     """User information and goals."""
