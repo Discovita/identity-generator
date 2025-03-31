@@ -61,9 +61,12 @@ class PromptManager:
         template = self.templates[state.current_state]
         context = self._build_prompt_context(state)
         
-        # Load action instructions
+        # Load shared prompt components
         action_instructions_path = self.loader.prompts_dir / "shared" / "action_instructions.md"
+        system_context_path = self.loader.prompts_dir / "shared" / "system_context.md"
+        
         action_instructions = self.loader._read_markdown_file(action_instructions_path)
+        system_context = self.loader._read_markdown_file(system_context_path)
         
         # Format the template with the context
         formatted_prompt = template.template.format(
@@ -80,11 +83,13 @@ class PromptManager:
             identity_categories=context.format_identity_categories()
         )
         
-        # Format and add action instructions at the beginning
+        # Format and add shared components at the beginning
         formatted_action_instructions = action_instructions.format(
             identity_categories=context.format_identity_categories()
         )
-        formatted_prompt = f"{formatted_action_instructions}\n\n{formatted_prompt}"
+        
+        # Combine all components
+        formatted_prompt = f"{formatted_action_instructions}\n\n{system_context}\n\n{formatted_prompt}"
         
         # Add examples if available
         if template.examples:
