@@ -1,0 +1,29 @@
+# Coach V3 release.   
+
+Coach V3 is out.  The last version of the coach was a glorified wrapper around a ChatGPT prompt.  By contrast, Coach V3's internals are significantly more.  
+
+1.  Conversation phases and state management.  
+
+The conversation can now progress through stages.  These stages are currently called Introduction, Identity Brainstorming, and Identity Refinement.  More significantly, *Casey and I will be able to add new stages very cheaply: I predict a new conversation stage, with a decent Product writeup, can be added to the coach with 1-2 hours of dev work.  Why is this important?
+
+2.  Phase-specific prompts. 
+
+We can now use prompts for the coach which are specialized to the current stage of the conversation.  This allows us to modify the behavior of the coach with high fidelity to intent.  
+
+3. Coach actions
+
+The coach can now take arbitrary _actions_ at any time.  A given ACTION can be added as an option to one or more phases.  Each time the user sends a message to the coach, the coach takes any number of actions in addition to sending a response message to the user.  These actions are arbitrary.  They can be calls to the Adalo API to create or modify objects there; they can be actions to modify the internal state of the coach, creating, modifying, or accepting proposed identities.  And they can be much more.  Anything you can imagine can be a coach action.  I expect this will be the basis for many upcoming product features you wish to add.
+
+4.  Behavior improvements
+
+With the benefit of stage-specific prompts, I was able to make the coach more conversational, with chat messages that are shorter and keep the conversation moving by always having a call-to-action for the user, in the form of a probing question or suggestion.  The coach is also *aware* of the identity categories and is able to ask the user to consider them, while being flexible about allowing the user to move on and come back to an identity category.  However, as I said before, we can make the category-related dialogue much more precise and aligned with your coaching technique by adding some prompt documents with definitions and example conversations pertaining to each of your categories.  
+
+5.  Identity management
+
+Coach V3 maintains a list of identities throughout the brainstorming and refinement process.  Each identity has three states: "proposed", "accepted", and "refined".  The coach manages this automatically, updating the identities as the conversation goes.  The coach also takes internal notes on the identities.  These notes can be used to create accurate identities on Adalo (or whatever backend we might eventually replace it with) that reflect the conversation with the user. 
+
+# Next features to implement:
+
+ Coach V3 is a base layer on top of which we can easily (1) iteratively improve the prompts to make the coach talk more like you, (2) add more conversation phases and coach actions to add structure and functionality so that the coaching process more accurately reflects your real conversations and techniques.  There are many directions we can go from here.  
+ 
+ Leigh Ann, we should meet to go over what product features you want to add in V4 to get this ready to show to investors and alpha users.  The hardest work is out of the way and we're now with a platform on top of which it's very easy to add and improve features. 
