@@ -76,11 +76,15 @@ class PromptManager:
             phase=context.phase,
             user_summary=context.user_summary(),
             recent_messages=context.format_recent_messages(),
-            identities=context.format_identities()
+            identities=context.format_identities(),
+            identity_categories=context.format_identity_categories()
         )
         
-        # Add action instructions at the beginning
-        formatted_prompt = f"{action_instructions}\n\n{formatted_prompt}"
+        # Format and add action instructions at the beginning
+        formatted_action_instructions = action_instructions.format(
+            identity_categories=context.format_identity_categories()
+        )
+        formatted_prompt = f"{formatted_action_instructions}\n\n{formatted_prompt}"
         
         # Add examples if available
         if template.examples:

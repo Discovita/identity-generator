@@ -3,6 +3,7 @@
 from typing import Optional, List
 from pydantic import BaseModel, Field
 from ..models.state import IdentityState
+from ..models.identity import IdentityCategory
 
 class IdentitySummary(BaseModel):
     """Summary of an identity for prompt context."""
@@ -43,3 +44,7 @@ class PromptContext(BaseModel):
         if not self.recent_messages:
             return "No recent messages."
         return "\n".join(self.recent_messages)
+        
+    def format_identity_categories(self) -> str:
+        """Format identity categories as a list of enum values."""
+        return ", ".join([f"'{category.name}': '{category.value}'" for category in IdentityCategory])

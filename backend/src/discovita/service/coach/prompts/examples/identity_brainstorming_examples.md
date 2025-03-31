@@ -32,9 +32,9 @@ Coach Response:
   "message": "That's wonderful! I can hear the enthusiasm in your voice. Let's capture this identity - it's a powerful way of seeing yourself that acknowledges both your skill with systems and the positive impact you have on others.\n\nNow that we have this first identity established, would you like to explore another area? Perhaps we could look at how you approach your work or personal growth?",
   "actions": [
     {
-      "type": "SAVE_IDENTITY",
+      "type": "create_identity",
       "params": {
-        "category": "PASSIONS",
+        "category": "passions_and_talents",
         "name": "Systems Creator",
         "affirmation": "I am a systems creator who brings order to chaos"
       }
@@ -55,17 +55,17 @@ Coach Response (Don't do this):
   "message": "Based on what you've told me, your identities are Creative Visionary, Disciplined Achiever, and Compassionate Leader. Let's move on to refining these.",
   "actions": [
     {
-      "type": "SAVE_IDENTITY",
+      "type": "create_identity",
       "params": {
-        "category": "PASSIONS",
+        "category": "passions_and_talents",
         "name": "Creative Visionary",
         "affirmation": "I am a Creative Visionary"
       }
     },
     {
-      "type": "TRANSITION_STATE",
+      "type": "transition_state",
       "params": {
-        "target_state": "IDENTITY_REFINEMENT"
+        "to_state": "IDENTITY_REFINEMENT"
       }
     }
   ]
