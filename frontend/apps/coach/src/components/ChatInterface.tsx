@@ -23,6 +23,7 @@ export const ChatInterface: React.FC<Props> = ({
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Initialize coach state
   const [coachState, setCoachState] = useState<CoachState>(
@@ -54,6 +55,33 @@ export const ChatInterface: React.FC<Props> = ({
   // Scroll when messages change
   useEffect(scrollToBottom, [messages, scrollToBottom]);
 
+  const resizeTextarea = useCallback(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+
+    const maxHeight = 500; // Should match the CSS max-height value
+    if (textarea.scrollHeight > maxHeight) {
+      textarea.style.height = `${maxHeight}px`;
+      textarea.classList.add('overflow');
+    } else {
+      textarea.classList.remove('overflow');
+    }
+  }, []);
+
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setInputMessage(e.target.value);
+      resizeTextarea();
+    },
+    [resizeTextarea]
+  );
+
+  useEffect(() => {
+    resizeTextarea();
+  }, [resizeTextarea]);
+
   const sendMessage = useCallback(
     async (content: string) => {
       if (!content.trim() || isLoading) return;
@@ -61,6 +89,7 @@ export const ChatInterface: React.FC<Props> = ({
       const userMessage: Message = { role: 'user', content: content.trim() };
       setMessages(prev => [...prev, userMessage]);
       setInputMessage('');
+      setTimeout(resizeTextarea, 0);
       setIsLoading(true);
 
       try {
@@ -78,7 +107,7 @@ export const ChatInterface: React.FC<Props> = ({
         setIsLoading(false);
       }
     },
-    [isLoading, coachState]
+    [isLoading, coachState, resizeTextarea]
   );
 
   const handleSubmit = useCallback(
@@ -89,6 +118,16 @@ export const ChatInterface: React.FC<Props> = ({
       }
     },
     [inputMessage, sendMessage]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSubmit(e);
+      }
+    },
+    [handleSubmit]
   );
 
   const handleIdentityChoice = useCallback(
@@ -124,12 +163,14 @@ export const ChatInterface: React.FC<Props> = ({
       </div>
       <div className="chat-controls">
         <form onSubmit={handleSubmit} className="input-form">
-          <input
-            type="text"
+          <textarea
+            ref={textareaRef}
             value={inputMessage}
-            onChange={e => setInputMessage(e.target.value)}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             placeholder="Type your message..."
             disabled={isLoading}
+            rows={1}
           />
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Sending...' : 'Send'}
