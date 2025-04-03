@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { CoachState, UserProfile, Message } from '../types/apiTypes';
+import { CoachState, UserProfile, Message, CoachResponse } from '../types/apiTypes';
 import { CoachingState } from '../types/enums';
 import { apiClient } from '../api/client';
 import { LoadingBubbles } from './LoadingBubbles';
@@ -12,12 +12,14 @@ interface Props {
   userId: string;
   initialMessages?: Message[];
   initialCoachState?: CoachState;
+  onStateUpdate?: (newState: CoachState, response: CoachResponse) => void;
 }
 
 export const ChatInterface: React.FC<Props> = ({
   userId,
   initialMessages = [],
   initialCoachState,
+  onStateUpdate,
 }) => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [inputMessage, setInputMessage] = useState('');
@@ -68,6 +70,11 @@ export const ChatInterface: React.FC<Props> = ({
         const response = await apiClient.sendMessage(content, coachState);
         setMessages(prev => [...prev, { role: 'assistant', content: response.message }]);
         setCoachState(response.coach_state);
+
+        // Notify parent component about state update if callback provided
+        if (onStateUpdate) {
+          onStateUpdate(response.coach_state, response);
+        }
       } catch (error) {
         console.error('Failed to send message:', error);
         setMessages(prev => [
@@ -78,7 +85,7 @@ export const ChatInterface: React.FC<Props> = ({
         setIsLoading(false);
       }
     },
-    [isLoading, coachState]
+    [isLoading, coachState, onStateUpdate]
   );
 
   const handleSubmit = useCallback(

@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { testStates } from '../tests/testStates';
 import { ChatInterface } from './ChatInterface';
+import { CoachStateVisualizer } from './coach-state-visualizer';
+import { CoachResponse, CoachState } from '../types/apiTypes';
+import '../styles/coach-state-visualizer.css';
 
 export const TestScreen: React.FC = () => {
   const [selectedState, setSelectedState] = useState('');
   const [hasStarted, setHasStarted] = useState(false);
+  // Track current coach state and last response
+  const [currentCoachState, setCurrentCoachState] = useState<CoachState | null>(null);
+  const [lastResponse, setLastResponse] = useState<CoachResponse | null>(null);
 
   const userId = React.useMemo(() => Math.random().toString(36).substring(2, 15), []);
 
+  // Callback to receive updated state from ChatInterface
+  const handleStateUpdate = useCallback((newState: CoachState, response: CoachResponse) => {
+    setCurrentCoachState(newState);
+    setLastResponse(response);
+  }, []);
+
   if (hasStarted) {
+    const initialState = testStates[selectedState].coach_state;
+
     return (
       <div className="test-mode">
         <div className="test-header">
@@ -17,11 +31,24 @@ export const TestScreen: React.FC = () => {
             Back to Test Selection
           </button>
         </div>
-        <ChatInterface
-          userId={userId}
-          initialCoachState={testStates[selectedState].coach_state}
-          initialMessages={testStates[selectedState].coach_state.conversation_history || []}
-        />
+
+        <div className="test-mode-container">
+          <div className="test-mode-chat">
+            <ChatInterface
+              userId={userId}
+              initialCoachState={initialState}
+              initialMessages={initialState.conversation_history || []}
+              onStateUpdate={handleStateUpdate}
+            />
+          </div>
+
+          <div className="test-mode-visualizer">
+            <CoachStateVisualizer
+              coachState={currentCoachState || initialState}
+              lastResponse={lastResponse || undefined}
+            />
+          </div>
+        </div>
       </div>
     );
   }

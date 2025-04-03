@@ -7,11 +7,7 @@ interface MarkdownRendererProps {
 }
 
 const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
-  return (
-    <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-      {content}
-    </ReactMarkdown>
-  );
+  return <ReactMarkdown rehypePlugins={[rehypeRaw]}>{content}</ReactMarkdown>;
 };
 
 export default MarkdownRenderer;
