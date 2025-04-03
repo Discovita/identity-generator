@@ -1,12 +1,14 @@
 """Base model for LLM responses with schema generation."""
 
-from typing import Dict, Any
 import json
+from typing import Any, Dict
+
 from pydantic import BaseModel
+
 
 class LLMResponseModel(BaseModel):
     """Base model for LLM responses that can generate their own schema documentation."""
-    
+
     @classmethod
     def get_openai_schema(cls) -> Dict[str, Any]:
         """Generate OpenAI-compatible JSON schema."""
@@ -19,4 +21,6 @@ class LLMResponseModel(BaseModel):
     def get_prompt_instruction(cls) -> str:
         """Generate prompt instruction with JSON schema."""
         schema_str = json.dumps(cls.get_openai_schema(), indent=2)
-        return f"Please provide your response in the following JSON format:\n{schema_str}"
+        return (
+            f"Please provide your response in the following JSON format:\n{schema_str}"
+        )

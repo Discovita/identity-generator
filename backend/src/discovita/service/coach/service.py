@@ -1,91 +1,60 @@
 """Coaching service implementation."""
 
-from typing import Dict, Any
-
-from .models.state import CoachState, Message
-from .models.action import ProcessMessageResult, Action
-from .models.llm import CoachLLMResponse
-from .prompt.manager import PromptManager
+from ..openai.core import OpenAIService
 from .actions.definitions import get_available_actions
 from .actions.handler import apply_actions
-from ..openai.client.client import OpenAIClient
-from ..openai.client.operations.responses.responses import ResponseInput, ResponseTools
+from .models.action import ProcessMessageResult
+from .models.llm import CoachLLMResponse
+from .models.state import CoachState, Message
+from .prompt.manager import PromptManager
+
 
 class CoachService:
-    """Service for handling coaching interactions."""
-    
-    def __init__(
-        self,
-        client: OpenAIClient,
-        prompt_manager: PromptManager
-    ):
+    """
+    Service for handling coaching interactions.
+
+    This service processes user messages, generates coach responses using OpenAI,
+    and applies any actions returned by the LLM to update the coaching state.
+    """
+
+    def __init__(self, client: OpenAIService, prompt_manager: PromptManager):
         self.client = client
         self.prompt_manager = prompt_manager
-    
+
     async def process_message(
-        self, 
-        message: str, 
-        state: CoachState
+        self, message: str, state: CoachState
     ) -> ProcessMessageResult:
         """Process a user message and update the coaching state."""
-        # Add user message to history
-        state.conversation_history.append(
-            Message(role="user", content=message)
-        )
-        
-        # Get LLM response
-        # Convert conversation history to messages with correct roles
-        messages = []
-        
-        # For the first message, combine system prompt with user message
-        first_user_msg = next(
-            (msg for msg in state.conversation_history if msg.role == "user"),
-            None
-        )
-        
-        # Get the system prompt
+        state.conversation_history.append(Message(role="user", content=message))
         system_prompt = self.prompt_manager.get_prompt(state)
-        
-        if first_user_msg:
-            combined_content = f"{system_prompt}\n\nUser message: {first_user_msg.content}"
-            messages.append({"role": "user", "content": combined_content})
-            
-            # Add remaining messages
-            remaining = False
-            for msg in state.conversation_history:
-                if msg == first_user_msg:
-                    remaining = True
-                    continue
-                if remaining:
-                    role = "assistant" if msg.role == "coach" else msg.role
-                    messages.append({"role": role, "content": msg.content})
-        
-        # Get structured completion
-        input_data = ResponseInput.from_dict_list(messages)
-        
-        # Get structured response from LLM
-        response = await self.client.get_structured_response_with_responses(
-            input_data=input_data,
-            response_model=CoachLLMResponse
+        formatted_messages = self.client.create_messages(
+            system_message=system_prompt, messages=state.conversation_history
         )
-        
-        if not response.is_valid or not response.parsed:
-            raise ValueError(f"Failed to parse LLM response: {response.error}")
-            
-        llm_response = response.parsed
-        
+        print(CoachLLMResponse.model_json_schema())
+
+        response = self.client.create_structured_chat_completion(
+            model="gpt-4o-2024-08-06",
+            messages=formatted_messages,
+            response_format=CoachLLMResponse,
+        )
+
+        if not response or not hasattr(response.choices[0].message, "parsed"):
+            raise ValueError(f"Failed to parse LLM response")
+
+        llm_response = response.choices[0].message.parsed
+
         # Apply actions
         new_state = apply_actions(state, llm_response.actions)
-        
+
         # Add coach response to history
         new_state.conversation_history.append(
             Message(role="coach", content=llm_response.message)
         )
-        
+
         # Construct final result with updated state
         return ProcessMessageResult(
             message=llm_response.message,
             state=new_state,
             actions=llm_response.actions,
-            final_prompt=system_prompt
+            final_prompt=system_prompt,
         )
