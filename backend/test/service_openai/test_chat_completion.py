@@ -8,7 +8,7 @@ including basic text completions, parameter handling, and error handling.
 from unittest.mock import ANY, MagicMock, patch
 
 import pytest
-from discovita.service.openai_service import AIModel, OpenAIService
+from discovita.service.openai import AIModel, OpenAIService
 from openai._types import NOT_GIVEN
 
 
@@ -37,7 +37,7 @@ class TestChatCompletion:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -80,7 +80,7 @@ class TestChatCompletion:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -116,7 +116,7 @@ class TestChatCompletion:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -150,7 +150,7 @@ class TestChatCompletion:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -195,7 +195,7 @@ class TestChatCompletion:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -229,7 +229,7 @@ class TestChatCompletion:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -264,7 +264,7 @@ class TestChatCompletion:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -294,7 +294,7 @@ class TestChatCompletion:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -304,7 +304,7 @@ class TestChatCompletion:
 
             # Call create_chat_completion with max_tokens (should be mapped to max_completion_tokens for o3-mini)
             with patch(
-                "discovita.service.openai_service.utils.model_utils.AIModel.get_token_param_name",
+                "discovita.service.openai.utils.model_utils.AIModel.get_token_param_name",
                 return_value="max_completion_tokens",
             ):
                 response = service.create_chat_completion(

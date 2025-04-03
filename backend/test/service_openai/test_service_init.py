@@ -10,7 +10,7 @@ import os
 from unittest.mock import MagicMock, patch
 
 import pytest
-from discovita.service.openai_service import OpenAIService
+from discovita.service.openai import OpenAIService
 
 
 class TestServiceInitialization:
@@ -29,7 +29,7 @@ class TestServiceInitialization:
         This test verifies that the OpenAI client is initialized with
         the provided API key.
         """
-        with patch("discovita.service.openai_service.core.base.OpenAI") as mock_openai:
+        with patch("discovita.service.openai.core.base.OpenAI") as mock_openai:
             service = OpenAIService(api_key="test_api_key")
             mock_openai.assert_called_once_with(
                 api_key="test_api_key", organization=None
@@ -42,7 +42,7 @@ class TestServiceInitialization:
         This test verifies that the OpenAI client is initialized with
         both the provided API key and organization.
         """
-        with patch("discovita.service.openai_service.core.base.OpenAI") as mock_openai:
+        with patch("discovita.service.openai.core.base.OpenAI") as mock_openai:
             service = OpenAIService(api_key="test_api_key", organization="test_org")
             mock_openai.assert_called_once_with(
                 api_key="test_api_key", organization="test_org"
@@ -56,7 +56,7 @@ class TestServiceInitialization:
         version of the OpenAI package, and that the warning can be muted.
         """
         # Import the actual OPENAI_VERSION constant
-        from discovita.service.openai_service.utils.model_utils import OPENAI_VERSION
+        from discovita.service.openai.utils.model_utils import OPENAI_VERSION
 
         # Create a custom version function for mocking
         def mock_version_func(package_name):
@@ -65,12 +65,12 @@ class TestServiceInitialization:
             return "1.0.0"  # Default for other packages
 
         with (
-            patch("discovita.service.openai_service.core.base.OpenAI"),
+            patch("discovita.service.openai.core.base.OpenAI"),
             patch(
-                "discovita.service.openai_service.utils.model_utils.version",
+                "discovita.service.openai.utils.model_utils.version",
                 side_effect=mock_version_func,
             ),
-            patch("discovita.service.openai_service.utils.model_utils.log") as mock_log,
+            patch("discovita.service.openai.utils.model_utils.log") as mock_log,
             patch.dict(os.environ, {"MUTE_OPENAI_HELPER_WARNING": "False"}),
         ):
 
@@ -94,7 +94,7 @@ class TestServiceInitialization:
         version of the OpenAI package.
         """
         # Import the actual OPENAI_VERSION constant
-        from discovita.service.openai_service.utils.model_utils import OPENAI_VERSION
+        from discovita.service.openai.utils.model_utils import OPENAI_VERSION
 
         # Create a custom version function that returns the expected version
         def mock_version_func(package_name):
@@ -103,12 +103,12 @@ class TestServiceInitialization:
             return "1.0.0"  # Default for other packages
 
         with (
-            patch("discovita.service.openai_service.core.base.OpenAI"),
+            patch("discovita.service.openai.core.base.OpenAI"),
             patch(
-                "discovita.service.openai_service.utils.model_utils.version",
+                "discovita.service.openai.utils.model_utils.version",
                 side_effect=mock_version_func,
             ),
-            patch("discovita.service.openai_service.utils.model_utils.log") as mock_log,
+            patch("discovita.service.openai.utils.model_utils.log") as mock_log,
         ):
 
             # Initialize the service, which should trigger the version check

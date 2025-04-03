@@ -10,7 +10,7 @@ import os
 from unittest.mock import MagicMock, patch
 
 import pytest
-from discovita.service.openai_service import OpenAIService
+from discovita.service.openai import OpenAIService
 
 
 class TestMessageCreation:
@@ -30,7 +30,7 @@ class TestMessageCreation:
         This test verifies that the create_messages method creates
         a list with a single user message when only a prompt is provided.
         """
-        with patch("discovita.service.openai_service.core.base.OpenAI"):
+        with patch("discovita.service.openai.core.base.OpenAI"):
             service = OpenAIService(api_key="test_api_key")
 
             messages = service.create_messages(prompt="Hello world")
@@ -47,7 +47,7 @@ class TestMessageCreation:
         a list with a system message followed by a user message when
         both a system message and a prompt are provided.
         """
-        with patch("discovita.service.openai_service.core.base.OpenAI"):
+        with patch("discovita.service.openai.core.base.OpenAI"):
             service = OpenAIService(api_key="test_api_key")
 
             messages = service.create_messages(
@@ -67,7 +67,7 @@ class TestMessageCreation:
         This test verifies that a message with an image is created
         correctly with the user role and a multimodal content structure.
         """
-        with patch("discovita.service.openai_service.core.base.OpenAI"):
+        with patch("discovita.service.openai.core.base.OpenAI"):
             service = OpenAIService(api_key="test_api_key")
 
             message = service.create_messages(
@@ -100,7 +100,7 @@ class TestMessageCreation:
         This test verifies that a message with multiple images is created
         correctly with the user role and a multimodal content structure.
         """
-        with patch("discovita.service.openai_service.core.base.OpenAI"):
+        with patch("discovita.service.openai.core.base.OpenAI"):
             service = OpenAIService(api_key="test_api_key")
 
             # Create a message with multiple images
@@ -142,7 +142,7 @@ class TestMessageCreation:
         This test verifies that a message with an image URL is created
         correctly with the user role and a multimodal content structure.
         """
-        with patch("discovita.service.openai_service.core.base.OpenAI"):
+        with patch("discovita.service.openai.core.base.OpenAI"):
             service = OpenAIService(api_key="test_api_key")
 
             image_url = "https://example.com/image.jpg"
@@ -173,7 +173,7 @@ class TestMessageCreation:
         This test verifies that the create_messages method correctly
         creates a sequence of messages including text and image messages.
         """
-        with patch("discovita.service.openai_service.core.base.OpenAI"):
+        with patch("discovita.service.openai.core.base.OpenAI"):
             service = OpenAIService(api_key="test_api_key")
 
             # Create a system message and a user message with an image

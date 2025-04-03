@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional
 from unittest.mock import MagicMock, patch
 
 import pytest
-from discovita.service.openai_service import AIModel, OpenAIService
+from discovita.service.openai import AIModel, OpenAIService
 from pydantic import BaseModel, Field
 
 
@@ -36,7 +36,7 @@ class TestStructuredOutputs:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -76,7 +76,7 @@ class TestStructuredOutputs:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -145,7 +145,7 @@ class TestStructuredOutputs:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")

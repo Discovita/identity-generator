@@ -36,10 +36,10 @@ The Coach Service is a sophisticated AI-powered coaching system designed to help
 
 ```python
 from discovita.service.coach.service import CoachService
-from discovita.service.openai.client.client import OpenAIClient
+from discovita.service.openai.core import OpenAIService
 
 # Initialize the service
-client = OpenAIClient()
+client = OpenAIService()
 coach_service = CoachService(client)
 ```
 

@@ -44,7 +44,7 @@ pytest tests/test_ai_models.py
 To run with coverage report:
 
 ```bash
-pytest --cov=discovita.service.openai_service
+pytest --cov=discovita.service.openai
 ```
 
 ## API-Dependent Tests

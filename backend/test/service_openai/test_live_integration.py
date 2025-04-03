@@ -14,7 +14,7 @@ import tempfile
 from typing import Any, Dict, List, Optional
 
 import pytest
-from discovita.service.openai_service import AIModel, OpenAIService
+from discovita.service.openai import AIModel, OpenAIService
 from pydantic import BaseModel, Field
 
 # Mark all tests in this module with the 'requires_api' mark
@@ -23,7 +23,7 @@ pytestmark = pytest.mark.requires_api
 
 # Define a fixture to check if an API key is available
 @pytest.fixture(scope="module")
-def openai_service():
+def openai():
     """
     Create an OpenAIService instance for live testing.
 
@@ -48,16 +48,16 @@ class TestLiveIntegration:
     be run when explicitly enabled.
     """
 
-    def test_basic_chat_completion(self, openai_service):
+    def test_basic_chat_completion(self, openai):
         """
         Test basic chat completion with the live API.
 
         This test verifies that a simple chat completion request
         is processed correctly by the OpenAI API.
         """
-        messages = openai_service.create_messages(prompt="Hello, how are you?")
+        messages = openai.create_messages(prompt="Hello, how are you?")
 
-        response = openai_service.create_chat_completion(
+        response = openai.create_chat_completion(
             messages=messages, model="gpt-3.5-turbo"  # Use a cheaper model for testing
         )
 
@@ -65,18 +65,18 @@ class TestLiveIntegration:
         assert isinstance(response, str)
         assert len(response) > 0
 
-    def test_json_mode(self, openai_service):
+    def test_json_mode(self, openai):
         """
         Test JSON mode with the live API.
 
         This test verifies that a chat completion request with
         JSON mode is processed correctly by the OpenAI API.
         """
-        messages = openai_service.create_messages(
+        messages = openai.create_messages(
             prompt="List 3 colors as a JSON array with 'colors' as the key"
         )
 
-        response = openai_service.create_chat_completion(
+        response = openai.create_chat_completion(
             messages=messages,
             model="gpt-3.5-turbo",  # Use a cheaper model for testing
             json_mode=True,
@@ -88,7 +88,7 @@ class TestLiveIntegration:
         assert isinstance(response["colors"], list)
         assert len(response["colors"]) == 3
 
-    def test_structured_output(self, openai_service):
+    def test_structured_output(self, openai):
         """
         Test structured output with the live API.
 
@@ -104,11 +104,11 @@ class TestLiveIntegration:
                 description="A list of color names", min_length=3, max_length=3
             )
 
-        messages = openai_service.create_messages(
+        messages = openai.create_messages(
             prompt="List exactly 3 colors. Respond in JSON format."
         )
 
-        response = openai_service.create_chat_completion(
+        response = openai.create_chat_completion(
             messages=messages,
             model="gpt-4o",  # Use a model that supports JSON mode
             response_format={"type": "json_object"},
@@ -130,7 +130,7 @@ class TestLiveIntegration:
         assert isinstance(color_list.colors, list)
         assert len(color_list.colors) == 3
 
-    def test_image_input(self, openai_service):
+    def test_image_input(self, openai):
         """
         Test image input with the live API.
 
@@ -146,11 +146,11 @@ class TestLiveIntegration:
             tmp_path = tmp.name
 
         try:
-            messages = openai_service.create_messages(
+            messages = openai.create_messages(
                 prompt="What's in this image?", images=[tmp_path]
             )
 
-            response = openai_service.create_chat_completion(
+            response = openai.create_chat_completion(
                 messages=messages,
                 model="gpt-4o",  # Use the current multi-modal model
             )
@@ -163,17 +163,17 @@ class TestLiveIntegration:
             if os.path.exists(tmp_path):
                 os.unlink(tmp_path)
 
-    def test_streaming_response(self, openai_service):
+    def test_streaming_response(self, openai):
         """
         Test streaming response with the live API.
 
         This test verifies that a streaming response is processed
         correctly by the OpenAI API.
         """
-        messages = openai_service.create_messages(prompt="Count from 1 to 5")
+        messages = openai.create_messages(prompt="Count from 1 to 5")
 
         # Get the streaming response
-        stream = openai_service.create_chat_completion(
+        stream = openai.create_chat_completion(
             messages=messages,
             model="gpt-3.5-turbo",  # Use a cheaper model for testing
             stream=True,

@@ -14,13 +14,13 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
-from discovita.service.openai_service import OpenAIService
-from discovita.service.openai_service.core.image.response import process_image_response
-from discovita.service.openai_service.core.image.utils import save_generated_image
-from discovita.service.openai_service.core.image.validation import (
+from discovita.service.openai import OpenAIService
+from discovita.service.openai.core.image.response import process_image_response
+from discovita.service.openai.core.image.utils import save_generated_image
+from discovita.service.openai.core.image.validation import (
     validate_and_process_image_params,
 )
-from discovita.service.openai_service.models.image import (
+from discovita.service.openai.models.image import (
     ImageModel,
     ImageQuality,
     ImageResponseFormat,
@@ -226,9 +226,9 @@ class TestImageGenerationMixin:
     """Tests for the ImageGenerationMixin class."""
 
     @patch(
-        "discovita.service.openai_service.core.image.mixin.validate_and_process_image_params"
+        "discovita.service.openai.core.image.mixin.validate_and_process_image_params"
     )
-    @patch("discovita.service.openai_service.core.image.mixin.process_image_response")
+    @patch("discovita.service.openai.core.image.mixin.process_image_response")
     def test_generate_image(self, mock_process, mock_validate):
         """Test the generate_image method with mocked dependencies."""
         # Setup mocks
@@ -260,7 +260,7 @@ class TestImageGenerationMixin:
     def test_encode_image_for_api(self):
         """Test the encode_image_for_api method."""
         with patch(
-            "discovita.service.openai_service.core.image.mixin.encode_image"
+            "discovita.service.openai.core.image.mixin.encode_image"
         ) as mock_encode:
             mock_encode.return_value = "base64encoded"
 
@@ -348,7 +348,7 @@ class TestImageGenerationIntegration:
         service.client = self.mock_client  # Replace the client directly
 
         with patch(
-            "discovita.service.openai_service.core.image.utils.base64.b64decode"
+            "discovita.service.openai.core.image.utils.base64.b64decode"
         ) as mock_decode:
             mock_decode.return_value = b"test image data"
 

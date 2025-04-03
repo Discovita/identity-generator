@@ -6,7 +6,7 @@ identification, feature detection, and parameter validation.
 """
 
 import pytest
-from discovita.service.openai_service import AIModel, AIProvider
+from discovita.service.openai import AIModel, AIProvider
 
 
 class TestAIProvider:

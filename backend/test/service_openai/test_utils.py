@@ -11,9 +11,9 @@ import tempfile
 from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
-from discovita.service.openai_service import AIModel
-from discovita.service.openai_service.utils.image import encode_image
-from discovita.service.openai_service.utils.model_utils import (
+from discovita.service.openai import AIModel
+from discovita.service.openai.utils.image import encode_image
+from discovita.service.openai.utils.model_utils import (
     check_dependency_versions,
     filter_unsupported_parameters,
 )
@@ -120,14 +120,12 @@ class TestModelUtils:
         correctly identifies compatible and incompatible versions.
         """
         # Import the actual OPENAI_VERSION constant
-        from discovita.service.openai_service.utils.model_utils import OPENAI_VERSION
+        from discovita.service.openai.utils.model_utils import OPENAI_VERSION
 
         # Test with matching version
         with (
-            patch(
-                "discovita.service.openai_service.utils.model_utils.version"
-            ) as mock_version,
-            patch("discovita.service.openai_service.utils.model_utils.log") as mock_log,
+            patch("discovita.service.openai.utils.model_utils.version") as mock_version,
+            patch("discovita.service.openai.utils.model_utils.log") as mock_log,
         ):
             mock_version.side_effect = lambda package: (
                 OPENAI_VERSION if package == "openai" else "1.0.0"
@@ -140,10 +138,8 @@ class TestModelUtils:
 
         # Test with non-matching version
         with (
-            patch(
-                "discovita.service.openai_service.utils.model_utils.version"
-            ) as mock_version,
-            patch("discovita.service.openai_service.utils.model_utils.log") as mock_log,
+            patch("discovita.service.openai.utils.model_utils.version") as mock_version,
+            patch("discovita.service.openai.utils.model_utils.log") as mock_log,
             patch.dict(os.environ, {"MUTE_OPENAI_HELPER_WARNING": "False"}),
         ):
             mock_version.side_effect = lambda package: (
@@ -157,10 +153,8 @@ class TestModelUtils:
 
         # Test with muted warnings
         with (
-            patch(
-                "discovita.service.openai_service.utils.model_utils.version"
-            ) as mock_version,
-            patch("discovita.service.openai_service.utils.model_utils.log") as mock_log,
+            patch("discovita.service.openai.utils.model_utils.version") as mock_version,
+            patch("discovita.service.openai.utils.model_utils.log") as mock_log,
             patch.dict(os.environ, {"MUTE_OPENAI_HELPER_WARNING": "True"}),
         ):
             mock_version.side_effect = lambda package: (

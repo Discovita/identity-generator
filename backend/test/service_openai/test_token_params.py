@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
-from discovita.service.openai_service import AIModel, OpenAIService
+from discovita.service.openai import AIModel, OpenAIService
 
 
 class TestTokenParams:
@@ -32,7 +32,7 @@ class TestTokenParams:
     @pytest.fixture
     def helper(self, mock_client):
         """Create an OpenAIService instance with a mocked client."""
-        with patch("discovita.service.openai_service.core.base.OpenAI"):
+        with patch("discovita.service.openai.core.base.OpenAI"):
             helper = OpenAIService(api_key="fake_key", organization="fake_org")
             helper.client = mock_client
             return helper
@@ -98,7 +98,7 @@ class TestTokenParams:
         # This simulates what happens after error handling where process_chat_completion_response
         # extracts the message content
         with patch(
-            "discovita.service.openai_service.core.chat.generic.error_handlers.handle_token_parameter_error"
+            "discovita.service.openai.core.chat.generic.error_handlers.handle_token_parameter_error"
         ) as mock_handler:
             # Set up the mock handler to return the content directly
             mock_handler.return_value = "test response after recovery"

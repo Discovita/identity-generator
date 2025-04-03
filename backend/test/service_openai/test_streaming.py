@@ -10,8 +10,8 @@ from typing import Generator, List, Tuple
 from unittest.mock import MagicMock, PropertyMock, patch
 
 import pytest
-from discovita.service.openai_service import OpenAIService
-from discovita.service.openai_service.models.openai_compatibility import Stream
+from discovita.service.openai import OpenAIService
+from discovita.service.openai.models.openai_compatibility import Stream
 from openai.types.chat import ParsedChatCompletion
 from pydantic import BaseModel, Field
 
@@ -38,7 +38,7 @@ class TestStreaming:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -114,7 +114,7 @@ class TestStreaming:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -191,7 +191,7 @@ class TestStreaming:
 
         # Mock the function to return our generator directly
         with patch(
-            "discovita.service.openai_service.core.chat.structured.stream_with_final.stream_structured_completion_with_final",
+            "discovita.service.openai.core.chat.structured.stream_with_final.stream_structured_completion_with_final",
             side_effect=lambda *args, **kwargs: mock_generator_factory(),
         ):
 
@@ -247,7 +247,7 @@ class TestStreaming:
 
         # Create service with the mocked client
         with patch(
-            "discovita.service.openai_service.core.base.OpenAI",
+            "discovita.service.openai.core.base.OpenAI",
             return_value=mock_openai_client,
         ):
             service = OpenAIService(api_key="test_api_key")
@@ -293,7 +293,7 @@ class TestStreaming:
 
         # Set up the mocks
         with patch(
-            "discovita.service.openai_service.core.chat.structured.stream_completion.get_token_param_name"
+            "discovita.service.openai.core.chat.structured.stream_completion.get_token_param_name"
         ) as mock_token_name:
             # First return max_tokens, then on retry it will use max_completion_tokens
             mock_token_name.return_value = "max_tokens"

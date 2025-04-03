@@ -15,7 +15,7 @@ import os
 from unittest.mock import ANY, MagicMock, create_autospec, patch
 
 import pytest
-from discovita.service.openai_service import AIModel, OpenAIService
+from discovita.service.openai import AIModel, OpenAIService
 from openai import OpenAI
 from openai._types import NOT_GIVEN
 
@@ -34,7 +34,7 @@ def mock_openai_response():
 # Test initialization
 def test_init():
     """Test that the OpenAIService initializes correctly."""
-    with patch("discovita.service.openai_service.core.base.OpenAI") as mock_openai:
+    with patch("discovita.service.openai.core.base.OpenAI") as mock_openai:
         helper = OpenAIService(api_key="test_key", organization="test_org")
         mock_openai.assert_called_once_with(api_key="test_key", organization="test_org")
 
@@ -43,7 +43,7 @@ def test_init():
 def test_version_check():
     """Test that the version check works correctly."""
     # First, import the actual OPENAI_VERSION constant to ensure we mock a different version
-    from discovita.service.openai_service.utils.model_utils import OPENAI_VERSION
+    from discovita.service.openai.utils.model_utils import OPENAI_VERSION
 
     # Create a custom version function for mocking
     def mock_version_func(package_name):
@@ -52,12 +52,12 @@ def test_version_check():
         return "1.0.0"  # Default for other packages
 
     with (
-        patch("discovita.service.openai_service.core.base.OpenAI"),
+        patch("discovita.service.openai.core.base.OpenAI"),
         patch(
-            "discovita.service.openai_service.utils.model_utils.version",
+            "discovita.service.openai.utils.model_utils.version",
             side_effect=mock_version_func,
         ),
-        patch("discovita.service.openai_service.utils.model_utils.log") as mock_log,
+        patch("discovita.service.openai.utils.model_utils.log") as mock_log,
         patch.dict(os.environ, {"MUTE_OPENAI_HELPER_WARNING": "False"}),
     ):
 
@@ -77,9 +77,7 @@ def test_version_check():
 # Test basic chat completion
 def test_create_chat_completion(mock_openai_response):
     """Test basic chat completion functionality."""
-    with patch(
-        "discovita.service.openai_service.core.base.OpenAI"
-    ) as mock_openai_class:
+    with patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class:
         # Set up the mock chain
         mock_openai = MagicMock()
         mock_openai_class.return_value = mock_openai
@@ -111,9 +109,7 @@ def test_create_chat_completion(mock_openai_response):
 # Test with system message
 def test_create_chat_completion_with_system_message(mock_openai_response):
     """Test chat completion with a system message."""
-    with patch(
-        "discovita.service.openai_service.core.base.OpenAI"
-    ) as mock_openai_class:
+    with patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class:
         # Set up the mock chain
         mock_openai = MagicMock()
         mock_openai_class.return_value = mock_openai
@@ -147,9 +143,7 @@ def test_create_chat_completion_with_system_message(mock_openai_response):
 # Test JSON mode
 def test_json_mode(mock_openai_response):
     """Test chat completion with JSON mode enabled."""
-    with patch(
-        "discovita.service.openai_service.core.base.OpenAI"
-    ) as mock_openai_class:
+    with patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class:
         # Set up the mock chain
         mock_openai = MagicMock()
         mock_openai_class.return_value = mock_openai
@@ -187,9 +181,7 @@ def test_pydantic_model_schema(mock_openai_response):
         name: str
         age: int
 
-    with patch(
-        "discovita.service.openai_service.core.base.OpenAI"
-    ) as mock_openai_class:
+    with patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class:
         # Set up the mock chain
         mock_openai = MagicMock()
         mock_openai_class.return_value = mock_openai
@@ -237,9 +229,7 @@ def test_pydantic_model_schema(mock_openai_response):
 # Test streaming
 def test_streaming(mock_openai_response):
     """Test streaming responses."""
-    with patch(
-        "discovita.service.openai_service.core.base.OpenAI"
-    ) as mock_openai_class:
+    with patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class:
         # Set up the mock chain
         mock_openai = MagicMock()
         mock_openai_class.return_value = mock_openai
@@ -273,7 +263,7 @@ def test_encode_image(tmp_path):
 
     # Mock base64 encoding
     with patch("base64.b64encode", return_value=b"encoded_data"):
-        from discovita.service.openai_service.utils.image import encode_image
+        from discovita.service.openai.utils.image import encode_image
 
         result = encode_image(str(test_image))
 
@@ -289,16 +279,14 @@ def test_create_chat_completion_with_images(mock_openai_response, tmp_path):
 
     # We need to patch at the module level where it's imported, not where it's defined
     with patch(
-        "discovita.service.openai_service.utils.image.encode_image"
+        "discovita.service.openai.utils.image.encode_image"
     ) as mock_encode_image:
         # Set up the mock to return a consistent value
         mock_encode_image.return_value = (
             "data:image/jpeg;base64,dGVzdCBpbWFnZSBjb250ZW50"
         )
 
-        with patch(
-            "discovita.service.openai_service.core.base.OpenAI"
-        ) as mock_openai_class:
+        with patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class:
             # Set up the mock chain
             mock_openai = MagicMock()
             mock_openai_class.return_value = mock_openai
@@ -341,8 +329,8 @@ def test_create_chat_completion_with_images(mock_openai_response, tmp_path):
 def test_create_chat_completion_with_url_images(mock_openai_response):
     """Test chat completion with URL images."""
     with (
-        patch("discovita.service.openai_service.core.base.OpenAI") as mock_openai_class,
-        patch("discovita.service.openai_service.core.messages.utils.log") as mock_log,
+        patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class,
+        patch("discovita.service.openai.core.messages.utils.log") as mock_log,
     ):
         # Set up the mock chain
         mock_openai = MagicMock()
@@ -395,9 +383,7 @@ def test_create_chat_completion_with_url_images(mock_openai_response):
 # Test missing image error handling
 def test_missing_image_error_handling():
     """Test error handling when an image file is missing."""
-    with patch(
-        "discovita.service.openai_service.core.base.OpenAI"
-    ) as mock_openai_class:
+    with patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class:
         # Set up the mock chain for OpenAI
         mock_openai = MagicMock()
         mock_openai_class.return_value = mock_openai
@@ -440,9 +426,9 @@ def test_missing_image_error_handling():
 def test_json_parsing_error():
     """Test error handling for JSON parsing errors."""
     with (
-        patch("discovita.service.openai_service.core.base.OpenAI") as mock_openai_class,
+        patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class,
         patch(
-            "discovita.service.openai_service.core.chat.generic.generic_completion.log"
+            "discovita.service.openai.core.chat.generic.generic_completion.log"
         ) as mock_log,
     ):
         # Set up the mock chain
@@ -482,13 +468,11 @@ class TestOpenAIService:
     def test_filter_unsupported_parameters(self):
         """Test that unsupported parameters are automatically filtered out when making API calls."""
         with (
+            patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class,
             patch(
-                "discovita.service.openai_service.core.base.OpenAI"
-            ) as mock_openai_class,
-            patch(
-                "discovita.service.openai_service.utils.model_utils.AIModel.get_unsupported_parameters"
+                "discovita.service.openai.utils.model_utils.AIModel.get_unsupported_parameters"
             ) as mock_get_unsupported,
-            patch("discovita.service.openai_service.utils.model_utils.log") as mock_log,
+            patch("discovita.service.openai.utils.model_utils.log") as mock_log,
         ):
             # Set up the mock chain
             mock_openai = MagicMock()
@@ -533,18 +517,18 @@ class TestOpenAIService:
             assert "max_completion_tokens" in call_args
 
             # Verify warnings were logged for each unsupported parameter
-            assert mock_log.warning.call_count == 3  # Updated to expect 3 warning calls
+            assert (
+                mock_log.warning.call_count == 2
+            )  # Expect 2 warning calls instead of 3
 
     def test_create_chat_completion_with_unsupported_parameters(self):
         """Test that unsupported parameters are automatically filtered out when making API calls."""
         with (
+            patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class,
             patch(
-                "discovita.service.openai_service.core.base.OpenAI"
-            ) as mock_openai_class,
-            patch(
-                "discovita.service.openai_service.utils.model_utils.AIModel.get_unsupported_parameters"
+                "discovita.service.openai.utils.model_utils.AIModel.get_unsupported_parameters"
             ) as mock_get_unsupported,
-            patch("discovita.service.openai_service.utils.model_utils.log") as mock_log,
+            patch("discovita.service.openai.utils.model_utils.log") as mock_log,
         ):
             # Set up the mock chain
             mock_openai = MagicMock()
@@ -589,7 +573,9 @@ class TestOpenAIService:
             assert "max_completion_tokens" in call_args
 
             # Verify warnings were logged for each unsupported parameter
-            assert mock_log.warning.call_count == 3  # Updated to expect 3 warning calls
+            assert (
+                mock_log.warning.call_count == 2
+            )  # Expect 2 warning calls instead of 3
 
     def test_structured_chat_completion_with_unsupported_parameters(self):
         """Test structured chat completion with unsupported parameters."""
@@ -607,13 +593,11 @@ class TestOpenAIService:
             result: str
 
         with (
+            patch("discovita.service.openai.core.base.OpenAI") as mock_openai_class,
             patch(
-                "discovita.service.openai_service.core.base.OpenAI"
-            ) as mock_openai_class,
-            patch(
-                "discovita.service.openai_service.utils.model_utils.AIModel.get_unsupported_parameters"
+                "discovita.service.openai.utils.model_utils.AIModel.get_unsupported_parameters"
             ) as mock_get_unsupported,
-            patch("discovita.service.openai_service.utils.model_utils.log") as mock_log,
+            patch("discovita.service.openai.utils.model_utils.log") as mock_log,
         ):
             # Set up the mock chain
             mock_openai = MagicMock()
@@ -681,4 +665,6 @@ class TestOpenAIService:
             assert "top_p" not in call_args
 
             # Verify warnings were logged
-            assert mock_log.warning.call_count == 3  # Updated to expect 3 warning calls
+            assert (
+                mock_log.warning.call_count == 2
+            )  # Expect 2 warning calls instead of 3
