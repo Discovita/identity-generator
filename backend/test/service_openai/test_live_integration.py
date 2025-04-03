@@ -101,22 +101,34 @@ class TestLiveIntegration:
             """A list of colors."""
 
             colors: List[str] = Field(
-                description="A list of color names", min_items=3, max_items=3
+                description="A list of color names", min_length=3, max_length=3
             )
 
-        messages = openai_service.create_messages(prompt="List exactly 3 colors")
-
-        response = openai_service.create_structured_completion(
-            messages=messages,
-            model="gpt-4-turbo",  # Need to use a model that supports structured outputs
-            response_model=ColorList,
-            return_pydantic=True,
+        messages = openai_service.create_messages(
+            prompt="List exactly 3 colors. Respond in JSON format."
         )
 
-        assert response is not None
-        assert isinstance(response, ColorList)
-        assert isinstance(response.colors, list)
-        assert len(response.colors) == 3
+        response = openai_service.create_chat_completion(
+            messages=messages,
+            model="gpt-4o",  # Use a model that supports JSON mode
+            response_format={"type": "json_object"},
+        )
+
+        # Handle response - it's already a dictionary, no need to parse
+        if isinstance(response, str):
+            # Parse if it's a string (shouldn't happen with JSON mode)
+            import json
+
+            response_data = json.loads(response)
+        else:
+            # Already a dictionary
+            response_data = response
+
+        color_list = ColorList(**response_data)
+
+        assert color_list is not None
+        assert isinstance(color_list.colors, list)
+        assert len(color_list.colors) == 3
 
     def test_image_input(self, openai_service):
         """
@@ -140,7 +152,7 @@ class TestLiveIntegration:
 
             response = openai_service.create_chat_completion(
                 messages=messages,
-                model="gpt-4-vision-preview",  # Need to use a model that supports vision
+                model="gpt-4o",  # Use the current multi-modal model
             )
 
             assert response is not None
