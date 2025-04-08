@@ -7,8 +7,9 @@ This mixin provides methods for generating images using OpenAI's DALL-E models.
 import logging
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from ...models.image import ImageModel, ImageSize
-from ...utils.image import encode_image
+from discovita.service.openai.models.image import ImageModel, ImageSize
+from discovita.service.openai.utils.image import encode_image
+
 from .response import process_image_response
 from .utils import save_generated_image
 from .validation import validate_and_process_image_params

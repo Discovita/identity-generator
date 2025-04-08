@@ -8,16 +8,18 @@ using the OpenAI API, with Pydantic model parsing support.
 import logging
 from typing import Dict, Iterable, List, Optional, Type, Union
 
+from discovita.service.openai.models.openai_compatibility import NOT_GIVEN, NotGiven
+from discovita.service.openai.models.response_types import ResponseFormatT
+from discovita.service.openai.utils.model_utils import (
+    filter_unsupported_parameters,
+    get_token_param_name,
+)
 from openai.types.chat import (
     ChatCompletionMessageParam,
     ChatCompletionToolChoiceOptionParam,
     ChatCompletionToolParam,
     ParsedChatCompletion,
 )
-
-from ....models.openai_compatibility import NOT_GIVEN, NotGiven
-from ....models.response_types import ResponseFormatT
-from ....utils.model_utils import filter_unsupported_parameters, get_token_param_name
 
 log = logging.getLogger(__name__)
 

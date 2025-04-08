@@ -15,6 +15,7 @@ from typing import (
     Union,
 )
 
+from discovita.service.openai.models.openai_compatibility import NOT_GIVEN, NotGiven
 from openai.types.chat import (
     ChatCompletionMessageParam,
     ChatCompletionToolChoiceOptionParam,
@@ -23,7 +24,6 @@ from openai.types.chat import (
 )
 from pydantic import BaseModel
 
-from ....models.openai_compatibility import NOT_GIVEN, NotGiven
 from .structured_completion import (
     create_structured_chat_completion as create_structured_chat_completion_impl,
 )

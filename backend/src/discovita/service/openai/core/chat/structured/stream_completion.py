@@ -5,20 +5,28 @@ This module provides the core streaming function for structured chat completions
 using the OpenAI API, with Pydantic model parsing support.
 """
 
-from typing import List, Optional, Dict, Union, Iterable, Type, Generator, Tuple
+import logging
+from typing import Dict, Generator, Iterable, List, Optional, Tuple, Type, Union
+
 from openai.types.chat import (
-    ParsedChatCompletion,
     ChatCompletionMessageParam,
     ChatCompletionToolChoiceOptionParam,
     ChatCompletionToolParam,
+    ParsedChatCompletion,
 )
-import logging
 
 log = logging.getLogger(__name__)
 
-from ....models.openai_compatibility import NotGiven, NOT_GIVEN, Stream
-from ....utils.model_utils import get_token_param_name, filter_unsupported_parameters
-from ....models.response_types import ResponseFormatT
+from discovita.service.openai.models.openai_compatibility import (
+    NOT_GIVEN,
+    NotGiven,
+    Stream,
+)
+from discovita.service.openai.models.response_types import ResponseFormatT
+from discovita.service.openai.utils.model_utils import (
+    filter_unsupported_parameters,
+    get_token_param_name,
+)
 
 
 def stream_structured_completion(
@@ -153,4 +161,4 @@ def stream_structured_completion(
                             log.error("Stream error: %s", event.error)
                             raise Exception(f"Stream error: {event.error}")
 
-        raise 
+        raise

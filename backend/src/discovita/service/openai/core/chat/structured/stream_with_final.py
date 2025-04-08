@@ -5,19 +5,21 @@ This module provides the function for streaming structured chat completions
 with access to both incremental updates and the final result.
 """
 
-from typing import List, Optional, Dict, Union, Iterable, Type, Generator, Tuple
+import logging
+from typing import Dict, Generator, Iterable, List, Optional, Tuple, Type, Union
+
 from openai.types.chat import (
-    ParsedChatCompletion,
     ChatCompletionMessageParam,
     ChatCompletionToolChoiceOptionParam,
     ChatCompletionToolParam,
+    ParsedChatCompletion,
 )
-import logging
 
 log = logging.getLogger(__name__)
 
-from ....models.openai_compatibility import NotGiven, NOT_GIVEN
-from ....models.response_types import ResponseFormatT
+from discovita.service.openai.models.openai_compatibility import NOT_GIVEN, NotGiven
+from discovita.service.openai.models.response_types import ResponseFormatT
+
 from .stream_completion import stream_structured_completion
 
 
@@ -112,4 +114,4 @@ def stream_structured_completion_with_final(
                 continue
             yield completion
 
-    return completion_generator(), final_completion 
+    return completion_generator(), final_completion
