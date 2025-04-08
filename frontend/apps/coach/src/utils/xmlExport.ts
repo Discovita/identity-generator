@@ -22,7 +22,7 @@ const formatXml = (xml: string): string => {
 
     formatted += indent + '<' + node + '>\n';
 
-    if (node.match(/^<?\w[^>]*[^\/]$/) && !node.startsWith('!--')) {
+    if (node.match(/^<?\w[^>]*[^/]$/) && !node.startsWith('!--')) {
       // Opening tag and not self-closing
       indent += tab;
     }
