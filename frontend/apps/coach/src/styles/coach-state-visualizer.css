@@ -1,0 +1,373 @@
+@import './variables.css';
+
+/* Coach State Visualizer Styles */
+.coach-state-visualizer {
+  background-color: var(--background-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--gold-shadow-md);
+  border: 1px solid var(--primary-light);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100vh;
+}
+
+/* Tab Navigation */
+.coach-state-visualizer .tabs {
+  display: flex;
+  background-color: var(--primary-light);
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.coach-state-visualizer .tab {
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  white-space: nowrap; /* Prevent tab text from wrapping */
+}
+
+.coach-state-visualizer .tab.active {
+  color: var(--primary-dark);
+  background-color: var(--background-light);
+  border-top: 2px solid var(--primary-color);
+  border-left: 2px solid var(--primary-color);
+  border-right: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--background-light);
+  margin-bottom: -2px;
+  z-index: 1;
+}
+
+.coach-state-visualizer .tab:hover:not(.active) {
+  background-color: rgba(208, 169, 89, 0.1);
+}
+
+/* Tab Update Indicator */
+.coach-state-visualizer .tab.has-updates {
+  position: relative;
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+.coach-state-visualizer .tab.has-updates::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background-color: #e74c3c; /* Bright red dot for better visibility */
+  border-radius: 50%;
+  animation: pulse 1.5s infinite ease-in-out;
+  box-shadow: 0 0 4px rgba(231, 76, 60, 0.5);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.9);
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 5px rgba(231, 76, 60, 0);
+  }
+  100% {
+    transform: scale(0.9);
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+  }
+}
+
+/* Tab Content */
+.coach-state-visualizer .tab-content {
+  padding: 16px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* Section Styling */
+.coach-state-visualizer .state-section {
+  margin-bottom: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.coach-state-visualizer .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: var(--primary-light);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.coach-state-visualizer .section-header:hover {
+  background-color: rgba(208, 169, 89, 0.2);
+}
+
+.coach-state-visualizer .section-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--primary-dark);
+}
+
+.coach-state-visualizer .section-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.coach-state-visualizer .copy-button {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.coach-state-visualizer .copy-button:hover {
+  background-color: var(--primary-dark);
+}
+
+.coach-state-visualizer .expand-icon {
+  font-size: 0.75rem;
+  transition: transform 0.2s;
+}
+
+.coach-state-visualizer .expand-icon.expanded {
+  transform: rotate(0deg);
+}
+
+/* Empty state styling */
+.coach-state-visualizer .empty-state {
+  padding: 24px;
+  text-align: center;
+  background-color: var(--background-light);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--border-radius);
+  color: var(--text-muted);
+}
+
+.coach-state-visualizer .empty-state p {
+  margin: 8px 0;
+}
+
+.coach-state-visualizer .empty-state p:first-child {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* Markdown Prompt Content */
+.coach-state-visualizer .markdown-prompt-content {
+  padding: 16px;
+  background-color: var(--background-light);
+  overflow-y: auto;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Style markdown elements in the prompt */
+.coach-state-visualizer .markdown-prompt-content h1,
+.coach-state-visualizer .markdown-prompt-content h2,
+.coach-state-visualizer .markdown-prompt-content h3 {
+  color: var(--primary-dark);
+  margin-top: 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--primary-light);
+  padding-bottom: 5px;
+}
+
+.coach-state-visualizer .markdown-prompt-content h1 {
+  font-size: 1.4rem;
+}
+
+.coach-state-visualizer .markdown-prompt-content h2 {
+  font-size: 1.2rem;
+}
+
+.coach-state-visualizer .markdown-prompt-content h3 {
+  font-size: 1.1rem;
+  border-bottom: none;
+}
+
+.coach-state-visualizer .markdown-prompt-content p {
+  margin: 12px 0;
+}
+
+.coach-state-visualizer .markdown-prompt-content ul,
+.coach-state-visualizer .markdown-prompt-content ol {
+  padding-left: 20px;
+  margin: 12px 0;
+}
+
+.coach-state-visualizer .markdown-prompt-content li {
+  margin: 6px 0;
+}
+
+.coach-state-visualizer .markdown-prompt-content pre,
+.coach-state-visualizer .markdown-prompt-content code {
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.coach-state-visualizer .markdown-prompt-content pre {
+  padding: 12px;
+  overflow-x: auto;
+  margin: 16px 0;
+  border: 1px solid #ddd;
+}
+
+.coach-state-visualizer .markdown-prompt-content code {
+  padding: 2px 4px;
+  font-size: 0.85em;
+}
+
+.coach-state-visualizer .markdown-prompt-content blockquote {
+  margin: 16px 0;
+  padding-left: 16px;
+  border-left: 4px solid var(--primary-light);
+  color: #555;
+}
+
+.coach-state-visualizer .markdown-prompt-content a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.coach-state-visualizer .markdown-prompt-content a:hover {
+  text-decoration: underline;
+}
+
+.coach-state-visualizer .markdown-prompt-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.coach-state-visualizer .markdown-prompt-content th,
+.coach-state-visualizer .markdown-prompt-content td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.coach-state-visualizer .markdown-prompt-content th {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+/* JSON Content Styling */
+.coach-state-visualizer .json-content {
+  margin: 0;
+  padding: 12px;
+  background-color: #f8f8f8;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #333;
+
+  overflow-y: auto;
+  white-space: pre-wrap; /* Allow text to wrap */
+  word-wrap: break-word; /* Break long words */
+  overflow-wrap: break-word; /* Modern version of word-wrap */
+  width: 100%; /* Ensure full width */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Test mode responsive layouts */
+.test-mode-container {
+  display: flex;
+  height: calc(100vh - 52px); /* Adjust for test header height */
+  flex-direction: row; /* Default: side by side */
+  align-items: flex-start; /* Align items to the top */
+}
+
+/* Side by side layout (default for large screens) */
+.test-mode-chat {
+  flex: 1;
+  min-width: 800px; /* Minimum width for chat */
+  overflow: hidden;
+  height: 75vh; /* Set to 75% of viewport height in side-by-side view */
+  display: flex;
+  flex-direction: column;
+  margin-right: 16px; /* Add some spacing between chat and visualizer */
+}
+
+.test-mode-visualizer {
+  width: 40%;
+  min-width: 600px; /* Minimum width for visualizer */
+  border-left: 1px solid var(--border-color);
+  overflow: hidden;
+  height: 75vh; /* Match the chat height */
+}
+
+/* Chat container layout adjustments - override default styles */
+.test-mode-chat .chat-container {
+  display: flex !important; /* Use !important to override general styles */
+  flex-direction: column !important;
+  height: 100% !important; /* Override the default 75vh height */
+  max-height: none !important;
+  border-radius: 0 !important; /* Remove border radius inside test mode */
+  border: none !important; /* Remove border inside test mode */
+  box-shadow: none !important; /* Remove box shadow inside test mode */
+  overflow: hidden !important;
+}
+
+.test-mode-chat .messages {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  padding-bottom: 16px !important;
+}
+
+.test-mode-chat .chat-controls {
+  flex-shrink: 0 !important; /* Prevent shrinking */
+  border-top: 1px solid var(--border-color) !important;
+  padding: 16px !important;
+  background-color: var(--background-light) !important;
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 10 !important;
+}
+
+/* Top-bottom layout for smaller screens */
+@media (max-width: 1400px) {
+  .test-mode-container {
+    flex-direction: column; /* Switch to top-bottom */
+  }
+  
+  .test-mode-chat {
+    flex: none;
+    height: 66vh; /* 66% of viewport height */
+    width: 100%;
+    min-width: unset; /* Remove min-width constraint */
+    border-bottom: 1px solid var(--border-color);
+    margin-right: 0; /* Remove right margin in vertical layout */
+  }
+  
+  .test-mode-visualizer {
+    width: 100%;
+    height: calc(34vh - 52px); /* 34% of viewport minus header */
+    min-width: unset; /* Remove min-width constraint */
+    border-left: none;
+  }
+  
+  /* Make JSON content areas shorter in vertical layout */
+  .coach-state-visualizer .json-content {
+    max-height: 200px;
+  }
+  
+  /* Make markdown content shorter in vertical layout */
+  .coach-state-visualizer .markdown-prompt-content {
+    max-height: 300px;
+  }
+} 
