@@ -15,7 +15,7 @@ export const ConversationExporter: React.FC<Props> = ({ messages, userId, coachS
   };
 
   return (
-    <button onClick={handleExport} disabled={messages.length === 0}>
+    <button className="export-button" onClick={handleExport} disabled={messages.length === 0}>
       Export Conversation
     </button>
   );
