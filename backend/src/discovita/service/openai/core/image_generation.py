@@ -7,16 +7,16 @@ from .base import OpenAIService
 class ImageGenerationService:
     """Service for generating images using OpenAI."""
 
-    def __init__(self, client: OpenAIService):
+    def __init__(self, open_ai_service: OpenAIService):
         """
-        Initialize the service with an OpenAIService client.
+        Initialize the service with an OpenAIService instance.
 
         Parameters
         ----------
-        client : OpenAIService
+        open_ai_service : OpenAIService
             OpenAIService instance for making API calls
         """
-        self.client = client
+        self.open_ai_service = open_ai_service
 
     def generate_scene(
         self,
@@ -69,7 +69,7 @@ The above description should be modified to strongly emphasize and incorporate t
             prompt = base_prompt
 
         # Generate the image using OpenAIService
-        result = self.client.generate_image(
+        result = self.open_ai_service.generate_image(
             prompt=prompt, model="dall-e-3", size="1024x1024", quality="hd"
         )
 
@@ -135,7 +135,7 @@ The above description should be modified to strongly emphasize and incorporate t
                 prompt = base_prompt
 
             # Generate the image using OpenAIService
-            result = self.client.generate_image(
+            result = self.open_ai_service.generate_image(
                 prompt=prompt, model="dall-e-3", size="1024x1024", quality="hd"
             )
 
