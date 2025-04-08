@@ -13,10 +13,12 @@ async def test_introduction():
     """Test the coach's introduction state response."""
     # Initialize components
     settings = Settings.from_env()
-    client = OpenAIService(api_key=settings.openai_api_key)
+    open_ai_service = OpenAIService(api_key=settings.openai_api_key)
     prompt_manager = PromptManager()
 
-    service = CoachService(client=client, prompt_manager=prompt_manager)
+    service = CoachService(
+        open_ai_service=open_ai_service, prompt_manager=prompt_manager
+    )
 
     # Create initial state
     state = CoachState(

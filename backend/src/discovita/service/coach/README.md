@@ -39,8 +39,8 @@ from discovita.service.coach.service import CoachService
 from discovita.service.openai.core import OpenAIService
 
 # Initialize the service
-client = OpenAIService()
-coach_service = CoachService(client)
+open_ai_service = OpenAIService()
+coach_service = CoachService(open_ai_service)
 ```
 
 ### Making Requests
@@ -142,7 +142,7 @@ The service uses Pydantic models for validation, ensuring:
 
 ## Dependencies
 
-- OpenAI API client for LLM interactions
+- OpenAI API service for LLM interactions
 - Pydantic for data validation
 - Python 3.7+ for async/await support
 

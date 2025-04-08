@@ -1,5 +1,5 @@
 """
-OpenAI Helper module for interacting with OpenAI's API.
+OpenAI Service module for interacting with OpenAI's API.
 
 This module provides a simplified interface for making requests to OpenAI's API,
 with support for text completions, image inputs, JSON mode, structured outputs,
@@ -8,8 +8,8 @@ and streaming responses.
 Usage:
     from discovita.service.openai import OpenAIService
 
-    helper = OpenAIService(api_key="your_api_key", organization="your_org_id")
-    response = helper.create_chat_completion(prompt="Hello, world!")
+    open_ai_service = OpenAIService(api_key="your_api_key", organization="your_org_id")
+    response = open_ai_service.create_chat_completion(prompt="Hello, world!")
 
     # You can also access the AIModel enum for model-specific logic
     from discovita.service.openai import AIModel
@@ -23,8 +23,8 @@ Usage:
     # Generate images using DALL-E models
     from discovita.service.openai import OpenAIService, ImageSize, ImageQuality, ImageStyle, ImageModel
 
-    helper = OpenAIService(api_key="your_api_key")
-    images = helper.generate_image(
+    open_ai_service = OpenAIService(api_key="your_api_key")
+    images = open_ai_service.generate_image(
         prompt="A futuristic city with flying cars",
         model=ImageModel.DALL_E_3,
         size=ImageSize.LANDSCAPE_1792x1024,

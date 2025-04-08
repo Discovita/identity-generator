@@ -10,7 +10,7 @@ from discovita.service.openai.core.image_generation import ImageGenerationServic
 from fastapi import Depends
 
 
-async def get_openai_client(
+async def get_openai_service(
     settings: Settings = Depends(get_settings),
 ) -> OpenAIService:
     """Get OpenAI client."""
@@ -20,22 +20,22 @@ async def get_openai_client(
 
 
 async def get_image_description_service(
-    client: OpenAIService = Depends(get_openai_client),
+    open_ai_service: OpenAIService = Depends(get_openai_service),
 ) -> ImageDescriptionService:
     """Get image description service."""
-    return ImageDescriptionService(client)
+    return ImageDescriptionService(open_ai_service)
 
 
 async def get_image_generation_service(
-    client: OpenAIService = Depends(get_openai_client),
+    open_ai_service: OpenAIService = Depends(get_openai_service),
 ) -> ImageGenerationService:
     """Get image generation service."""
-    return ImageGenerationService(client)
+    return ImageGenerationService(open_ai_service)
 
 
 async def get_coach_service(
-    client: OpenAIService = Depends(get_openai_client),
+    open_ai_service: OpenAIService = Depends(get_openai_service),
 ) -> CoachService:
     """Get coach service."""
     prompt_manager = PromptManager()
-    return CoachService(client, prompt_manager)
+    return CoachService(open_ai_service, prompt_manager)

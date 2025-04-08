@@ -17,8 +17,8 @@ class CoachService:
     and applies any actions returned by the LLM to update the coaching state.
     """
 
-    def __init__(self, client: OpenAIService, prompt_manager: PromptManager):
-        self.client = client
+    def __init__(self, open_ai_service: OpenAIService, prompt_manager: PromptManager):
+        self.open_ai_service = open_ai_service
         self.prompt_manager = prompt_manager
 
     async def process_message(
@@ -27,12 +27,12 @@ class CoachService:
         """Process a user message and update the coaching state."""
         state.conversation_history.append(Message(role="user", content=message))
         system_prompt = self.prompt_manager.get_prompt(state)
-        formatted_messages = self.client.create_messages(
+        formatted_messages = self.open_ai_service.create_messages(
             system_message=system_prompt, messages=state.conversation_history
         )
         print(CoachLLMResponse.model_json_schema())
 
-        response = self.client.create_structured_chat_completion(
+        response = self.open_ai_service.create_structured_chat_completion(
             model="gpt-4o-2024-08-06",
             messages=formatted_messages,
             response_format=CoachLLMResponse,

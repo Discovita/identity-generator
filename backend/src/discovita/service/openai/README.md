@@ -66,14 +66,14 @@ openai/
 ```python
 from discovita.service.openai import OpenAIService
 
-# Initialize the client
-client = OpenAIService(
+# Initialize the open_ai_service
+open_ai_service = OpenAIService(
     api_key="YOUR_API_KEY",
     organization="YOUR_ORG_ID"
 )
 
 # Simple text completion
-response = client.create_chat_completion(
+response = open_ai_service.create_chat_completion(
     prompt="Tell me a joke about programming.",
     model="gpt-4o"  # Or try newer models like "gpt-4.5-preview", "o1", "o1-mini", "o3-mini"
 )
@@ -93,8 +93,8 @@ class Message(BaseModel):
     role: str  # "user", "assistant", or custom roles like "coach"
     content: str
 
-# Initialize the client
-client = OpenAIService(
+# Initialize the open_ai_service
+open_ai_service = OpenAIService(
     api_key="YOUR_API_KEY",
     organization="YOUR_ORG_ID"
 )
@@ -107,13 +107,13 @@ conversation = [
 ]
 
 # Create messages array with conversation history and system prompt
-messages = client.create_messages(
+messages = open_ai_service.create_messages(
     system_message="You are a helpful AI assistant with a good sense of humor.",
     messages=conversation
 )
 
 # Get a response using the conversation history
-response = client.create_chat_completion(
+response = open_ai_service.create_chat_completion(
     messages=messages,
     model="gpt-4o"
 )
@@ -123,7 +123,7 @@ conversation.append(Message(role="assistant", content=response))
 
 # For the next interaction, just update the conversation and create messages again
 conversation.append(Message(role="user", content="Explain that joke"))
-updated_messages = client.create_messages(
+updated_messages = open_ai_service.create_messages(
     system_message="You are a helpful AI assistant with a good sense of humor.",
     messages=conversation
 )
@@ -134,13 +134,13 @@ updated_messages = client.create_messages(
 ```python
 from discovita.service.openai import OpenAIService
 
-client = OpenAIService(
+open_ai_service = OpenAIService(
     api_key="YOUR_API_KEY",
     organization="YOUR_ORG_ID"
 )
 
 # Analyze an image using the vision capabilities
-image_description = client.describe_image_with_vision(
+image_description = open_ai_service.describe_image_with_vision(
     image_url="https://example.com/image.jpg",
     prompt="What's in this image? Describe all the details you can see."
 )
@@ -148,7 +148,7 @@ image_description = client.describe_image_with_vision(
 print(image_description)
 
 # Multimodal input with image in chat completion
-response = client.create_chat_completion(
+response = open_ai_service.create_chat_completion(
     prompt="What's in this image?",
     images=["path/to/your/image.jpg"],
     model="gpt-4o"
@@ -164,13 +164,13 @@ from discovita.service.openai import OpenAIService
 from discovita.service.openai.core.image_description import ImageDescriptionService
 
 # Initialize the OpenAI service
-client = OpenAIService(
+open_ai_service = OpenAIService(
     api_key="YOUR_API_KEY",
     organization="YOUR_ORG_ID"
 )
 
 # Create the image description service
-description_service = ImageDescriptionService(client)
+description_service = ImageDescriptionService(open_ai_service)
 
 # Get a clean description of a headshot image
 description = await description_service.get_clean_description("https://example.com/headshot.jpg")
@@ -183,13 +183,13 @@ print(description)
 ```python
 from discovita.service.openai import OpenAIService
 
-client = OpenAIService(
+open_ai_service = OpenAIService(
     api_key="YOUR_API_KEY",
     organization="YOUR_ORG_ID"
 )
 
 # Get response in JSON format
-response = client.create_chat_completion(
+response = open_ai_service.create_chat_completion(
     prompt="Generate a list of 3 programming languages with their creator and year.",
     model="gpt-4o",
     json_mode=True
@@ -216,8 +216,8 @@ class ProgrammingLanguage(BaseModel):
 class LanguagesResponse(BaseModel):
     languages: List[ProgrammingLanguage]
 
-# Initialize the client
-client = OpenAIService(
+# Initialize the open_ai_service
+open_ai_service = OpenAIService(
     api_key="YOUR_API_KEY",
     organization="YOUR_ORG_ID"
 )
@@ -229,7 +229,7 @@ messages = [
 ]
 
 # Get a structured response
-response = client.create_structured_chat_completion(
+response = open_ai_service.create_structured_chat_completion(
     messages=messages,
     model="gpt-4.5-preview", 
     response_format=LanguagesResponse
@@ -257,8 +257,8 @@ class UserProfile(BaseModel):
     interests: List[str]
     skills: List[str]
 
-# Initialize the client
-client = OpenAIService(
+# Initialize the open_ai_service
+open_ai_service = OpenAIService(
     api_key="YOUR_API_KEY",
     organization="YOUR_ORG_ID"
 )
@@ -271,13 +271,13 @@ conversation = [
 ]
 
 # Create formatted messages with conversation history
-messages = client.create_messages(
+messages = open_ai_service.create_messages(
     system_message="Extract information about the user from the conversation.",
     messages=conversation
 )
 
 # Get a structured response based on the conversation
-response = client.create_structured_chat_completion(
+response = open_ai_service.create_structured_chat_completion(
     messages=messages,
     model="o1",  # O1 model supports structured outputs
     response_format=UserProfile
@@ -295,13 +295,13 @@ print(f"Skills: {', '.join(user_profile.skills)}")
 ```python
 from discovita.service.openai import OpenAIService
 
-client = OpenAIService(
+open_ai_service = OpenAIService(
     api_key="YOUR_API_KEY",
     organization="YOUR_ORG_ID"
 )
 
 # Stream the response
-stream = client.create_chat_completion(
+stream = open_ai_service.create_chat_completion(
     prompt="Write a short story about AI.",
     model="gpt-4o",
     stream=True
@@ -326,8 +326,8 @@ class EntityExtraction(BaseModel):
     colors: List[str]
     animals: List[str]
 
-# Initialize the client
-client = OpenAIService(
+# Initialize the open_ai_service
+open_ai_service = OpenAIService(
     api_key="YOUR_API_KEY",
     organization="YOUR_ORG_ID"
 )
@@ -335,10 +335,10 @@ client = OpenAIService(
 # Create messages
 system_message = "Extract entities from the input text"
 prompt = "The quick brown fox jumps over the lazy dog with piercing blue eyes"
-messages = client.create_messages(prompt=prompt, system_message=system_message)
+messages = open_ai_service.create_messages(prompt=prompt, system_message=system_message)
 
 # Stream the structured completion
-for parsed_data, is_final in client.stream_structured_completion(
+for parsed_data, is_final in open_ai_service.stream_structured_completion(
     messages=messages,
     model="gpt-4o-mini",
     response_format=EntityExtraction,
@@ -357,13 +357,13 @@ for parsed_data, is_final in client.stream_structured_completion(
 ```python
 from discovita.service.openai import OpenAIService, ImageModel, ImageSize, ImageQuality, ImageStyle
 
-client = OpenAIService(
+open_ai_service = OpenAIService(
     api_key="YOUR_API_KEY",
     organization="YOUR_ORG_ID"
 )
 
 # Generate an image with DALL-E 3
-image_response = client.generate_image(
+image_response = open_ai_service.generate_image(
     prompt="A futuristic city with flying cars and tall glass buildings against a sunset sky",
     model=ImageModel.DALL_E_3,
     size=ImageSize.LANDSCAPE_1792x1024,
@@ -372,7 +372,7 @@ image_response = client.generate_image(
 )
 
 # Save the generated image to a file
-saved_path = client.save_generated_image(
+saved_path = open_ai_service.save_generated_image(
     image_response.data[0].url,
     output_path="./generated_images",
     filename="futuristic_city.png"
@@ -418,6 +418,6 @@ To contribute to this module, please follow the modular structure. Each file sho
 
 When adding new functionality, consider which module it belongs in:
 - `core`: For main functionality that users will interact with directly
-- `utils`: For client functions and utilities
+- `utils`: For open_ai_service functions and utilities
 - `types`: For type definitions and parsing logic
 - `enums`: For enumeration types and constants
