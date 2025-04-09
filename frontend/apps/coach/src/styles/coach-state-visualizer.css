@@ -147,6 +147,84 @@
   transform: rotate(0deg);
 }
 
+/* Actions Container Styling */
+.coach-state-visualizer .actions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.coach-state-visualizer .action-card {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.coach-state-visualizer .action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.coach-state-visualizer .action-type {
+  padding: 10px 16px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.coach-state-visualizer .action-params {
+  padding: 12px;
+}
+
+.coach-state-visualizer .no-params {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  padding: 8px;
+}
+
+.coach-state-visualizer .params-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.coach-state-visualizer .params-table th,
+.coach-state-visualizer .params-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.coach-state-visualizer .params-table th {
+  background-color: #f8f8f8;
+  font-weight: 600;
+  color: #555;
+}
+
+.coach-state-visualizer .param-name {
+  font-weight: 500;
+  color: #555;
+  width: 40%;
+}
+
+.coach-state-visualizer .param-value {
+  font-family: monospace;
+  background-color: #f9f9f9;
+  padding: 4px 8px;
+  border-radius: 3px;
+  word-break: break-word;
+  max-width: 60%;
+}
+
 /* Empty state styling */
 .coach-state-visualizer .empty-state {
   padding: 24px;

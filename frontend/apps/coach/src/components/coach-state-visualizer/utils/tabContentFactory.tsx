@@ -1,7 +1,12 @@
 import React from 'react';
 import { CoachResponse, CoachState } from '../../../types/apiTypes';
 import { TabName, ExpandedSectionsConfig, ExtractedActions } from '../types';
-import { renderJsonSection, renderFinalPrompt, renderEmptyState } from './renderUtils';
+import {
+  renderJsonSection,
+  renderFinalPrompt,
+  renderEmptyState,
+  renderActionsSection,
+} from './renderUtils';
 import { getCurrentStateInfo } from './dataUtils';
 
 /**
@@ -24,6 +29,15 @@ export const renderTabContent = (
   extractedActions: ExtractedActions
 ): JSX.Element => {
   const { availableActions, actionsTaken } = extractedActions;
+
+  // Filter actions for history - exclude current response actions
+  const currentResponseActions = lastResponse?.actions || [];
+  const currentResponseActionStrings = currentResponseActions.map(a => JSON.stringify(a));
+
+  // Only show actions in history that aren't in the current response
+  const actionHistory = (actionsTaken || []).filter(
+    action => !currentResponseActionStrings.includes(JSON.stringify(action))
+  );
 
   switch (tabName) {
     case TabName.STATE:
@@ -71,13 +85,25 @@ export const renderTabContent = (
     case TabName.ACTIONS:
       return (
         <>
-          {renderJsonSection(
-            'Actions Taken',
-            actionsTaken,
-            'actionsTaken',
-            expandedSections['actionsTaken'],
-            toggleSection
-          )}
+          {lastResponse?.actions &&
+            lastResponse.actions.length > 0 &&
+            renderActionsSection(
+              'Current Response Actions',
+              lastResponse.actions,
+              'currentActions',
+              expandedSections['currentActions'] ?? true, // Default to expanded
+              toggleSection
+            )}
+
+          {actionHistory &&
+            actionHistory.length > 0 &&
+            renderActionsSection(
+              'Action History',
+              actionHistory,
+              'actionHistory',
+              expandedSections['actionHistory'] ?? true, // Default to expanded
+              toggleSection
+            )}
 
           {renderJsonSection(
             'Available Actions',
@@ -87,8 +113,9 @@ export const renderTabContent = (
             toggleSection
           )}
 
-          {(!actionsTaken || actionsTaken.length === 0) &&
+          {(!actionHistory || actionHistory.length === 0) &&
             (!availableActions || availableActions.length === 0) &&
+            (!lastResponse?.actions || lastResponse.actions.length === 0) &&
             renderEmptyState(
               'No action information available yet.',
               'Actions will appear here when the coach performs them or lists available ones.'
