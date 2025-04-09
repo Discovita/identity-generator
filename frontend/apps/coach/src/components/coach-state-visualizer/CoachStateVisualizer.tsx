@@ -36,7 +36,7 @@ export const CoachStateVisualizer: React.FC<CoachStateVisualizerProps> = ({
   const prevStateRef = useRef<null | typeof coachState>(null);
   const prevResponseRef = useRef<undefined | typeof lastResponse>(undefined);
   const prevActionsRef = useRef<null | ExtractedActions>(null);
-  const extractedActionsRef = useRef<ExtractedActions>(extractActions(coachState));
+  const extractedActionsRef = useRef<ExtractedActions>(extractActions(coachState, lastResponse));
   const tabsConfig = getTabsConfig();
 
   // Toggle section expansion
@@ -64,7 +64,7 @@ export const CoachStateVisualizer: React.FC<CoachStateVisualizerProps> = ({
   // Detect changes in data when state or response updates
   useEffect(() => {
     // Extract current actions
-    const currentActions = extractActions(coachState);
+    const currentActions = extractActions(coachState, lastResponse);
     extractedActionsRef.current = currentActions;
 
     // Skip first render

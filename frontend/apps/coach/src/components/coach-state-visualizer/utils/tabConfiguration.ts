@@ -12,8 +12,9 @@ export const getDefaultExpandedSections = (): ExpandedSectionsConfig => ({
   proposedIdentity: true,
   prompt: true,
   history: true,
-  actionsTaken: true,
+  actionHistory: true,
   availableActions: true,
+  currentActions: true,
 });
 
 /**

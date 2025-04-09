@@ -103,9 +103,19 @@ export const detectPromptTabChanges = (
  */
 export const detectActionsTabChanges = (
   prevActions: ExtractedActions | null,
-  currentActions: ExtractedActions
+  currentActions: ExtractedActions,
+  prevResponse?: CoachResponse,
+  currentResponse?: CoachResponse
 ): boolean => {
   if (!prevActions) return false;
+
+  // Check if response actions have changed
+  const prevResponseActions = prevResponse?.actions || [];
+  const currentResponseActions = currentResponse?.actions || [];
+
+  if (hasChanged(prevResponseActions, currentResponseActions)) {
+    return true;
+  }
 
   return (
     hasChanged(prevActions.actionsTaken, currentActions.actionsTaken) ||
@@ -184,7 +194,12 @@ export const detectAllTabChanges = (
   }
 
   if (currentTab !== TabName.ACTIONS) {
-    updates[TabName.ACTIONS] = detectActionsTabChanges(prevActions, currentActions);
+    updates[TabName.ACTIONS] = detectActionsTabChanges(
+      prevActions,
+      currentActions,
+      prevResponse,
+      currentResponse
+    );
   }
 
   if (currentTab !== TabName.IDENTITIES) {
