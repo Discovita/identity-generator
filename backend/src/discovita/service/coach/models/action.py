@@ -22,7 +22,6 @@ class ActionType(Enum):
     )
 
 
-# TODO: We'll need to ensure that the action params are properly parsed using this new format
 class Param(BaseModel):
     """Parameter for an action."""
 
