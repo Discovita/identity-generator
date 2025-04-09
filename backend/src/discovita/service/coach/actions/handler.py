@@ -24,28 +24,20 @@ def _params_to_dict(params: List[Param]) -> Dict:
 def apply_actions(state: CoachState, actions: List[Action] = None) -> CoachState:
     """Apply actions to modify the coaching state."""
     new_state = state.model_copy(deep=True)
-    print(f"Applying actions: {actions[0].type} {type(actions[0].type)}")
     if not actions:
         return new_state
 
     for action in actions:
-        # Convert string action type to enum if necessary
+        # Convert string action type to enum
         action_type = action.type
         if isinstance(action_type, str):
-            try:
-                action_type = ActionType(action_type)
-            except ValueError:
-                print(f"Warning: Invalid action type: {action_type}")
-                continue
+            action_type = ActionType(action_type)
 
-        # Convert params list to dictionary
         params_dict = (
             _params_to_dict(action.params)
             if isinstance(action.params, list)
             else action.params
         )
-
-        print(f"Processing action: {action_type} with params: {params_dict}")
 
         if action_type == ActionType.CREATE_IDENTITY:
             params = CreateIdentityParams(**params_dict)
