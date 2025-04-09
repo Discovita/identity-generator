@@ -47,4 +47,4 @@ class PromptContext(BaseModel):
         
     def format_identity_categories(self) -> str:
         """Format identity categories as a list of enum values."""
-        return ", ".join([f"'{category.name}': '{category.value}'" for category in IdentityCategory])
+        return ", ".join([f"'{category.value}'" for category in IdentityCategory])
