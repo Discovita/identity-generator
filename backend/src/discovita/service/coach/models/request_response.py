@@ -1,5 +1,8 @@
 """Request and response models for coaching service."""
 
+from typing import List, Optional
+
+from discovita.service.coach.models.action import Action
 from pydantic import BaseModel, Field
 
 from .state import CoachState
@@ -24,6 +27,7 @@ class CoachResponse(BaseModel):
     final_prompt: str = Field(
         "", description="The final prompt used to generate the coach's response"
     )
+    actions: Optional[List[Action]] = Field(description="Actions performed")
 
 
 class CoachStructuredResponse(BaseModel):

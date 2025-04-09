@@ -9,21 +9,26 @@
  * Type of action to perform
  */
 export type ActionType =
-  | "create_identity"
-  | "update_identity"
-  | "accept_identity"
-  | "accept_identity_refinement"
-  | "add_identity_note"
-  | "transition_state"
-  | "select_identity_focus";
+  | 'create_identity'
+  | 'update_identity'
+  | 'accept_identity'
+  | 'accept_identity_refinement'
+  | 'add_identity_note'
+  | 'transition_state'
+  | 'select_identity_focus';
 /**
  * Current state of the coaching session
  */
-export type CoachingState = "introduction" | "identity_brainstorming" | "identity_refinement";
+export type CoachingState = 'introduction' | 'identity_brainstorming' | 'identity_refinement';
 /**
  * Current state of the identity
  */
-export type IdentityState = "proposed" | "accepted" | "refinement_complete";
+export type IdentityState = 'proposed' | 'accepted' | 'refinement_complete';
+
+export interface Param {
+  name: string;
+  value: string | number;
+}
 
 /**
  * An action to be performed on the coaching state.
@@ -33,10 +38,9 @@ export interface Action {
   /**
    * Parameters for the action
    */
-  params?: {
-    [k: string]: unknown;
-  };
+  params?: Param[];
 }
+
 /**
  * Request model for coach API.
  */
@@ -133,6 +137,7 @@ export interface CoachResponse {
    * The final prompt used to generate the coach's response
    */
   final_prompt?: string;
+  actions?: Action[];
 }
 /**
  * Updated state of the coaching session
