@@ -112,13 +112,105 @@ The entirety of the coach logic is quite easy to describe:
         </note>
     </long-term-memory>
     <current-task> 
-      cline/coach_planning/v4_planning/leigh_ann_notes_2025-03-29.txt
+    Fix all unit tests
+      <logs>
+      ➜  identity-generator git:(master) ✗ cd backend && pyright src/discovita/service/coach/prompt/models.py
+0 errors, 0 warnings, 0 informations 
+➜  backend git:(master) ✗ git status
+On branch master
+Your branch is up to date with 'origin/master'.
 
-      has notes directly from the CEO on how she wants certain elements
-      of dialogue to go during the IDENTITY_BRAINSTORMING phase of coaching.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   src/discovita/service/coach/prompt/models.py
+        modified:   src/discovita/service/coach/prompts/shared/identity_instructions.md
+        modified:   ../cline/CLINE_CONTEXT.xml
 
-      Propose modifications to the prompt associated with 
-      IDENTITY_BRAINSTORMING align the coach's behavior better with
-      the CEO's vision.
+no changes added to commit (use "git add" and/or "git commit -a")
+➜  backend git:(master) ✗ cd "/Users/jakemirra/workspace/discovita/identity-generator"
+➜  identity-generator git:(master) ✗ 
+➜  identity-generator git:(master) ✗ cd backend && python -m pytest test/service_coach -v
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/pytest_asyncio/plugin.py:208: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+================================================================ test session starts ================================================================
+platform darwin -- Python 3.11.6, pytest-8.3.3, pluggy-1.5.0 -- /usr/local/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/jakemirra/workspace/discovita/identity-generator/backend
+configfile: pytest.ini
+plugins: asyncio-0.24.0, anyio-4.6.2.post1
+asyncio: mode=Mode.STRICT, default_loop_scope=None
+collected 0 items / 6 errors                                                                                                                        
+
+====================================================================== ERRORS =======================================================================
+____________________________________________ ERROR collecting test/service_coach/test_context_builder.py ____________________________________________
+ImportError while importing test module '/Users/jakemirra/workspace/discovita/identity-generator/backend/test/service_coach/test_context_builder.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+test/service_coach/test_context_builder.py:4: in <module>
+    from discovita.service.coach.models import (
+E   ImportError: cannot import name 'ChatMessage' from 'discovita.service.coach.models' (/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/models/__init__.py)
+____________________________________________ ERROR collecting test/service_coach/test_context_models.py _____________________________________________
+ImportError while importing test module '/Users/jakemirra/workspace/discovita/identity-generator/backend/test/service_coach/test_context_models.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+test/service_coach/test_context_models.py:3: in <module>
+    from discovita.service.coach.models import (
+E   ImportError: cannot import name 'CoachContext' from 'discovita.service.coach.models' (/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/models/__init__.py)
+________________________________________________ ERROR collecting test/service_coach/test_models.py _________________________________________________
+ImportError while importing test module '/Users/jakemirra/workspace/discovita/identity-generator/backend/test/service_coach/test_models.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+test/service_coach/test_models.py:4: in <module>
+    from discovita.service.coach.models import (
+E   ImportError: cannot import name 'ChatMessage' from 'discovita.service.coach.models' (/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/models/__init__.py)
+____________________________________________ ERROR collecting test/service_coach/test_prompt_manager.py _____________________________________________
+ImportError while importing test module '/Users/jakemirra/workspace/discovita/identity-generator/backend/test/service_coach/test_prompt_manager.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+test/service_coach/test_prompt_manager.py:9: in <module>
+    from discovita.service.coach.models import CoachingState, ActionType, CoachContext
+E   ImportError: cannot import name 'CoachContext' from 'discovita.service.coach.models' (/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/models/__init__.py)
+________________________________________________ ERROR collecting test/service_coach/test_service.py ________________________________________________
+ImportError while importing test module '/Users/jakemirra/workspace/discovita/identity-generator/backend/test/service_coach/test_service.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+test/service_coach/test_service.py:7: in <module>
+    from discovita.service.coach.models import (
+E   ImportError: cannot import name 'ChatMessage' from 'discovita.service.coach.models' (/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/models/__init__.py)
+_____________________________________________ ERROR collecting test/service_coach/test_state_machine.py _____________________________________________
+ImportError while importing test module '/Users/jakemirra/workspace/discovita/identity-generator/backend/test/service_coach/test_state_machine.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+test/service_coach/test_state_machine.py:5: in <module>
+    from discovita.service.coach.models import (
+E   ImportError: cannot import name 'TransitionCondition' from 'discovita.service.coach.models' (/Users/jakemirra/workspace/discovita/identity-generator/backend/src/discovita/service/coach/models/__init__.py)
+============================================================== short test summary info ==============================================================
+ERROR test/service_coach/test_context_builder.py
+ERROR test/service_coach/test_context_models.py
+ERROR test/service_coach/test_models.py
+ERROR test/service_coach/test_prompt_manager.py
+ERROR test/service_coach/test_service.py
+ERROR test/service_coach/test_state_machine.py
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Interrupted: 6 errors during collection !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+================================================================= 6 errors in 0.70s =================================================================
+➜  backend git:(master) ✗ cd backend && python -m pytest test/service_coach -v
+      <logs>
+
+      Fix all unit tests
     </current-task>
 </cline-context>
