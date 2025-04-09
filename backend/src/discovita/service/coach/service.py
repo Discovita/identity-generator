@@ -25,12 +25,13 @@ class CoachService:
         self, message: str, state: CoachState
     ) -> ProcessMessageResult:
         """Process a user message and update the coaching state."""
+        if not state.conversation_history:
+            state = self.prompt_manager.add_initial_message_to_state(state)
         state.conversation_history.append(Message(role="user", content=message))
         system_prompt = self.prompt_manager.get_prompt(state)
         formatted_messages = self.open_ai_service.create_messages(
             system_message=system_prompt, messages=state.conversation_history
         )
-        print(CoachLLMResponse.model_json_schema())
 
         response = self.open_ai_service.create_structured_chat_completion(
             model="gpt-4o-2024-08-06",
