@@ -20,50 +20,44 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Default: solid gold background, white text, no border, rounded-md, gold shadow
-        default: [
-          'bg-gold-500', // Gold background
-          'text-white', // White text
-          'border-0', // No border
-          'rounded-md', // Standard border radius
-          'px-2 py-4', // Padding
-          'font-medium', // Font weight
-          'transition-colors transition-shadow', // Smooth transitions
-          'hover:bg-gold-600 hover:shadow-gold-sm', // Deeper gold and bigger shadow on hover
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-600', // Focus ring
-          'dark:bg-gold-600 dark:text-white dark:hover:bg-gold-700', // Dark mode
-        ].join(' '),
-        // Destructive: keep as is
+        default: cn(
+          'bg-gold-500',
+          'text-white',
+          'border-0',
+          'rounded-md',
+          'px-2 py-4',
+          'font-medium',
+          'transition-colors transition-shadow',
+          'hover:bg-gold-600 hover:shadow-gold-sm',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-600',
+          'dark:bg-gold-600 dark:text-white dark:hover:bg-gold-700'
+        ),
         destructive:
           'bg-destructive text-white shadow-xs hover:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 dark:hover:bg-red-500/60',
-        // Outline: gold border, gold text, white background
-        outline: [
+        outline: cn(
           'border border-gold-400',
           'bg-background',
           'text-gold-700',
           'hover:bg-gold-50 hover:text-gold-900',
           'dark:bg-gold-950 dark:text-gold-100 dark:border-gold-700',
-          'dark:hover:bg-gold-900/50 dark:hover:text-gold-100',
-        ].join(' '),
-        // Secondary: lighter gold background, gold text
-        secondary: [
+          'dark:hover:bg-gold-900/50 dark:hover:text-gold-100'
+        ),
+        secondary: cn(
           'bg-gold-100',
           'text-gold-900',
           'border border-gold-200',
           'hover:bg-gold-200 hover:text-gold-950',
           'dark:bg-gold-800 dark:text-gold-100 dark:border-gold-700',
-          'dark:hover:bg-gold-700 dark:hover:text-gold-200',
-        ].join(' '),
-        // Ghost: transparent, gold text on hover
-        ghost: [
+          'dark:hover:bg-gold-700 dark:hover:text-gold-200'
+        ),
+        ghost: cn(
           'hover:bg-gold-50 hover:text-gold-900',
-          'dark:hover:bg-gold-900/50 dark:hover:text-gold-100',
-        ].join(' '),
-        // Link: gold underline
+          'dark:hover:bg-gold-900/50 dark:hover:text-gold-100'
+        ),
         link: 'text-gold-700 underline-offset-4 hover:underline dark:text-gold-200',
       },
       size: {
-        default: 'px-6 py-2', // Match input height and padding
+        default: 'px-6 py-2',
         sm: 'h-9 rounded-md gap-1.5 px-4 text-xs',
         lg: 'h-12 rounded-md px-8 text-lg',
         icon: 'size-8',

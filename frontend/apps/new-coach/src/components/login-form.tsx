@@ -6,8 +6,8 @@ import { Label } from '@/components/ui/label';
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
-      <Card>
+    <div className={cn('_LoginForm flex flex-col gap-6 mx-auto w-[450px]', className)} {...props}>
+      <Card className="w-full">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription>Login with your Apple or Google account</CardDescription>

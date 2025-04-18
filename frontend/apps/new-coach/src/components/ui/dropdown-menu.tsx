@@ -64,14 +64,17 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        // Gold theme: focus/active states
-        'focus:bg-gold-100 focus:text-gold-900 active:bg-gold-200 active:text-gold-950',
+        // Base styles
+        "relative flex cursor-default items-center gap-2 rounded-lg px-3 py-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        // focus/active states
+        'active:bg-gold-400 active:text-gold-950',
+        'text-gold-700 focus:bg-gold-500/40 focus:text-gold-800 *:[svg]:!text-gold-700',
+        // Dark focus/active states
+        'dark:text-gold-700 dark:focus:bg-gold-500/40 dark:focus:text-gold-800 dark:*:[svg]:!text-gold-700',
         // Destructive state
         'data-[variant=destructive]:text-red-500 data-[variant=destructive]:focus:bg-red-500/40 dark:data-[variant=destructive]:focus:bg-red-500/40 data-[variant=destructive]:focus:text-red-500 data-[variant=destructive]:*:[svg]:!text-red-500',
         // Dark Destructive state
         'dark:data-[variant=destructive]:text-red-500 dark:data-[variant=destructive]:focus:bg-red-500/40 dark:data-[variant=destructive]:focus:text-red-500 dark:data-[variant=destructive]:*:[svg]:!text-red-500',
-        // Base styles
-        "relative flex cursor-default items-center gap-2 rounded-lg px-3 py-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         // Dark mode
         'dark:focus:bg-gold-400 dark:focus:text-gold-800',
         className
@@ -91,10 +94,19 @@ function DropdownMenuCheckboxItem({
     <DropdownMenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
       className={cn(
-        // Gold theme: focus state
-        'focus:bg-gold-100 focus:text-gold-900 dark:focus:bg-gold-400 dark:focus:text-gold-800',
         // Base styles
         "relative flex cursor-default items-center gap-2 rounded-lg py-2 pr-3 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        // focus/active states
+        'active:bg-gold-400 active:text-gold-950',
+        'text-gold-700 focus:bg-gold-500/40 focus:text-gold-800 *:[svg]:!text-gold-700',
+        // Dark focus/active states
+        'dark:text-gold-700 dark:focus:bg-gold-500/40 dark:focus:text-gold-800 dark:*:[svg]:!text-gold-700',
+        // Destructive state
+        'data-[variant=destructive]:text-red-500 data-[variant=destructive]:focus:bg-red-500/40 dark:data-[variant=destructive]:focus:bg-red-500/40 data-[variant=destructive]:focus:text-red-500 data-[variant=destructive]:*:[svg]:!text-red-500',
+        // Dark Destructive state
+        'dark:data-[variant=destructive]:text-red-500 dark:data-[variant=destructive]:focus:bg-red-500/40 dark:data-[variant=destructive]:focus:text-red-500 dark:data-[variant=destructive]:*:[svg]:!text-red-500',
+        // Dark mode
+        'dark:focus:bg-gold-400 dark:focus:text-gold-800',
         className
       )}
       checked={checked}
@@ -125,10 +137,19 @@ function DropdownMenuRadioItem({
     <DropdownMenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       className={cn(
-        // Gold theme: focus state
-        'focus:bg-gold-100 focus:text-gold-900 dark:focus:bg-gold-400 dark:focus:text-gold-800',
         // Base styles
         "relative flex cursor-default items-center gap-2 rounded-lg py-2 pr-3 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        // focus/active states
+        'active:bg-gold-400 active:text-gold-950',
+        'text-gold-700 focus:bg-gold-500/40 focus:text-gold-800 *:[svg]:!text-gold-700',
+        // Dark focus/active states
+        'dark:text-gold-700 dark:focus:bg-gold-500/40 dark:focus:text-gold-800 dark:*:[svg]:!text-gold-700',
+        // Destructive state
+        'data-[variant=destructive]:text-red-500 data-[variant=destructive]:focus:bg-red-500/40 dark:data-[variant=destructive]:focus:bg-red-500/40 data-[variant=destructive]:focus:text-red-500 data-[variant=destructive]:*:[svg]:!text-red-500',
+        // Dark Destructive state
+        'dark:data-[variant=destructive]:text-red-500 dark:data-[variant=destructive]:focus:bg-red-500/40 dark:data-[variant=destructive]:focus:text-red-500 dark:data-[variant=destructive]:*:[svg]:!text-red-500',
+        // Dark mode
+        'dark:focus:bg-gold-400 dark:focus:text-gold-800',
         className
       )}
       {...props}

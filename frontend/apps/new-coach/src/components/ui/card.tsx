@@ -17,7 +17,7 @@ function Card({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="card"
       className={cn(
         // Gold theme styles
-        'bg-white border border-gold-200 rounded-xl shadow-gold-md p-10 max-w-3xl mx-auto',
+        'bg-white border border-gold-200 rounded-xl shadow-gold-md p-10 mx-auto',
         // Dark mode
         'dark:bg-gold-300 dark:border-gold-700 dark:shadow-gold-md',
         className

@@ -1,16 +1,17 @@
-import { LoginForm } from '@/components/login-form';
+import { motion } from 'framer-motion';
+
 function Home() {
   return (
-    <div className="w-72">
-      <div className="text-center mb-12">
-        <h1 className="text-2xl font-bold tracking-tight sm:text-4xl mb-4">
-          Welcome to the Coach Website
-        </h1>
-      </div>
-      <div className="">
-        <LoginForm />
-      </div>
-    </div>
+    <motion.div
+      className="_Home text-center mb-12"
+      key="home"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8 }}
+    >
+      <h1 className="text-gold-700 text-2xl font-bold sm:text-4xl">Welcome to the Coach</h1>
+    </motion.div>
   );
 }
 

@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Layout from '@/layout/Layout';
 import Home from '@/pages/home/Home';
 import Demo from '@/pages/components-demo/Demo';
+import Login from '@/pages/login/Login';
 
 /**
  * Main App component
@@ -13,6 +14,7 @@ const App = () => {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/demo" element={<Demo />} />
       </Route>
     </Routes>

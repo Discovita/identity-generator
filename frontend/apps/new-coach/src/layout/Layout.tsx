@@ -8,7 +8,7 @@ const Layout = () => {
       <nav className="relative z-[1000] flex-none">
         <Navbar />
       </nav>
-      <main className="_Main flex grow-1 justify-center overflow-auto">
+      <main className="_Main flex flex-col grow-1 justify-center overflow-auto">
         <Outlet />
       </main>
       <Footer />
