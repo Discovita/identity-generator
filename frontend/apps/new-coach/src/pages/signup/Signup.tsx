@@ -1,6 +1,6 @@
-import { LoginForm } from '@/pages/login/components/login-form';
+import { SignupForm } from '@/pages/signup/components/signup-form';
 import { motion } from 'framer-motion';
-function Login() {
+function Signup() {
   return (
     <div className="_Login text-center mb-24">
       <motion.div
@@ -10,9 +10,9 @@ function Login() {
         transition={{ duration: 1, delay: 0.5 }}
       >
         <div className="flex flex-col items-center">
-          <span className="sr-only">Log in to your account</span>
+          <span className="sr-only">Create an account</span>
           <h1 className="text-gold-700 text-2xl font-bold tracking-tight sm:text-4xl mb-12">
-            Login
+            Signup
           </h1>
         </div>
       </motion.div>
@@ -23,10 +23,10 @@ function Login() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <LoginForm />
+        <SignupForm />
       </motion.div>
     </div>
   );
 }
 
-export default Login;
+export default Signup;
