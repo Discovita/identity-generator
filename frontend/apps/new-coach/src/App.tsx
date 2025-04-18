@@ -4,6 +4,7 @@ import Home from '@/pages/home/Home';
 import Demo from '@/pages/demo/Demo';
 import Login from '@/pages/login/Login';
 import Signup from '@/pages/signup/Signup';
+import TestScreen from '@/pages/test/TestScreen';
 
 /**
  * Main App component
@@ -15,6 +16,7 @@ const App = () => {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/test" element={<TestScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/demo" element={<Demo />} />
