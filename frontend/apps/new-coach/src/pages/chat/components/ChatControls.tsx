@@ -70,9 +70,11 @@ export const ChatControls: React.FC<ChatControlsProps> = ({
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         handleSubmit(e);
+      } else if (e.key === 'Enter' && e.shiftKey) {
+        setTimeout(resizeTextarea, 0);
       }
     },
-    [handleSubmit]
+    [handleSubmit, resizeTextarea]
   );
 
   return (
