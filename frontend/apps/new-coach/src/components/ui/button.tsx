@@ -22,7 +22,7 @@ const buttonVariants = cva(
       variant: {
         default: cn(
           'bg-gold-500',
-          'text-white',
+          'text-black',
           'border-0',
           'rounded-md',
           'px-2 py-4',

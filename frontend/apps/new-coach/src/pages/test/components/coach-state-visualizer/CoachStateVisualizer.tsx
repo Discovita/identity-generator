@@ -91,19 +91,19 @@ export const CoachStateVisualizer: React.FC<CoachStateVisualizerProps> = ({
   }, [coachState, lastResponse, activeTab]);
 
   return (
-    <div className="_CoachStateVisualizer flex flex-col h-full w-full max-h-screen rounded-md shadow-gold-md border overflow-hidden border-gold-200 bg-gold-50">
+    <div className="_CoachStateVisualizer flex flex-col h-full w-full max-h-screen rounded-none dark:rounded-none shadow-gold-md overflow-hidden dark:bg-[#333333] dark:border-none">
       <Tabs
         value={activeTab}
         onValueChange={v => handleTabClick(v as TabName)}
         className="flex flex-col h-full"
       >
-        <TabsList className="border-b-2 bg-gold-200 border-gold-500 flex gap-2 w-full">
+        <TabsList className="border-b-2 bg-gold-200 border-gold-500 flex gap-2 w-full dark:text-gold-50">
           {tabsConfig.map(tab => (
             <TabsTrigger
               key={tab.name}
               value={tab.name}
               className={
-                'relative whitespace-nowrap px-4 py-3 font-medium transition-all ' +
+                'relative whitespace-nowrap px-4 py-3 font-medium transition-all' +
                 (tabUpdates[tab.name] ? ' font-semibold text-gold-700' : '')
               }
             >

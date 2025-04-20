@@ -25,10 +25,10 @@ export const renderJsonSection = (
   return (
     <div className="mb-4 border rounded-md overflow-hidden border-gold-600">
       <div
-        className="flex justify-between items-center px-4 py-2 bg-gold-200 cursor-pointer transition-colors"
+        className="flex justify-between items-center px-4 py-2 bg-gold-200 dark:bg-neutral-800 cursor-pointer transition-colors"
         onClick={() => toggleSection(sectionKey)}
       >
-        <h3 className="m-0 text-base font-semibold text-gold-900">{title}</h3>
+        <h3 className="m-0 text-base font-semibold text-gold-900 dark:text-gold-200">{title}</h3>
         <div className="flex items-center gap-2">
           <Button
             className="rounded-md px-2 py-1 text-xs font-medium transition-colors hover:bg-gold-600"
@@ -40,12 +40,12 @@ export const renderJsonSection = (
             Copy
           </Button>
           <span className={`text-xs transition-transform ${isExpanded ? '' : 'rotate-[-90deg]'}`}>
-            {isExpanded ? '▼' : '▶'}
+            ▼
           </span>
         </div>
       </div>
       {isExpanded && (
-        <pre className="m-0 p-3 bg-[#f8f8f8] overflow-x-auto font-mono text-xs text-[#333] whitespace-pre-wrap break-words w-full box-border">
+        <pre className="m-0 p-3 bg-[#f8f8f8] dark:bg-neutral-700 overflow-x-auto font-mono text-xs text-[#333] dark:text-gold-50 whitespace-pre-wrap break-words w-full box-border">
           {JSON.stringify(data, null, 2)}
         </pre>
       )}
@@ -89,7 +89,7 @@ export const renderActionsSection = (
             Copy
           </Button>
           <span className={`text-xs transition-transform ${isExpanded ? '' : 'rotate-[-90deg]'}`}>
-            {isExpanded ? '▼' : '▶'}
+            ▼
           </span>
         </div>
       </div>
@@ -163,7 +163,7 @@ export const renderFinalPrompt = (
         <h3 className="m-0 text-base font-semibold text-gold-900">Final Prompt</h3>
         <div className="flex items-center gap-2">
           <Button
-            className="bg-gold-500 text-background rounded-md px-2 py-1 text-xs font-medium transition-colors hover:bg-gold-700"
+            className="bg-gold-500 rounded-md px-2 py-1 text-xs font-medium transition-colors hover:bg-gold-700"
             onClick={e => {
               e.stopPropagation();
               copyToClipboard(lastResponse.final_prompt);
@@ -172,7 +172,7 @@ export const renderFinalPrompt = (
             Copy
           </Button>
           <span className={`text-xs transition-transform ${isExpanded ? '' : 'rotate-[-90deg]'}`}>
-            {isExpanded ? '▼' : '▶'}
+            ▼
           </span>
         </div>
       </div>
@@ -194,7 +194,7 @@ export const renderFinalPrompt = (
  */
 export const renderEmptyState = (primaryText: string, secondaryText?: string): JSX.Element => {
   return (
-    <div className="p-6 text-center bg-gold-50 border border-dashed rounded-md text-neutral-400">
+    <div className="p-6 text-center bg-gold-50 dark:bg-neutral-800 border border-dashed rounded-md text-neutral-400 dark:border-gold-500">
       <p className="font-medium mb-2">{primaryText}</p>
       {secondaryText && <p className="mt-1">{secondaryText}</p>}
     </div>

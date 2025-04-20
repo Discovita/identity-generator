@@ -34,7 +34,7 @@ function SelectTrigger({
         'text-gold-900',
         'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold-400 focus-visible:border-gold-500',
         'hover:border-gold-500',
-        'dark:bg-input/30 dark:text-neutral-100 dark:border-neutral-500 dark:placeholder-neutral-400 dark:hover:border-gold-600',
+        'dark:bg-gold-100 dark:text-gold-800 dark:border-gold-700 dark:placeholder-neutral-400 dark:hover:border-gold-600',
         // Base styles
         'flex w-fit items-center justify-between gap-2 rounded-md px-3 py-2 text-sm whitespace-nowrap outline-none disabled:cursor-not-allowed disabled:opacity-50',
         'data-[size=default]:h-9 data-[size=sm]:h-8',
@@ -46,7 +46,7 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-4 opacity-50" />
+        <ChevronDownIcon className="size-4 dark:text-gold-800" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
