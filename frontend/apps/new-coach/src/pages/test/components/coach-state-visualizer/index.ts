@@ -1,2 +1,2 @@
-export { CoachStateVisualizer } from './CoachStateVisualizer';
-export type { CoachStateVisualizerProps } from './types';
+export { CoachStateVisualizer } from '@/pages/test/components/coach-state-visualizer/CoachStateVisualizer';
+export type { CoachStateVisualizerProps } from '@/pages/test/components/coach-state-visualizer/types';

@@ -12,25 +12,20 @@ interface TestChatProps {
 }
 
 const TestChat: React.FC<TestChatProps> = ({ selectedState, setHasStarted, testStates }) => {
-  // Local state for current coach state and last response
   const [currentCoachState, setCurrentCoachState] = useState<CoachState | null>(null);
   const [lastResponse, setLastResponse] = useState<CoachResponse | null>(null);
 
-  // Generate a random userId for the session
   const userId = React.useMemo(() => Math.random().toString(36).substring(2, 15), []);
 
-  // Callback to receive updated state from ChatInterface
   const handleStateUpdate = useCallback((newState: CoachState, response: CoachResponse) => {
     setCurrentCoachState(newState);
     setLastResponse(response);
   }, []);
 
-  // Get the initial state for the selected test
   const initialState = testStates[selectedState].coach_state;
 
   return (
     <div className="relative z-10 flex flex-col h-full _TestChat">
-      {/* Sticky header with test name and back button */}
       <div className="sticky top-0 left-0 w-full flex justify-between items-center px-5 py-3 shadow-gold-sm z-50 border-b-2 border-primary-color h-[62px]">
         <h2 className="text-[1.2rem] font-semibold m-0">
           Test Mode: {testStates[selectedState].name}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { testStates } from '@/tests/testStates';
-import TestStateSelector from './components/TestStateSelector';
-import TestChat from './components/TestChat';
+import TestStateSelector from '@/pages/test/components/TestStateSelector';
+import TestChat from '@/pages/test/components/TestChat';
 
 function Test() {
   const [selectedState, setSelectedState] = useState('');

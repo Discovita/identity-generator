@@ -6,14 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Link } from 'react-router-dom';
 import { FaGoogle, FaApple } from 'react-icons/fa';
 
-/**
- * LoginForm Component
- * ------------------
- * Renders a login form with social login options, email/password fields, and links.
- * Fully styled for both light and dark themes using Tailwind and custom theme variables.
- *
- * Usage: Place inside a page for authentication.
- */
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div className={cn('_LoginForm flex flex-col gap-6 mx-auto w-[450px]', className)} {...props}>

@@ -1,42 +1,29 @@
-import React from 'react'
+import React from 'react';
+import { motion } from 'framer-motion';
 
 export const LoadingBubbles: React.FC = () => {
+  const numBubbles = 3;
+  const duration = 0.9;
+  const stagger = 0.18;
+
   return (
-    <div className="message assistant loading-bubbles">
-      <div className="bubble"></div>
-      <div className="bubble"></div>
-      <div className="bubble"></div>
-      <style>
-        {`
-          .loading-bubbles {
-            display: flex;
-            gap: 4px;
-            padding: 12px !important;
-            min-width: 60px;
-          }
-          
-          .bubble {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #666;
-            animation: bounce 1s infinite;
-          }
-          
-          .bubble:nth-child(2) {
-            animation-delay: 0.2s;
-          }
-          
-          .bubble:nth-child(3) {
-            animation-delay: 0.4s;
-          }
-          
-          @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-          }
-        `}
-      </style>
+    <div className="flex gap-1.5 py-3 min-w-[60px] items-end" aria-label="Loading...">
+      {Array.from({ length: numBubbles }).map((_, i) => (
+        <motion.div
+          key={i}
+          className="w-2 h-2 rounded-full bg-neutral-500 dark:bg-gold-600"
+          initial={{ y: 0 }}
+          animate={{ y: [0, -8, 0] }}
+          transition={{
+            duration,
+            repeat: Infinity,
+            repeatType: 'loop',
+            ease: 'easeInOut',
+            delay: i * stagger,
+          }}
+          aria-hidden="true"
+        />
+      ))}
     </div>
-  )
-}
+  );
+};

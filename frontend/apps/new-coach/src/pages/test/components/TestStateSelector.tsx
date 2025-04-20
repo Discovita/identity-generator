@@ -11,16 +11,6 @@ import {
 import { Label } from '@/components/ui/label';
 import { TestState } from '@/tests/testStates';
 
-/**
- * Props for TestStateSelector
- * --------------------------
- * - selectedState: The currently selected test state key
- * - setSelectedState: Setter for selectedState
- * - setHasStarted: Setter to indicate the test has started
- * - testStates: Object containing all available test states (Record<string, TestState>)
- *
- * Used by: Test.tsx
- */
 interface TestStateSelectorProps {
   selectedState: string;
   setSelectedState: (value: string) => void;
@@ -28,14 +18,6 @@ interface TestStateSelectorProps {
   testStates: Record<string, TestState>;
 }
 
-/**
- * TestStateSelector Component
- * --------------------------
- * Renders a card UI for selecting a test state and viewing its details.
- * Stateless; all state is managed by the parent.
- *
- * Usage: See Test.tsx
- */
 const TestStateSelector: React.FC<TestStateSelectorProps> = ({
   selectedState,
   setSelectedState,
@@ -52,7 +34,6 @@ const TestStateSelector: React.FC<TestStateSelectorProps> = ({
           <p className="text-gold-900 mb-6">
             Select a test state to simulate different chat scenarios
           </p>
-          {/* State selector form */}
           <form className="flex flex-col gap-4">
             <div className="flex flex-col md:flex-row md:items-center gap-4">
               <Label htmlFor="test-state-select" className="min-w-[120px]">
@@ -84,7 +65,6 @@ const TestStateSelector: React.FC<TestStateSelectorProps> = ({
               </Button>
             </div>
           </form>
-          {/* Selected state details */}
           {selectedState && (
             <div className="mt-8 bg-gold-50 border border-gold-200 rounded-lg p-4">
               <h3 className="text-lg font-semibold text-gold-700 mb-2">Selected State Details:</h3>

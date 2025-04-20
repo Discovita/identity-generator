@@ -1,17 +1,5 @@
 import React from 'react';
 
-/**
- * UserMessage Component
- * ---------------------
- * Renders a chat bubble for user messages with gold theme.
- * Usage: <UserMessage>Message content</UserMessage>
- *
- * Tailwind styles match the original user message style in ChatInterface.
- *
- * Props:
- * - children: React.ReactNode (message content)
- * - ...props: any additional props for the div
- */
 export const UserMessage: React.FC<
   React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
 > = ({ children, ...props }) => (

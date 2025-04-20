@@ -8,17 +8,6 @@ import {
 } from './renderUtils';
 import { getCurrentStateInfo } from './dataUtils';
 
-/**
- * Factory function to render the appropriate content for each tab
- *
- * @param tabName - The currently active tab name
- * @param coachState - The current coach state
- * @param lastResponse - The last API response
- * @param expandedSections - Configuration for which sections are expanded
- * @param toggleSection - Function to toggle section expansion
- * @param extractedActions - Actions extracted from the coach state
- * @returns JSX element with the tab content
- */
 export const renderTabContent = (
   tabName: TabName,
   coachState: CoachState,

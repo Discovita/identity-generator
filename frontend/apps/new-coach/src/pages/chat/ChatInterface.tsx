@@ -42,7 +42,7 @@ export const ChatInterface: React.FC<Props> = ({
   // Add initial message on mount if no messages exist
   useEffect(() => {
     if (messages.length === 0) {
-      setMessages([{ role: 'assistant', content: initialMessage }]);
+      setMessages([{ role: 'coach', content: initialMessage }]);
     }
   }, [messages.length]); // Include messages.length as dependency
 
@@ -64,7 +64,7 @@ export const ChatInterface: React.FC<Props> = ({
       try {
         // Send message without adding to conversation_history (backend will add it)
         const response = await apiClient.sendMessage(content, coachState);
-        setMessages(prev => [...prev, { role: 'assistant', content: response.message }]);
+        setMessages(prev => [...prev, { role: 'coach', content: response.message }]);
         setCoachState(response.coach_state);
 
         // Notify parent component about state update if callback provided
@@ -91,7 +91,6 @@ export const ChatInterface: React.FC<Props> = ({
     [sendMessage]
   );
 
-  // Handler passed to ChatControls to send a message
   const handleSendMessage = useCallback(
     (content: string) => {
       sendMessage(content);

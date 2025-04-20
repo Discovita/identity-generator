@@ -12,18 +12,6 @@ export interface IdentityChoiceProps {
   disabled: boolean;
 }
 
-/**
- * Component for displaying identity choice buttons
- *
- * These buttons appear when a proposed identity is available
- * and allow users to quickly respond with canned messages
- * instead of typing their own responses.
- *
- * There are three main actions:
- * 1. Accept - Confirm the identity as is
- * 2. Refine - Accept but with some adjustments
- * 3. Reject - Ask for a different identity
- */
 export const IdentityChoice: React.FC<IdentityChoiceProps> = ({
   identity,
   onChoiceSelected,

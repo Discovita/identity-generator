@@ -1,5 +1,6 @@
 import { LoginForm } from '@/pages/login/components/login-form';
 import { motion } from 'framer-motion';
+
 function Login() {
   return (
     <div className="_Login text-center mb-24">

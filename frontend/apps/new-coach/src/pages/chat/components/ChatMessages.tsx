@@ -1,6 +1,6 @@
 import React from 'react';
 import { Message, CoachState } from '@/types/apiTypes';
-import { AssistantMessage } from '@/pages/chat/components/AssistantMessage';
+import { CoachMessage } from '@/pages/chat/components/CoachMessage';
 import { UserMessage } from '@/pages/chat/components/UserMessage';
 import { IdentityChoice } from '@/pages/chat/components/IdentityChoice';
 import MarkdownRenderer from '@/utils/MarkdownRenderer';
@@ -25,18 +25,6 @@ interface ChatMessagesProps {
   messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 
-/**
- * ChatMessages Component
- * ---------------------
- * Renders the chat message list, including:
- * - Assistant messages (with Markdown rendering and optional IdentityChoice)
- * - User messages
- * - System messages (error/info)
- * - Loading bubbles when isLoading is true
- * - Scrolls to bottom using messagesEndRef
- *
- * Usage: See ChatInterface.tsx
- */
 export const ChatMessages: React.FC<ChatMessagesProps> = ({
   messages,
   isLoading,
@@ -48,10 +36,9 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
     <div className="_ChatMessages scrollbar not-last:flex-grow overflow-y-auto p-6 bg-gold-50  dark:bg-[#333333]">
       {messages.map((message, index) => (
         <div key={index}>
-          {message.role === 'assistant' ? (
-            <AssistantMessage>
+          {message.role === 'coach' ? (
+            <CoachMessage>
               <MarkdownRenderer content={message.content} />
-              {/* Show IdentityChoice if this is the last message, a proposed identity exists, and not loading */}
               {index === messages.length - 1 && coachState.proposed_identity && !isLoading && (
                 <IdentityChoice
                   identity={coachState.proposed_identity}
@@ -59,7 +46,7 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
                   disabled={isLoading}
                 />
               )}
-            </AssistantMessage>
+            </CoachMessage>
           ) : message.role === 'user' ? (
             <UserMessage>{message.content}</UserMessage>
           ) : (
@@ -70,9 +57,9 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
         </div>
       ))}
       {isLoading && (
-        <AssistantMessage>
+        <CoachMessage>
           <LoadingBubbles />
-        </AssistantMessage>
+        </CoachMessage>
       )}
       {/* Dummy div to scroll to bottom */}
       <div ref={messagesEndRef} />

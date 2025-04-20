@@ -1,4 +1,4 @@
-import { CoachState, CoachResponse, Action } from '../../../types/apiTypes';
+import { CoachState, CoachResponse, Action } from '@/types/apiTypes';
 import { ExtractedActions } from '../types';
 
 // Map to track actions by user session

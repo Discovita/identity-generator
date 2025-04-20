@@ -3,16 +3,6 @@ import MarkdownRenderer from '@/utils/MarkdownRenderer';
 import { copyToClipboard } from './dataUtils';
 import { Button } from '@/components/ui/button';
 
-/**
- * Renders a JSON section with collapsible functionality
- *
- * @param title - Section title
- * @param data - JSON data to display
- * @param sectionKey - Unique key for the section
- * @param isExpanded - Whether the section is expanded
- * @param toggleSection - Function to toggle section expansion
- * @returns JSX element for the section
- */
 export const renderJsonSection = (
   title: string,
   data: Record<string, unknown> | unknown[] | null | undefined,
@@ -53,16 +43,6 @@ export const renderJsonSection = (
   );
 };
 
-/**
- * Renders actions in a visually appealing way with syntax highlighting
- *
- * @param title - Section title
- * @param actions - Array of actions to display
- * @param sectionKey - Unique key for the section
- * @param isExpanded - Whether the section is expanded
- * @param toggleSection - Function to toggle section expansion
- * @returns JSX element for the section
- */
 export const renderActionsSection = (
   title: string,
   actions: Action[],
@@ -144,14 +124,6 @@ export const renderActionsSection = (
   );
 };
 
-/**
- * Renders the final prompt using Markdown
- *
- * @param lastResponse - The last API response containing the prompt
- * @param isExpanded - Whether the section is expanded
- * @param toggleSection - Function to toggle section expansion
- * @returns JSX element for the final prompt section
- */
 export const renderFinalPrompt = (
   lastResponse: CoachResponse | undefined,
   isExpanded: boolean,
@@ -195,13 +167,6 @@ export const renderFinalPrompt = (
   );
 };
 
-/**
- * Renders an empty state message
- *
- * @param primaryText - Primary text to display
- * @param secondaryText - Optional secondary text
- * @returns JSX element for the empty state
- */
 export const renderEmptyState = (primaryText: string, secondaryText?: string): JSX.Element => {
   return (
     <div className="p-6 text-center bg-gold-50 dark:bg-neutral-800 border border-dashed rounded-md text-neutral-400 dark:border-gold-500">

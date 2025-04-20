@@ -1,5 +1,6 @@
 import { SignupForm } from '@/pages/signup/components/signup-form';
 import { motion } from 'framer-motion';
+
 function Signup() {
   return (
     <div className="_Login text-center mb-24">

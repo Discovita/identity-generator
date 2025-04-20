@@ -10,13 +10,6 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { motion } from 'framer-motion';
 
-/**
- * CoachStateVisualizer Component
- * -----------------------------
- * Uses shadcn/ui Tabs for tab navigation and Tailwind CSS for layout and styling.
- * All colors, borders, backgrounds, etc. use the provided CSS variables.
- * Responsive: side-by-side on large screens, stacked on small screens.
- */
 export const CoachStateVisualizer: React.FC<CoachStateVisualizerProps> = ({
   coachState,
   lastResponse,
