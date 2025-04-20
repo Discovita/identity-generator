@@ -1,6 +1,7 @@
 import React from 'react';
 import { Message, CoachState } from '@/types/apiTypes';
 import { convertToXml, downloadXml } from '@/utils/xmlExport';
+import { Button } from '@/components/ui/button';
 
 interface Props {
   messages: Message[];
@@ -15,8 +16,8 @@ export const ConversationExporter: React.FC<Props> = ({ messages, userId, coachS
   };
 
   return (
-    <button className="export-button" onClick={handleExport} disabled={messages.length === 0}>
+    <Button onClick={handleExport} disabled={messages.length === 0}>
       Export Conversation
-    </button>
+    </Button>
   );
 };

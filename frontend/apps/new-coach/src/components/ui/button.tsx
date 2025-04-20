@@ -33,7 +33,7 @@ const buttonVariants = cva(
           'dark:bg-gold-600 dark:text-white dark:hover:bg-gold-700'
         ),
         destructive:
-          'bg-destructive text-white shadow-xs hover:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 dark:hover:bg-red-500/60',
+          'bg-red-600 text-white shadow-xs hover:bg-red-600/70 focus-visible:ring-red-600/20 dark:focus-visible:ring-red-600/40 dark:bg-red-600/60 dark:hover:bg-red-500/60',
         outline: cn(
           'border border-gold-400',
           'bg-background',

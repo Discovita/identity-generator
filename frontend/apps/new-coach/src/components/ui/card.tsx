@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
  * --------------
  * 1. Uses gold theme for background, border, shadow, and radius.
  * 2. Light mode: bg-background, border-gold-200, shadow-gold-md, rounded-xl, generous padding.
- * 3. Dark mode: bg-background-dark, border-gold-700, shadow-gold-md.
+ * 3. Dark mode: bg-gold-200, border-gold-700, shadow-gold-md.
  * 4. CardTitle uses text-gold-500 for h1-like emphasis.
  * 5. All other structure and props are preserved.
  */

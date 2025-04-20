@@ -1,6 +1,7 @@
 import { CoachResponse, Action } from '@/types/apiTypes';
-import MarkdownRenderer from '@/pages/test/MarkdownRenderer';
+import MarkdownRenderer from '@/utils/MarkdownRenderer';
 import { copyToClipboard } from './dataUtils';
+import { Button } from '@/components/ui/button';
 
 /**
  * Renders a JSON section with collapsible functionality
@@ -14,7 +15,7 @@ import { copyToClipboard } from './dataUtils';
  */
 export const renderJsonSection = (
   title: string,
-  data: any,
+  data: Record<string, unknown> | unknown[] | null | undefined,
   sectionKey: string,
   isExpanded: boolean,
   toggleSection: (section: string) => void
@@ -22,26 +23,32 @@ export const renderJsonSection = (
   if (!data || (Array.isArray(data) && data.length === 0)) return null;
 
   return (
-    <div className="state-section">
-      <div className="section-header" onClick={() => toggleSection(sectionKey)}>
-        <h3>{title}</h3>
-        <div className="section-controls">
-          <button
-            className="copy-button"
+    <div className="mb-4 border rounded-md overflow-hidden border-gold-600">
+      <div
+        className="flex justify-between items-center px-4 py-2 bg-gold-200 cursor-pointer transition-colors"
+        onClick={() => toggleSection(sectionKey)}
+      >
+        <h3 className="m-0 text-base font-semibold text-gold-900">{title}</h3>
+        <div className="flex items-center gap-2">
+          <Button
+            className="rounded-md px-2 py-1 text-xs font-medium transition-colors hover:bg-gold-600"
             onClick={e => {
               e.stopPropagation();
               copyToClipboard(data);
             }}
           >
             Copy
-          </button>
-          <span className={`expand-icon ${isExpanded ? 'expanded' : ''}`}>
+          </Button>
+          <span className={`text-xs transition-transform ${isExpanded ? '' : 'rotate-[-90deg]'}`}>
             {isExpanded ? '▼' : '▶'}
           </span>
         </div>
       </div>
-
-      {isExpanded && <pre className="json-content">{JSON.stringify(data, null, 2)}</pre>}
+      {isExpanded && (
+        <pre className="m-0 p-3 bg-[#f8f8f8] overflow-x-auto font-mono text-xs text-[#333] whitespace-pre-wrap break-words w-full box-border">
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      )}
     </div>
   );
 };
@@ -65,56 +72,63 @@ export const renderActionsSection = (
 ): JSX.Element | null => {
   if (!actions || actions.length === 0) return null;
 
-  // Single color for all action types
-  const actionColor = 'var(--primary-color)'; // Use the primary color from variables.css
-
   return (
-    <div className="state-section">
-      <div className="section-header" onClick={() => toggleSection(sectionKey)}>
-        <h3>{title}</h3>
-        <div className="section-controls">
-          <button
-            className="copy-button"
+    <div className="mb-4 border rounded-md overflow-hidden">
+      <div
+        className="flex justify-between items-center px-4 py-2 bg-gold-200 cursor-pointer transition-colors"
+        onClick={() => toggleSection(sectionKey)}
+      >
+        <h3 className="m-0 text-base font-semibold text-gold-700">{title}</h3>
+        <div className="flex items-center gap-2">
+          <Button
             onClick={e => {
               e.stopPropagation();
               copyToClipboard(actions);
             }}
           >
             Copy
-          </button>
-          <span className={`expand-icon ${isExpanded ? 'expanded' : ''}`}>
+          </Button>
+          <span className={`text-xs transition-transform ${isExpanded ? '' : 'rotate-[-90deg]'}`}>
             {isExpanded ? '▼' : '▶'}
           </span>
         </div>
       </div>
-
       {isExpanded && (
-        <div className="actions-container">
+        <div className="flex flex-col gap-3 p-4 max-h-[500px] overflow-y-auto">
           {actions.map((action, index) => (
-            <div key={index} className="action-card">
-              <div className="action-type" style={{ backgroundColor: actionColor }}>
+            <div
+              key={index}
+              className="rounded-md border overflow-hidden bg-white shadow transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              <div className="px-4 py-2 text-white font-semibold text-sm uppercase tracking-wide bg-gold-500">
                 {action.type}
               </div>
-              <div className="action-params">
+              <div className="p-3">
                 {action.params && action.params.length > 0 ? (
-                  <table className="params-table">
+                  <table className="w-full border-collapse text-sm">
                     <thead>
                       <tr>
-                        <th>Parameter</th>
-                        <th>Value</th>
+                        <th className="bg-[#f8f8f8] font-semibold text-[#555] p-2 text-left">
+                          Parameter
+                        </th>
+                        <th className="bg-[#f8f8f8] font-semibold text-[#555] p-2 text-left">
+                          Value
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       {action.params.map((param, pIndex) => (
                         <tr key={pIndex}>
-                          <td className="param-name">{param.name}</td>
-                          <td className="param-value">{JSON.stringify(param.value)}</td>
+                          <td className="font-medium text-[#555] w-2/5 p-2">{param.name}</td>
+                          <td className="font-mono bg-[#f9f9f9] p-2 rounded break-words max-w-[60%]">
+                            {JSON.stringify(param.value)}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 ) : (
-                  <div className="no-params">No parameters</div>
+                  <div className="italic text-[#888] text-center p-2">No parameters</div>
                 )}
               </div>
             </div>
@@ -141,27 +155,29 @@ export const renderFinalPrompt = (
   if (!lastResponse?.final_prompt) return null;
 
   return (
-    <div className="state-section">
-      <div className="section-header" onClick={() => toggleSection('prompt')}>
-        <h3>Final Prompt</h3>
-        <div className="section-controls">
-          <button
-            className="copy-button"
+    <div className="mb-4 border rounded-md overflow-hidden">
+      <div
+        className="flex justify-between items-center px-4 py-2 bg-gold-200 cursor-pointer transition-colors"
+        onClick={() => toggleSection('prompt')}
+      >
+        <h3 className="m-0 text-base font-semibold text-gold-900">Final Prompt</h3>
+        <div className="flex items-center gap-2">
+          <Button
+            className="bg-gold-500 text-background rounded-md px-2 py-1 text-xs font-medium transition-colors hover:bg-gold-700"
             onClick={e => {
               e.stopPropagation();
               copyToClipboard(lastResponse.final_prompt);
             }}
           >
             Copy
-          </button>
-          <span className={`expand-icon ${isExpanded ? 'expanded' : ''}`}>
+          </Button>
+          <span className={`text-xs transition-transform ${isExpanded ? '' : 'rotate-[-90deg]'}`}>
             {isExpanded ? '▼' : '▶'}
           </span>
         </div>
       </div>
-
       {isExpanded && (
-        <div className="markdown-prompt-content">
+        <div className="p-4 bg-gold-50 overflow-y-auto text-sm leading-[1.5] max-h-[300px]">
           <MarkdownRenderer content={lastResponse.final_prompt} />
         </div>
       )}
@@ -178,9 +194,9 @@ export const renderFinalPrompt = (
  */
 export const renderEmptyState = (primaryText: string, secondaryText?: string): JSX.Element => {
   return (
-    <div className="empty-state">
-      <p>{primaryText}</p>
-      {secondaryText && <p>{secondaryText}</p>}
+    <div className="p-6 text-center bg-gold-50 border border-dashed rounded-md text-neutral-400">
+      <p className="font-medium mb-2">{primaryText}</p>
+      {secondaryText && <p className="mt-1">{secondaryText}</p>}
     </div>
   );
 };

@@ -32,11 +32,11 @@ function DropdownMenuContent({
         sideOffset={sideOffset}
         className={cn(
           // Gold theme: background, border, shadow
-          'bg-background-light text-neutral-600 border border-gold-300 shadow-gold-md',
+          'bg-gold-50 text-neutral-600 border border-gold-300 shadow-gold-md',
           // Animation and layout
           'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 max-h-(--radix-dropdown-menu-content-available-height) min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-xl p-1',
           // Dark mode
-          'dark:bg-background-dark dark:border-gold-700 dark:shadow-gold-md',
+          'dark:bg-gold-200 dark:border-gold-700 dark:shadow-gold-md',
           className
         )}
         {...props}
@@ -252,7 +252,7 @@ function DropdownMenuSubContent({
       data-slot="dropdown-menu-sub-content"
       className={cn(
         // Gold theme: background, border, shadow
-        'bg-background-light text-neutral-600 border border-gold-300 shadow-gold-md rounded-xl p-1 dark:bg-background-dark dark:text-neutral-600-light dark:border-gold-700 dark:shadow-gold-md',
+        'bg-gold-50 text-neutral-600 border border-gold-300 shadow-gold-md rounded-xl p-1 dark:bg-gold-200 dark:text-neutral-600-light dark:border-gold-700 dark:shadow-gold-md',
         className
       )}
       {...props}

@@ -48,9 +48,9 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
   // the 'validMatch' state.
   useEffect(() => {
     const result = PASSWORD_REGEX.test(password);
-    setValidPassword(result); // sets if password is valid or not
+    setValidPassword(result);
     const match = password === matchPassword;
-    setValidMatch(match); // sets if password and its confirmation match
+    setValidMatch(match);
   }, [password, matchPassword]);
 
   // This useEffect hook is used to clear the error message every time the email
@@ -73,34 +73,48 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
     }
     // Implement Create User Logic
   };
+
   return (
     <div className={cn('_SignupForm flex flex-col gap-6 mx-auto w-[450px]', className)} {...props}>
-      <Card className="w-full">
+      {/* Card container with adaptive background and shadow for dark mode */}
+      <Card className="w-full bg-card dark:bg-gold-400 shadow-gold-sm dark:shadow-gold-md border border-border dark:border-gold-700">
         <CardHeader className="text-center">
-          <CardDescription>Signup with your Apple or Google account</CardDescription>
+          <CardDescription className="text-muted-foreground dark:text-gold-200">
+            Signup with your Apple or Google account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-6" method="POST" onSubmit={handleSubmit}>
             <div className="grid gap-6">
+              {/* Social signup buttons with gold accents in dark mode */}
               <div className="flex flex-col gap-4">
-                <Button variant="outline" className="w-full">
-                  <FaApple />
+                <Button
+                  variant="outline"
+                  className="w-full bg-white dark:bg-gold-700/90 dark:text-gold-50 border border-border dark:border-gold-600 hover:dark:bg-gold-600/90"
+                >
+                  <FaApple className="mr-2" />
                   Signup with Apple
                 </Button>
-                <Button variant="outline" className="w-full">
-                  <FaGoogle />
+                <Button
+                  variant="outline"
+                  className="w-full bg-white dark:bg-gold-700/90 dark:text-gold-50 border border-border dark:border-gold-600 hover:dark:bg-gold-600/90"
+                >
+                  <FaGoogle className="mr-2" />
                   Signup with Google
                 </Button>
               </div>
-              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                <span className="bg-card text-muted-foreground relative z-10 px-2">
-                  Or create an account with
+              {/* Divider with adaptive color */}
+              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t dark:after:border-gold-700">
+                <span className="text-muted-foreground dark:text-gold-200 relative z-10 px-2 bg-gold-50 dark:bg-gold-400">
+                  or create an account with
                 </span>
               </div>
-
-              <div className="grid gap-2">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
+              {/* Email/password fields with gold highlights in dark mode */}
+              <div className="grid gap-6">
+                <div className="grid gap-3">
+                  <Label htmlFor="email" className="text-gold-900 dark:text-gold-100">
+                    Email
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -110,12 +124,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
                     aria-invalid={validEmail ? 'false' : 'true'}
                     aria-describedby="emailnote"
                     onChange={e => setEmail(e.target.value)}
+                    className="bg-background dark:bg-gold-700/40 border border-border dark:border-gold-600 text-foreground dark:text-gold-50 placeholder:text-muted-foreground dark:placeholder:text-gold-300 focus:ring-2 focus:ring-gold-500"
                   />
                 </div>
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Password</Label>
-                  </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="password" className="text-gold-900 dark:text-gold-100">
+                    Password
+                  </Label>
                   <Input
                     name="password"
                     type={'password'}
@@ -125,13 +140,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
                     aria-invalid={validPassword ? 'false' : 'true'}
                     aria-describedby="passwordnote"
                     showPasswordToggle
+                    className="bg-background dark:bg-gold-700/40 border border-border dark:border-gold-600 text-foreground dark:text-gold-50 placeholder:text-muted-foreground dark:placeholder:text-gold-300 focus:ring-2 focus:ring-gold-500"
                   />
                 </div>
-
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Confirm Password</Label>
-                  </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="confirm_password" className="text-gold-900 dark:text-gold-100">
+                    Confirm Password
+                  </Label>
                   <Input
                     name="confirm_password"
                     type={'password'}
@@ -141,19 +156,27 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
                     aria-invalid={validMatch ? 'false' : 'true'}
                     aria-describedby="confirmnote"
                     showPasswordToggle
+                    className="bg-background dark:bg-gold-700/40 border border-border dark:border-gold-600 text-foreground dark:text-gold-50 placeholder:text-muted-foreground dark:placeholder:text-gold-300 focus:ring-2 focus:ring-gold-500"
                   />
                 </div>
-
-                <Button type="submit" className="w-full">
+                <Button
+                  type="submit"
+                  className="w-full bg-gold-500 hover:bg-gold-600 text-white dark:bg-gold-700 dark:hover:bg-gold-600 dark:text-gold-50 font-semibold shadow-gold-md"
+                >
                   Signup
                 </Button>
               </div>
-              <div className="text-center text-sm">
+              {/* Login link with gold hover in dark mode */}
+              <div className="text-center text-sm text-muted-foreground dark:text-gold-200">
                 Already have an account?{' '}
-                <Link to="/login" className="underline underline-offset-4">
+                <Link
+                  to="/login"
+                  className="underline underline-offset-4 hover:text-gold-700 dark:hover:text-gold-300"
+                >
                   Log in
                 </Link>
               </div>
+              {/* Error message and info notes styled for both themes */}
               <p
                 ref={errorRef}
                 className={errorMessage ? 'errmsg' : 'offscreen'}
@@ -223,7 +246,8 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
           </form>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-gold-500 text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+      {/* Terms and privacy links with gold hover in dark mode */}
+      <div className="text-muted-foreground dark:text-gold-300 *:[a]:hover:text-gold-500 dark:*:[a]:hover:text-gold-200 text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
         By clicking continue, you agree to our <Link to="#">Terms of Service</Link> and{' '}
         <Link to="#">Privacy Policy</Link>.
       </div>

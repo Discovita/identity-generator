@@ -7,24 +7,15 @@ import {
   getTabsConfig,
   detectAllTabChanges,
 } from './utils';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { motion } from 'framer-motion';
 
 /**
  * CoachStateVisualizer Component
- *
- * This component displays the internal state and metadata of the coaching system
- * during test mode. It provides a detailed view into what's happening behind the
- * scenes in the coaching system.
- *
- * Features:
- * - Displays coach state in a tabbed interface
- * - Shows available actions and actions taken
- * - Allows collapsing/expanding sections
- * - Provides syntax highlighting for JSON data
- * - Includes copy to clipboard functionality
- * - Shows indicators when tab content changes
- *
- * @param props.coachState - The current state of the coach
- * @param props.lastResponse - The last API response object containing prompt and other metadata
+ * -----------------------------
+ * Uses shadcn/ui Tabs for tab navigation and Tailwind CSS for layout and styling.
+ * All colors, borders, backgrounds, etc. use the provided CSS variables.
+ * Responsive: side-by-side on large screens, stacked on small screens.
  */
 export const CoachStateVisualizer: React.FC<CoachStateVisualizerProps> = ({
   coachState,
@@ -50,7 +41,6 @@ export const CoachStateVisualizer: React.FC<CoachStateVisualizerProps> = ({
   // Handle tab click - change active tab and clear update indicator
   const handleTabClick = (tabName: TabName) => {
     setActiveTab(tabName);
-
     // Clear update indicator for this tab
     if (tabUpdates[tabName]) {
       setTabUpdates(prev => {
@@ -66,7 +56,6 @@ export const CoachStateVisualizer: React.FC<CoachStateVisualizerProps> = ({
     // Extract current actions
     const currentActions = extractActions(coachState, lastResponse);
     extractedActionsRef.current = currentActions;
-
     // Skip first render
     if (prevStateRef.current === null) {
       prevStateRef.current = coachState;
@@ -74,7 +63,6 @@ export const CoachStateVisualizer: React.FC<CoachStateVisualizerProps> = ({
       prevActionsRef.current = currentActions;
       return;
     }
-
     // Detect changes in each tab's data
     const updates = detectAllTabChanges(
       prevStateRef.current,
@@ -85,52 +73,78 @@ export const CoachStateVisualizer: React.FC<CoachStateVisualizerProps> = ({
       currentActions,
       activeTab
     );
-
     // Only update state if there are actual changes
     let hasAnyUpdates = false;
     Object.values(updates).forEach(value => {
       if (value === true) hasAnyUpdates = true;
     });
-
     if (hasAnyUpdates) {
       setTabUpdates(prev => ({
         ...prev,
         ...updates,
       }));
     }
-
     // Store current values for next comparison
     prevStateRef.current = coachState;
     prevResponseRef.current = lastResponse;
     prevActionsRef.current = currentActions;
-  }, [coachState, lastResponse, activeTab]); // Remove extractedActions from dependencies
+  }, [coachState, lastResponse, activeTab]);
 
   return (
-    <div className="coach-state-visualizer">
-      <div className="tabs">
+    <div className="_CoachStateVisualizer flex flex-col h-full w-full max-h-screen rounded-md shadow-gold-md border overflow-hidden border-gold-200 bg-gold-50">
+      <Tabs
+        value={activeTab}
+        onValueChange={v => handleTabClick(v as TabName)}
+        className="flex flex-col h-full"
+      >
+        <TabsList className="border-b-2 bg-gold-200 border-gold-500 flex gap-2 w-full">
+          {tabsConfig.map(tab => (
+            <TabsTrigger
+              key={tab.name}
+              value={tab.name}
+              className={
+                'relative whitespace-nowrap px-4 py-3 font-medium transition-all ' +
+                (tabUpdates[tab.name] ? ' font-semibold text-gold-700' : '')
+              }
+            >
+              {tab.label}
+              {/* Tab update indicator using Framer Motion for pulse animation */}
+              {tabUpdates[tab.name] && (
+                <motion.span
+                  className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#e74c3c]"
+                  initial={{ scale: 0.9, boxShadow: '0 0 0 0 rgba(231,76,60,0.7)' }}
+                  animate={{
+                    scale: [0.9, 1.1, 0.9],
+                    boxShadow: [
+                      '0 0 0 0 rgba(231,76,60,0.7)',
+                      '0 0 0 5px rgba(231,76,60,0)',
+                      '0 0 0 0 rgba(231,76,60,0)',
+                    ],
+                  }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                />
+              )}
+            </TabsTrigger>
+          ))}
+        </TabsList>
         {tabsConfig.map(tab => (
-          <button
+          <TabsContent
             key={tab.name}
-            className={`tab ${activeTab === tab.name ? 'active' : ''} ${
-              tabUpdates[tab.name] ? 'has-updates' : ''
-            }`}
-            onClick={() => handleTabClick(tab.name)}
+            value={tab.name}
+            className="flex-1 overflow-y-auto p-4 scrollbar"
           >
-            {tab.label}
-          </button>
+            {activeTab === tab.name &&
+              renderTabContent(
+                tab.name as TabName,
+                coachState,
+                lastResponse,
+                expandedSections,
+                toggleSection,
+                extractedActionsRef.current
+              )}
+          </TabsContent>
         ))}
-      </div>
-
-      <div className="tab-content">
-        {renderTabContent(
-          activeTab,
-          coachState,
-          lastResponse,
-          expandedSections,
-          toggleSection,
-          extractedActionsRef.current
-        )}
-      </div>
+      </Tabs>
     </div>
   );
 };

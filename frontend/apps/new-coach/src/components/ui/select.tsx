@@ -30,7 +30,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        'border border-gold-300 bg-background-light transition-all',
+        'border border-gold-300 bg-gold-50 transition-all',
         'text-gold-900',
         'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold-400 focus-visible:border-gold-500',
         'hover:border-gold-500',

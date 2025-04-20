@@ -39,9 +39,9 @@ function Input({ className, type, showPasswordToggle, ...props }: InputProps) {
             // Base styles
             'text-sm rounded-xl block w-full px-5 py-3 transition-all',
             // Border and background
-            'border border-gold-300 bg-background-light',
+            'border border-gold-300 bg-gold-50',
             // Text and placeholder
-            'text-neutral-600 placeholder-text-light',
+            'text-neutral-600 placeholder-neutral-400',
             // Focus and hover: gold border, no dark border
             'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold-400 focus-visible:border-gold-500',
             'hover:border-gold-500',
@@ -60,7 +60,7 @@ function Input({ className, type, showPasswordToggle, ...props }: InputProps) {
           type="button"
           tabIndex={-1}
           aria-label={show ? 'Hide password' : 'Show password'}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 focus:outline-none"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 focus:outline-none dark:text-gold-50"
           onClick={() => setShow(prev => !prev)}
         >
           {show ? <FaEyeSlash /> : <FaEye />}
@@ -78,9 +78,9 @@ function Input({ className, type, showPasswordToggle, ...props }: InputProps) {
         // Base styles
         'text-sm rounded-xl block w-full px-5 py-3 transition-all',
         // Border and background
-        'border border-gold-300 bg-background-light',
+        'border border-gold-300 bg-gold-50',
         // Text and placeholder
-        'text-neutral-600 placeholder-text-light',
+        'text-neutral-600 placeholder-neutral-400',
         // Focus and hover: gold border, no dark border
         'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold-400 focus-visible:border-gold-500',
         'hover:border-gold-500',
