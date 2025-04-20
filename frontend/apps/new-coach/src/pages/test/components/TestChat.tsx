@@ -31,7 +31,7 @@ const TestChat: React.FC<TestChatProps> = ({ selectedState, setHasStarted, testS
   return (
     <div className="relative z-10 flex flex-col h-full _TestChat">
       {/* Sticky header with test name and back button */}
-      <div className="sticky top-0 left-0 w-full flex justify-between items-center px-5 py-3 shadow-gold-md z-50 border-b-2 border-primary-color h-[62px]">
+      <div className="sticky top-0 left-0 w-full flex justify-between items-center px-5 py-3 shadow-gold-sm z-50 border-b-2 border-primary-color h-[62px]">
         <h2 className="text-[1.2rem] font-semibold m-0">
           Test Mode: {testStates[selectedState].name}
         </h2>

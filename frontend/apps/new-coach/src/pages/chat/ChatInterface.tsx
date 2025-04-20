@@ -100,7 +100,7 @@ export const ChatInterface: React.FC<Props> = ({
   );
 
   return (
-    <div className="_ChatInterface flex flex-col h-[100vh] rounded-md overflow-hidden shadow-gold-md bg-gold-50 transition-shadow hover:shadow-gold-lg">
+    <div className="_ChatInterface flex flex-col h-[100vh] rounded-md overflow-hidden shadow-gold-md bg-gold-50 transition-shadow hover:shadow-gold-lg dark:rounded-none">
       <ChatMessages
         messages={messages}
         isLoading={isLoading}
