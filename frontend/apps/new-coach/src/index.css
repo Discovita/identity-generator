@@ -142,4 +142,10 @@
   p {
     @apply text-base mb-3;
   }
+
+  /* Ensure code blocks and pre elements wrap and never overflow horizontally */
+  pre,
+  code {
+    @apply break-words whitespace-pre-wrap w-full max-w-full;
+  }
 }
