@@ -2,6 +2,13 @@ import { Link } from 'react-router-dom';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 
 export default function Navbar() {
+  const centerLinks = [
+    { label: 'Home', to: '/', ariaCurrent: true },
+    { label: 'Test', to: '/test' },
+    { label: 'Chat', to: '/chat' },
+    // Add more links here as needed
+  ];
+
   return (
     <nav className="_Navbar w-full">
       <div className="flex flex-wrap justify-between items-center mx-auto p-2 bg-gold-600 border-b border-gray-200 dark:bg-neutral-800 dark:border-gray-800">
@@ -12,16 +19,16 @@ export default function Navbar() {
         </Link>
         <div className="flex items-center">
           <div className="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
-            <Link
-              to="/"
-              className="text-gold-50 dark:text-white hover:underline"
-              aria-current="page"
-            >
-              Home
-            </Link>
-            <Link to="/test" className="text-gold-50 dark:text-white hover:underline">
-              Test
-            </Link>
+            {centerLinks.map(link => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="text-gold-50 dark:text-white hover:underline"
+                aria-current={link.ariaCurrent ? 'page' : undefined}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
         <div className="flex items-center gap-4">

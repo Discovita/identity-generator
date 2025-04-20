@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { ChatInterface } from '@/pages/chat/ChatInterface';
+import { ChatInterface } from '@/pages/chat/components/ChatInterface';
 import { CoachStateVisualizer } from '@/pages/test/components/coach-state-visualizer/CoachStateVisualizer';
 import { CoachResponse, CoachState } from '@/types/apiTypes';
 import { Button } from '@/components/ui/button';
