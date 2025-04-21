@@ -30,8 +30,8 @@ check_dependencies
 if [ -n "$1" ]; then
     APP_NAME="$1"
     # Validate app name
-    if [ "$APP_NAME" != "face-swapper" ] && [ "$APP_NAME" != "coach" ]; then
-        echo "Error: Invalid app name. Must be either 'face-swapper' or 'coach'"
+    if [ "$APP_NAME" != "face-swapper" ] && [ "$APP_NAME" != "coach" ] && [ "$APP_NAME" != "new-coach" ]; then
+        echo "Error: Invalid app name. Must be either 'face-swapper', 'coach', or 'new-coach'"
         exit 1
     fi
 else
@@ -41,7 +41,8 @@ else
     case $choice in
         1) APP_NAME="face-swapper" ;;
         2) APP_NAME="coach" ;;
-        *) echo "Error: Invalid choice. Please enter 1 or 2."; exit 1 ;;
+        3) APP_NAME="new-coach" ;;
+        *) echo "Error: Invalid choice. Please enter 1, 2, or 3."; exit 1 ;;
     esac
 fi
 
