@@ -58,7 +58,7 @@ def describe_image_with_vision(client: Any, image_url: str, prompt: str) -> str:
 
     # Make the API call
     response = client.chat.completions.create(
-        model="gpt-4-vision-preview", messages=messages, max_tokens=300
+        model="gpt-image-1", messages=messages, max_tokens=300
     )
 
     # Extract the content from the response
