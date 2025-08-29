@@ -354,7 +354,7 @@ def test_create_chat_completion_with_url_images(mock_openai_response):
         # Call create_chat_completion with the messages and vision model
         response = client.create_chat_completion(
             messages=messages,
-            model="gpt-image-1",  # Explicitly set vision model
+            model="gpt-5",  # Explicitly set vision model
         )
 
         assert response == "Test response"
@@ -362,7 +362,7 @@ def test_create_chat_completion_with_url_images(mock_openai_response):
 
         # Verify the parameters passed to the API
         call_args = mock_completions.create.call_args[1]
-        assert call_args["model"] == "gpt-image-1"
+        assert call_args["model"] == "gpt-5"
         assert len(call_args["messages"]) == 1
         assert call_args["messages"][0]["role"] == "user"
 
