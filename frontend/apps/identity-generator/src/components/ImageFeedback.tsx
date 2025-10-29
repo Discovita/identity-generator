@@ -6,22 +6,35 @@ const ImageFeedback: React.FC = () => {
   const [feedback, setFeedback] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isSwapping, setIsSwapping] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const state = workflowService.getState()
   const { images: imageHistory, selectedIndex } = workflowService.getImageHistory()
 
   const handleSubmitFeedback = async () => {
     if (feedback.trim()) {
       setIsLoading(true)
-      await workflowService.generateImage(feedback)
-      setFeedback('')
-      setIsLoading(false)
+      setError(null)
+      try {
+        await workflowService.generateImage(feedback)
+        setFeedback('')
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to generate new version')
+      } finally {
+        setIsLoading(false)
+      }
     }
   }
 
   const handleFinalize = async () => {
     setIsSwapping(true)
-    await workflowService.generateFinalResult()
-    setIsSwapping(false)
+    setError(null)
+    try {
+      await workflowService.generateFinalResult()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to finalize image')
+    } finally {
+      setIsSwapping(false)
+    }
   }
 
   return (
@@ -66,18 +79,38 @@ const ImageFeedback: React.FC = () => {
 
       <div>
         <h3>How would you like to adjust this image?</h3>
+
+        {error && (
+          <div style={{
+            color: 'red',
+            marginBottom: '15px',
+            padding: '10px',
+            border: '1px solid red',
+            borderRadius: '4px',
+            backgroundColor: '#ffebee'
+          }}>
+            <strong>Error</strong>
+            <p style={{ margin: '5px 0' }}>
+              {error}
+            </p>
+            <p style={{ margin: '5px 0', fontSize: '0.9em' }}>
+              Please try again or adjust your request.
+            </p>
+          </div>
+        )}
+
         <textarea
           value={feedback}
           onChange={(e) => setFeedback(e.target.value)}
           placeholder="Describe any changes you'd like to make to the image..."
           rows={4}
         />
-        
+
         <div>
-          <button onClick={handleSubmitFeedback} disabled={isLoading}>
+          <button onClick={handleSubmitFeedback} disabled={isLoading || isSwapping}>
             {isLoading ? <LoadingSpinner /> : 'Generate New Version'}
           </button>
-          <button onClick={handleFinalize} disabled={isSwapping}>
+          <button onClick={handleFinalize} disabled={isSwapping || isLoading}>
             {isSwapping ? <LoadingSpinner /> : 'Finalize Image'}
           </button>
         </div>
