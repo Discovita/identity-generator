@@ -102,7 +102,7 @@ export class WorkflowService {
       }
 
       const response = await apiClient.generateImage(request)
-      
+
       this.imageHistory.push({
         imageUrl: response.imageUrl,
         augmentedPrompt: response.augmentedPrompt,
@@ -116,10 +116,13 @@ export class WorkflowService {
         isLoading: false,
       })
     } catch (error) {
-      this.setState({ 
-        error: error instanceof Error ? error.message : 'Failed to generate image',
-        isLoading: false 
+      const errorMessage = error instanceof Error ? error.message : 'Failed to generate image'
+      this.setState({
+        error: errorMessage,
+        isLoading: false
       })
+      // Re-throw so components can handle it
+      throw error
     }
   }
 
@@ -137,10 +140,13 @@ export class WorkflowService {
         isLoading: false,
       })
     } catch (error) {
-      this.setState({ 
-        error: error instanceof Error ? error.message : 'Failed to swap faces',
-        isLoading: false 
+      const errorMessage = error instanceof Error ? error.message : 'Failed to swap faces'
+      this.setState({
+        error: errorMessage,
+        isLoading: false
       })
+      // Re-throw so components can handle it
+      throw error
     }
   }
 
