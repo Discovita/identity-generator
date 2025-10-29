@@ -55,3 +55,52 @@ class OpenAIService(
         self.client = OpenAI(api_key=api_key, organization=organization)
 
         check_dependency_versions()
+
+    def get_completion(
+        self,
+        prompt: str,
+        model: str = "gpt-4o",
+        system_message: Optional[str] = None,
+        temperature: float = 0.7,
+        max_completion_tokens: Optional[int] = None,
+    ) -> str:
+        """
+        Get a simple text completion from the API.
+
+        This is a convenience method that wraps create_chat_completion
+        for simple use cases where you just need a text response.
+
+        Parameters
+        ----------
+        prompt : str
+            The user prompt/query
+        model : str
+            The model to use (default: "gpt-4o")
+        system_message : Optional[str]
+            Optional system message to set context
+        temperature : float
+            Controls randomness (default: 0.7)
+        max_completion_tokens : Optional[int]
+            Maximum tokens in response (for newer models)
+
+        Returns
+        -------
+        str
+            The model's text response
+        """
+        messages = self.create_messages(prompt=prompt, system_message=system_message)
+
+        response = self.create_chat_completion(
+            messages=messages,
+            model=model,
+            temperature=temperature,
+            max_completion_tokens=max_completion_tokens,
+        )
+
+        # Extract text from response
+        if isinstance(response, str):
+            return response
+        elif hasattr(response, "choices") and len(response.choices) > 0:
+            return response.choices[0].message.content
+        else:
+            return str(response)

@@ -6,12 +6,9 @@
     "apps/*"
   ],
   "scripts": {
-    "start:face-swapper": "cd apps/face-swapper && npm start",
-    "start:coach": "cd apps/coach && npm start",
-    "build:face-swapper": "cd apps/face-swapper && npm run build",
-    "build:coach": "cd apps/coach && npm run build",
-    "install:face-swapper": "cd apps/face-swapper && npm install",
-    "install:coach": "cd apps/coach && npm install"
+    "start": "cd apps/identity-generator && npm start",
+    "build": "cd apps/identity-generator && npm run build",
+    "install": "cd apps/identity-generator && npm install"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
