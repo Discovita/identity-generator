@@ -1,0 +1,17 @@
+{
+  "name": "identity-generator",
+  "version": "1.0.0",
+  "description": "Identity Generator App",
+  "private": true,
+  "scripts": {
+    "install:backend": "cd backend && python3 -m venv .venv && .venv/bin/pip install -e .",
+    "install:frontend": "cd frontend && npm install && cd apps/identity-generator && npm install",
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "dev": "npm install --no-save concurrently && concurrently --kill-others --prefix \"[{name}]\" --names \"backend,frontend\" --prefix-colors \"yellow.bold,cyan.bold\" \"cd backend && .venv/bin/uvicorn discovita.app:app --reload --port 8000\" \"cd frontend/apps/identity-generator && PORT=3000 npm start\"",
+    "build": "cd frontend/apps/identity-generator && npm run build && cd ../../.. && rm -rf backend/public/* && cp -r frontend/apps/identity-generator/build/* backend/public/",
+    "start": "cd backend && .venv/bin/uvicorn discovita.app:app --host 0.0.0.0 --port ${PORT:-8000}"
+  },
+  "keywords": ["identity", "generator"],
+  "author": "Discovitas Team",
+  "license": "UNLICENSED"
+}

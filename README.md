@@ -1,33 +1,60 @@
-# Discovita Apps
+# Identity Generator
 
-This repository contains two applications:
-- Face Swapper: A face swapping application
-- Coach: An AI coaching application
+A web application for generating identity images using AI.
+
+## Prerequisites
+
+- Python 3.9+
+- Node.js 16+ and npm
 
 ## Local Development
 
-To run either application locally, use:
+### First Time Setup
+
+Install all dependencies:
 
 ```bash
-./scripts/run_project.sh
+npm run install:all
 ```
 
-If no app is specified, you will be prompted to choose which app to run. Alternatively, you can specify the app directly:
+### Running the App
+
+Start both backend and frontend in development mode:
 
 ```bash
-./scripts/run_project.sh face-swapper
-# or
-./scripts/run_project.sh coach
+npm run dev
 ```
 
-The application will be available at http://localhost:8000
+The application will be available at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
 
-## Deployment
+## Production Build
 
-For Render deployment, use:
-- Build Command: `./scripts/build.sh <app-name>`
-- Start Command: `./scripts/start.sh`
+Build the frontend and prepare for deployment:
+
+```bash
+npm run build
+```
+
+This builds the frontend and copies static files to `backend/public/`.
+
+## Production Server
+
+Start the production server:
+
+```bash
+npm start
+```
+
+## Deployment (Render)
+
+- Build Command: `npm run install:all && npm run build`
+- Start Command: `npm start`
 - Environment Variables:
-  - `PORT`: Set this to your desired port (the server will automatically bind to 0.0.0.0)
-
-The build script handles all dependency installation and frontend building, while the start script runs the server. For local development, the server runs on localhost:8000 with auto-reload enabled.
+  - `PORT`: Server port (defaults to 8000)
+  - `OPENAI_API_KEY`: Your OpenAI API key
+  - `AWS_ACCESS_KEY_ID`: AWS access key for S3
+  - `AWS_SECRET_ACCESS_KEY`: AWS secret key for S3
+  - `S3_BUCKET`: S3 bucket name
+  - `FACESWAP_API_KEY`: Icons8 Face Swap API key
