@@ -33,5 +33,5 @@ class SafeImageResponse(BaseModel):
     data: Optional[ImageResponse] = Field(None, description="Generated image data if successful")
     error: Optional[str] = Field(None, description="Error message if unsuccessful")
     safety_violation: bool = Field(False, description="Whether a safety violation occurred")
-    original_prompt: str = Field(..., description="Original prompt that was submitted")
+    original_prompt: Optional[str] = Field(None, description="Original prompt that was submitted")
     cleaned_prompt: Optional[str] = Field(None, description="Cleaned prompt if safety violation occurred")

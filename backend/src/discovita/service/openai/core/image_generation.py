@@ -1,6 +1,7 @@
 """Service for generating images using OpenAI."""
 
-from ..models.image_models import ImageResponse, SafeImageResponse
+import time
+from ..models.image_models import ImageResponse, SafeImageResponse, GeneratedImage
 from .base import OpenAIService
 
 
@@ -142,19 +143,30 @@ The above description should be modified to strongly emphasize and incorporate t
             # Convert to expected response format
             if result and len(result) > 0:
                 image_data = result[0]
-                return SafeImageResponse(
-                    success=True,
+                generated_image = GeneratedImage(
                     url=image_data.get("url", ""),
                     revised_prompt=image_data.get("revised_prompt", ""),
+                )
+                image_response = ImageResponse(
+                    created=int(time.time()),
+                    data=[generated_image],
+                )
+                return SafeImageResponse(
+                    success=True,
+                    data=image_response,
                     error=None,
                 )
 
             return SafeImageResponse(
-                success=False, url="", revised_prompt="", error="No image was generated"
+                success=False,
+                data=None,
+                error="No image was generated",
             )
 
         except Exception as e:
             # Handle any errors during generation
             return SafeImageResponse(
-                success=False, url="", revised_prompt="", error=str(e)
+                success=False,
+                data=None,
+                error=str(e),
             )

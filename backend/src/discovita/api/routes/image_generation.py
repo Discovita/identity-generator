@@ -15,7 +15,7 @@ async def generate_scene(
     service: ImageGenerationService = Depends(get_image_generation_service),
 ) -> GenerateImageResponse:
     """Generate an image based on the user's vision."""
-    response = await service.safe_generate_scene(
+    response = service.safe_generate_scene(
         setting=request.setting,
         outfit=request.outfit,
         emotion=request.emotion,
@@ -26,7 +26,9 @@ async def generate_scene(
     if not response.success:
         raise HTTPException(status_code=500, detail=response.error)
 
-    assert response.data is not None
+    if response.data is None or not response.data.data:
+        raise HTTPException(status_code=500, detail="No image data available in response")
+    
     image = response.data.data[0]
     return GenerateImageResponse(
         imageUrl=image.url, augmentedPrompt=image.revised_prompt
