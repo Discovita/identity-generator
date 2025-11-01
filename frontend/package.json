@@ -7,8 +7,7 @@
   ],
   "scripts": {
     "start": "cd apps/identity-generator && npm start",
-    "build": "cd apps/identity-generator && npm run build",
-    "install": "cd apps/identity-generator && npm install"
+    "build": "cd apps/identity-generator && npm run build"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
