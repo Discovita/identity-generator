@@ -70,5 +70,9 @@ app.add_middleware(
 
 app.include_router(router, prefix="/api/v1")
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-app.mount("/", StaticFiles(directory=os.path.join(BASE_DIR, "public"), html=True), name="static")
+# Static file serving is not needed when frontend is deployed separately
+# If you need to serve static files in the future, uncomment this:
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# public_dir = os.path.join(BASE_DIR, "public")
+# if os.path.exists(public_dir):
+#     app.mount("/", StaticFiles(directory=public_dir, html=True), name="static")
